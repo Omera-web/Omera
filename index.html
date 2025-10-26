@@ -4,477 +4,319 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Omera — Solutions web sur mesure</title>
-  <meta name="description" content="Création d'applications web, sites, et landing pages performantes. Automatisation, clarté et performance au service de vos opérations."/>
+  <meta name="description" content="SaaS sur mesure et sites web performants. Tarifs clairs, exécution rapide, focus ROI."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg-dark:#0b0f19;
-      --bg-elev:#0e1322;
-      --card:#12182a;
-      --text:#e8e9f1;
-      --muted:#a7abbe;
-      --primary:#7c5cff;
-      --primary-600:#6846ff;
-      --accent:#9f7aff;
-      --success:#5eead4;
-      --warning:#f59e0b;
-      --ring:rgba(124,92,255,.35);
-      --radius:16px;
-      --shadow-lg:0 10px 30px rgba(0,0,0,.45);
-      --shadow-sm:0 4px 16px rgba(0,0,0,.25);
-      --header-h:70px;               /* hauteur header desktop */
-      --header-h-mobile:64px;        /* hauteur header mobile */
-      /* remplace ce chemin quand tu m'envoies le fond */
-      --bg-image:url('assets/bg-omera.jpg');
+      --bg-dark:#0b0f19; --bg-elev:#0e1322; --card:#12182a;
+      --text:#e8e9f1; --muted:#a7abbe; --primary:#7c5cff; --accent:#9f7aff;
+      --ring:rgba(124,92,255,.35); --radius:16px; --shadow-lg:0 10px 30px rgba(0,0,0,.45); --shadow-sm:0 4px 16px rgba(0,0,0,.25);
+      --header-h:70px; --header-h-mobile:64px; --bg-image:url('assets/bg-omera.jpg');
+      --space: clamp(16px, 2.8vw, 24px);
     }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
-      background:var(--bg-dark);
-      color:var(--text);
-      line-height:1.6;
-      -webkit-font-smoothing:antialiased;
-      text-rendering:optimizeLegibility;
-      overflow-x:hidden;
-      /* on réserve la place sous le header fixé */
-      padding-top:var(--header-h);
-    }
-    @media (max-width: 768px){
-      body{ padding-top:var(--header-h-mobile); }
-    }
-
-    /* BACKGROUND */
-    .site-bg{
-      position:fixed; inset:0; z-index:-2;
-      background:
-        radial-gradient(1200px 600px at 75% -10%, rgba(124,92,255,.35), transparent 60%),
-        radial-gradient(900px 600px at -10% 20%, rgba(159,122,255,.25), transparent 55%),
-        radial-gradient(600px 600px at 90% 70%, rgba(94,234,212,.15), transparent 65%),
-        linear-gradient(180deg, rgba(11,15,25,.85), rgba(11,15,25,.95)),
-        var(--bg-image);
-      background-size:cover; background-position:center; filter:saturate(1.02);
-    }
-    .noise{position:fixed; inset:0; z-index:-1; pointer-events:none;
-      background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 0 0 0 .06 .09 .12 .15"/></feComponentTransfer></filter><rect width="100" height="100" filter="url(%23n)" opacity="0.25"/></svg>');
-      mix-blend-mode:soft-light; opacity:.25;
-    }
-
-    a{color:var(--success); text-decoration:none}
-    a:hover{text-decoration:underline}
+    *{box-sizing:border-box} html,body{height:100%} html{scroll-behavior:smooth}
+    body{margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      background:var(--bg-dark); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; overflow-x:hidden; padding-top:var(--header-h)}
+    @media (max-width:768px){ body{padding-top:var(--header-h-mobile)} }
+    .site-bg{position:fixed; inset:0; z-index:-2; background:
+      radial-gradient(1200px 600px at 75% -10%, rgba(124,92,255,.35), transparent 60%),
+      radial-gradient(900px 600px at -10% 20%, rgba(159,122,255,.25), transparent 55%),
+      radial-gradient(600px 600px at 90% 70%, rgba(94,234,212,.15), transparent 65%),
+      linear-gradient(180deg, rgba(11,15,25,.85), rgba(11,15,25,.95)), var(--bg-image);
+      background-size:cover; background-position:center; filter:saturate(1.02)}
+    .noise{position:fixed; inset:0; z-index:-1; pointer-events:none; background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 0 0 0 .06 .09 .12 .15"/></feComponentTransfer></filter><rect width="100" height="100" filter="url(%23n)" opacity="0.25"/></svg>'); mix-blend-mode:soft-light; opacity:.25}
+    a{color:#5eead4; text-decoration:none} a:hover{text-decoration:underline}
     .container{width:min(1120px,92vw); margin:0 auto}
-    *:where(section, .card, .price, .hero-card){scroll-margin-top:calc(var(--header-h) + 16px)}
-    @media (max-width:768px){
-      *:where(section, .card, .price, .hero-card){scroll-margin-top:calc(var(--header-h-mobile) + 12px)}
-    }
+    section{padding: clamp(40px, 7vw, 64px) 0}
+    .section-title{font-family:Poppins,Inter,sans-serif; font-size:clamp(22px, 5.5vw, 36px); margin:0 0 16px}
+    .muted{color:var(--muted)}
+    [data-reveal]{opacity:0; transform:translateY(14px); transition:.6s ease} [data-reveal].in{opacity:1; transform:none}
 
-    /* HEADER FIXE */
-    header{
-      position:fixed; top:0; left:0; right:0; z-index:50;
-      backdrop-filter:saturate(1.2) blur(12px);
-      background:linear-gradient(180deg, rgba(11,15,25,.86), rgba(11,15,25,.55));
-      border-bottom:1px solid rgba(255,255,255,.06);
-      height:var(--header-h);
-    }
+    header{position:fixed; top:0; left:0; right:0; z-index:50; backdrop-filter:saturate(1.2) blur(12px);
+      background:linear-gradient(180deg, rgba(11,15,25,.86), rgba(11,15,25,.55)); border-bottom:1px solid rgba(255,255,255,.06); height:var(--header-h)}
     .nav{display:flex; align-items:center; justify-content:space-between; height:100%}
     .nav-inner{display:flex; align-items:center; gap:16px; padding:0 10px}
     .logo{display:inline-flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.3px}
     .logo svg{width:34px; height:34px; filter:drop-shadow(0 6px 12px rgba(124,92,255,.45))}
-    .nav a{color:var(--text); opacity:.9; margin:0 8px; font-weight:500}
-    .cta{padding:10px 16px; background:linear-gradient(135deg, var(--primary), var(--accent)); border-radius:999px; box-shadow:var(--shadow-sm); border:1px solid rgba(255,255,255,.08)}
+    .menu{display:flex; align-items:center} .nav a{color:var(--text); opacity:.9; margin:0 8px; font-weight:500}
+    .cta{padding:12px 18px; background:linear-gradient(135deg, var(--primary), var(--accent)); border-radius:999px; box-shadow:var(--shadow-sm); border:1px solid rgba(255,255,255,.08)}
+    .burger{display:none; width:44px; height:44px; border-radius:14px; border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); box-shadow:var(--shadow-sm); align-items:center; justify-content:center; cursor:pointer}
+    .burger span,.burger::before,.burger::after{content:""; display:block; width:20px; height:2px; background:#fff; opacity:.9; border-radius:2px; transition:.25s}
+    .burger::before{transform:translateY(-6px)} .burger::after{transform:translateY(6px)}
+    .burger.active span{opacity:0} .burger.active::before{transform:translateY(0) rotate(45deg)} .burger.active::after{transform:translateY(0) rotate(-45deg)}
+    .drawer{position:fixed; top:var(--header-h-mobile); left:0; right:0; background:linear-gradient(180deg, rgba(14,19,34,.98), rgba(14,19,34,.92)); border-bottom:1px solid rgba(255,255,255,.08); display:none}
+    .drawer.open{display:block} .drawer a{display:block; padding:16px var(--space); border-top:1px solid rgba(255,255,255,.06); color:#fff; opacity:.95}
+    .drawer .cta{display:block; margin:12px var(--space)}
+    @media (max-width:980px){ .menu{display:none} .burger{display:flex} header{height:var(--header-h-mobile)} }
 
-    /* MENU DESKTOP */
-    .menu{display:flex; align-items:center}
-
-    /* MENU MOBILE */
-    .burger{display:none; width:42px; height:42px; border-radius:12px;
-      border:1px solid rgba(255,255,255,.08);
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      box-shadow:var(--shadow-sm);
-      align-items:center; justify-content:center; cursor:pointer;
-    }
-    .burger span,.burger::before,.burger::after{
-      content:""; display:block; width:18px; height:2px; background:#fff; opacity:.9; border-radius:2px; transition:.25s
-    }
-    .burger::before{transform:translateY(-6px)}
-    .burger::after{transform:translateY(6px)}
-    .burger.active span{opacity:0}
-    .burger.active::before{transform:translateY(0) rotate(45deg)}
-    .burger.active::after{transform:translateY(0) rotate(-45deg)}
-
-    .drawer{
-      position:fixed; top:var(--header-h-mobile); left:0; right:0;
-      background:linear-gradient(180deg, rgba(14,19,34,.98), rgba(14,19,34,.92));
-      border-bottom:1px solid rgba(255,255,255,.08);
-      display:none;
-    }
-    .drawer.open{display:block}
-    .drawer a{display:block; padding:14px 18px; border-top:1px solid rgba(255,255,255,.06); color:#fff; opacity:.95}
-    .drawer .cta{display:block; margin:12px 18px}
-
-    @media (max-width: 980px){
-      .menu{display:none}
-      .burger{display:flex}
-      header{height:var(--header-h-mobile)}
-    }
-
-    /* HERO */
-    .hero{padding:96px 0 48px; position:relative}
+    .hero{padding: clamp(56px, 10vw, 96px) 0 clamp(24px, 6vw, 48px)}
     .hero-grid{display:grid; grid-template-columns:1.2fr .8fr; gap:32px; align-items:center}
-    .headline{font-family:Poppins,Inter,sans-serif; font-size:clamp(30px,5vw,56px); line-height:1.12; margin:0 0 12px; letter-spacing:.2px}
-    .lead{font-size:clamp(16px,1.5vw,19px); color:var(--muted); max-width:64ch}
-    .badges{display:flex; gap:12px; margin:18px 0 28px; flex-wrap:wrap}
+    .headline{font-family:Poppins,Inter,sans-serif; font-size:clamp(28px, 7vw, 56px); line-height:1.15; margin:0 0 12px}
+    .lead{font-size:clamp(15px, 4.3vw, 19px); color:var(--muted); max-width:64ch}
+    .badges{display:flex; gap:10px; margin:16px 0 24px; flex-wrap:wrap}
     .badge{border:1px solid rgba(124,92,255,.35); color:#dcd7ff; padding:8px 12px; border-radius:999px; background:linear-gradient(180deg, rgba(124,92,255,.18), rgba(124,92,255,.08)); font-weight:600}
     .hero-card{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:22px; box-shadow:var(--shadow-lg)}
-    .check{display:flex; align-items:flex-start; gap:12px; margin:12px 0}
-    .check i{width:22px; height:22px; border-radius:50%; background:radial-gradient(circle at 30% 25%, #fff, #fff0 40%), linear-gradient(135deg, var(--primary), var(--accent)); display:inline-block; margin-top:2px; box-shadow:0 6px 20px rgba(124,92,255,.5)}
 
-    /* SECTIONS */
-    section{padding:64px 0; position:relative}
-    .section-title{font-family:Poppins,Inter,sans-serif; font-size:clamp(24px,3.4vw,36px); margin:0 0 20px}
-    .muted{color:var(--muted)}
-
-    /* SERVICES */
     .grid{display:grid; gap:18px}
-    .grid.cols-3{grid-template-columns:repeat(3, minmax(0,1fr))}
-    .card{background:linear-gradient(180deg, rgba(14,19,34,.9), rgba(14,19,34,.75)); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden}
-    .card::after{content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none; background:radial-gradient(300px 120px at 20% 0%, rgba(124,92,255,.18), transparent), radial-gradient(300px 120px at 100% 120%, rgba(124,92,255,.12), transparent)}
-    .icon{width:40px; height:40px; border-radius:12px; display:grid; place-items:center; background:linear-gradient(135deg, var(--primary), var(--accent)); box-shadow:0 6px 18px rgba(124,92,255,.45)}
-    .card h3{margin:12px 0 6px; font-size:20px}
+    .grid.cols-2{grid-template-columns:repeat(2, minmax(0,1fr))}
+    .card{background:linear-gradient(180deg, rgba(14,19,34,.9), rgba(14,19,34,.75)); border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius); padding:22px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden; transition:.25s}
+    .card:hover{transform:translateY(-2px)}
+    .card::after{content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none;
+      background:radial-gradient(300px 120px at 20% 0%, rgba(124,92,255,.18), transparent), radial-gradient(300px 120px at 100% 120%, rgba(124,92,255,.12), transparent)}
+    .icon{width:42px; height:42px; border-radius:12px; display:grid; place-items:center; background:linear-gradient(135deg, var(--primary), var(--accent)); box-shadow:0 6px 18px rgba(124,92,255,.45)}
+    .card h3{margin:12px 0 6px; font-size:clamp(18px, 4.8vw, 20px)}
+    .price-chip{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px; border:1px solid rgba(124,92,255,.35); background:linear-gradient(180deg, rgba(124,92,255,.16), rgba(124,92,255,.06)); color:#dcd7ff; font-weight:700}
 
-    /* WHY */
-    .pill{display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:14px; background:linear-gradient(180deg, rgba(124,92,255,.16), rgba(124,92,255,.06)); border:1px solid rgba(124,92,255,.35); font-weight:600}
-
-    /* PROCESS */
     .step{display:flex; gap:16px; align-items:flex-start}
-    .step-num{width:34px; height:34px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(135deg, var(--primary), var(--accent)); font-weight:800; box-shadow:0 6px 18px rgba(124,92,255,.45)}
+    .step-num{width:36px; height:36px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(135deg, var(--primary), var(--accent)); font-weight:800; box-shadow:0 6px 18px rgba(124,92,255,.45)}
 
-    /* PRICING */
-    .pricing{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:18px}
-    .price{position:relative; padding:24px; border-radius:18px; background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); box-shadow:var(--shadow-sm)}
-    .price.featured{background:linear-gradient(180deg, rgba(124,92,255,.18), rgba(124,92,255,.06)); border-color:rgba(124,92,255,.45); transform:translateY(-2px)}
-    .price h4{margin:6px 0; font-size:18px}
-    .price .value{font-family:Poppins,Inter,sans-serif; font-size:32px; font-weight:800}
-    .kicker{font-size:12px; letter-spacing:.3px; text-transform:uppercase; color:#dcd7ff; opacity:.85}
-
-    /* STORY */
-    .story{display:grid; grid-template-columns:.9fr 1.1fr; gap:26px; align-items:center}
+    .view{display:none} .view.active{display:block}
+    .breadcrumb{display:flex; gap:10px; align-items:center; font-size:14px; color:var(--muted)}
+    .breadcrumb a{color:#fff; opacity:.9}
     .glass{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.09); border-radius:22px; padding:24px; box-shadow:var(--shadow-lg)}
 
-    /* CONTACT */
     .contact{display:grid; grid-template-columns:1.1fr .9fr; gap:26px}
-    .contact form{display:grid; gap:12px}
-    input,textarea{background:#0d1323; border:1px solid rgba(255,255,255,.08); color:var(--text); border-radius:12px; padding:12px 14px; font:inherit}
+    form{display:grid; gap:12px}
+    input,textarea{background:#0d1323; border:1px solid rgba(255,255,255,.08); color:var(--text); border-radius:14px; padding:14px 16px; font:inherit}
+    input:focus, textarea:focus{outline:3px solid var(--ring); outline-offset:2px}
     textarea{min-height:120px; resize:vertical}
-    .btn{display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:12px 16px; border-radius:12px; background:linear-gradient(135deg, var(--primary), var(--accent)); color:white; border:1px solid rgba(255,255,255,.12); box-shadow:var(--shadow-sm); cursor:pointer}
-
-    /* FOOTER */
+    .btn{display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:14px 18px; border-radius:14px; background:linear-gradient(135deg, var(--primary), var(--accent)); color:white; border:1px solid rgba(255,255,255,.12); box-shadow:var(--shadow-sm); cursor:pointer}
+    .btn.secondary{background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.12); color:#fff}
     footer{padding:36px 0; color:var(--muted); border-top:1px solid rgba(255,255,255,.06)}
 
-    /* MOBILE / TABLET */
-    @media (max-width: 980px){
-      .hero{padding:72px 0 36px}
-      .hero-grid{grid-template-columns:1fr; gap:18px}
-      .pricing{grid-template-columns:repeat(2, minmax(0,1fr))}
-      .grid.cols-3{grid-template-columns:repeat(2, minmax(0,1fr))}
-      .lead{max-width:100%}
-    }
-    @media (max-width: 640px){
-      .container{width:min(100%, 92vw)}
-      .grid.cols-3, .pricing{grid-template-columns:1fr}
-      .headline{font-size:clamp(26px, 7vw, 34px)}
-      .section-title{font-size:clamp(22px, 6vw, 28px)}
-      .hero{padding:64px 0 28px}
-      section{padding:48px 0}
-      .contact{grid-template-columns:1fr}
-      footer{padding:28px 0}
-    }
-
-    /* REVEAL ON SCROLL */
-    [data-reveal]{opacity:0; transform:translateY(14px); transition:.6s ease}
-    [data-reveal].in{opacity:1; transform:none}
-
-    /* BACK TO TOP BUTTON (bottom-left) */
-    .to-top{
-      position:fixed; left:16px; bottom:16px; z-index:60;
-      width:48px; height:48px; border-radius:14px;
-      display:grid; place-items:center; cursor:pointer;
-      border:1px solid rgba(255,255,255,.10);
-      background:linear-gradient(135deg, var(--primary), var(--accent));
-      box-shadow:0 10px 24px rgba(0,0,0,.35), 0 8px 22px rgba(124,92,255,.35);
-      color:#fff; font-weight:800;
-      opacity:0; pointer-events:none; transform:translateY(10px);
-      transition:.25s ease;
-    }
+    .to-top{position:fixed; left:16px; bottom:16px; z-index:60; width:48px; height:48px; border-radius:14px; display:grid; place-items:center; cursor:pointer;
+      border:1px solid rgba(255,255,255,.10); background:linear-gradient(135deg, var(--primary), var(--accent)); box-shadow:0 10px 24px rgba(0,0,0,.35), 0 8px 22px rgba(124,92,255,.35);
+      color:#fff; font-weight:800; opacity:0; pointer-events:none; transform:translateY(10px); transition:.25s ease}
     .to-top.show{opacity:1; pointer-events:auto; transform:none}
-    .to-top:focus-visible{outline:3px solid var(--ring)}
-    @supports (padding: max(0px)) {
-      .to-top{ bottom: max(16px, env(safe-area-inset-bottom)); left:max(16px, env(safe-area-inset-left)); }
+
+    @media (max-width:980px){
+      .hero{padding: clamp(40px, 12vw, 72px) 0 clamp(16px, 6vw, 36px)}
+      .hero-grid{grid-template-columns:1fr; gap:14px}
+      .grid.cols-2{grid-template-columns:1fr}
+      .contact{grid-template-columns:1fr}
+      .cta{padding:14px 18px}
+      .card{padding: clamp(18px, 4.5vw, 22px)}
+      .badge{padding:7px 10px}
+    }
+    @media (max-width:640px){
+      .container{width:min(100%, 92vw)}
+      .headline{font-size:clamp(26px, 8vw, 34px)}
+      .section-title{font-size:clamp(22px, 7vw, 28px)}
+      .drawer a{padding:18px var(--space)}
     }
   </style>
 </head>
 <body>
-  <div class="site-bg"></div>
-  <div class="noise"></div>
+  <div class="site-bg"></div><div class="noise"></div>
 
-  <!-- HEADER FIXE -->
+  <!-- Header -->
   <header>
     <div class="container nav">
       <div class="nav-inner">
         <a class="logo" href="#" aria-label="Accueil Omera">
-          <svg viewBox="0 0 40 40" aria-hidden="true" role="img">
-            <circle cx="20" cy="20" r="14" fill="url(#g)"/>
-            <defs>
-              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#8a6bff"/><stop offset="1" stop-color="#6b46ff"/>
-              </linearGradient>
-            </defs>
-          </svg>
-          <span>Omera</span>
+          <svg viewBox="0 0 40 40" aria-hidden="true" role="img"><circle cx="20" cy="20" r="14" fill="url(#g)"/>
+            <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6bff"/><stop offset="1" stop-color="#6b46ff"/></linearGradient></defs>
+          </svg><span>Omera</span>
         </a>
       </div>
-
-      <!-- Menu desktop -->
       <nav class="menu" aria-label="Navigation principale">
-        <a class="hide-sm" href="#services">Services</a>
-        <a class="hide-sm" href="#why">Pourquoi nous</a>
-        <a class="hide-sm" href="#process">Approche</a>
-        <a class="hide-sm" href="#pricing">Tarifs</a>
-        <a class="hide-sm" href="#story">Notre histoire</a>
+        <a href="#services">Services</a>
+        <a href="#why">Pourquoi nous</a>
+        <a href="#process">Approche</a>
         <a class="cta" href="#contact">Discutons</a>
       </nav>
-
-      <!-- Burger mobile -->
-      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="drawer">
-        <span></span>
-      </button>
+      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="drawer"><span></span></button>
     </div>
-
-    <!-- Drawer mobile -->
     <nav id="drawer" class="drawer" aria-label="Menu mobile">
       <a href="#services">Services</a>
       <a href="#why">Pourquoi nous</a>
       <a href="#process">Approche</a>
-      <a href="#pricing">Tarifs</a>
-      <a href="#story">Notre histoire</a>
       <a class="cta" href="#contact">Discutons</a>
     </nav>
   </header>
 
-  <main>
-    <!-- HERO -->
-    <section class="hero container">
-      <div class="hero-grid">
-        <div>
-          <h1 class="headline" data-reveal>Création de solutions web sur&nbsp;mesure</h1>
-          <p class="lead" data-reveal style="transition-delay:.08s">
-            Des outils clairs et performants pour simplifier, automatiser et fluidifier vos opérations — sites, plateformes et applications SaaS taillées pour vos besoins.
-          </p>
-          <div class="badges" data-reveal style="transition-delay:.14s">
-            <span class="badge">Exécution rapide & coûts maîtrisés</span>
-            <span class="badge">Design propre & lisible</span>
-            <span class="badge">Focus ROI et productivité</span>
+  <main id="app">
+    <!-- HOME -->
+    <div id="view-home" class="view active" role="region" aria-labelledby="home-title">
+      <section class="hero container">
+        <div class="hero-grid">
+          <div>
+            <h1 id="home-title" class="headline" data-reveal>Création de solutions web sur&nbsp;mesure</h1>
+            <p class="lead" data-reveal style="transition-delay:.08s">Des outils clairs et performants pour simplifier, automatiser et fluidifier vos opérations — SaaS et sites web taillés pour vos besoins.</p>
+            <div class="badges" data-reveal style="transition-delay:.14s">
+              <span class="badge">Tarifs clairs</span><span class="badge">Design propre</span><span class="badge">Focus ROI</span>
+            </div>
+            <div data-reveal style="transition-delay:.2s"><a class="btn" href="#contact">Parler de votre projet</a></div>
           </div>
-          <div data-reveal style="transition-delay:.2s">
-            <a class="btn" href="#contact">Parler de votre projet</a>
+          <aside class="hero-card" aria-label="Pourquoi Omera" data-reveal>
+            <div class="check"><i></i><div>Des solutions <b>sur mesure</b>, pas des modèles figés</div></div>
+            <div class="check"><i></i><div>Exécution rapide à <b>coût optimisé</b></div></div>
+            <div class="check"><i></i><div>Approche <b>humaine</b>, orientée résultats</div></div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- Services -->
+      <section id="services">
+        <div class="container">
+          <h2 class="section-title" data-reveal>Nos services</h2>
+          <p class="muted" data-reveal>Choisissez votre format et découvrez le déroulé complet.</p>
+          <div class="grid cols-2" style="margin-top:20px">
+            <article class="card" data-reveal>
+              <div class="icon">📱</div>
+              <h3>Applications / SaaS sur mesure</h3>
+              <p class="muted">Automatisation, dashboards, portails clients, intégrations API.</p>
+              <div class="price-chip" aria-label="Tarif SaaS">À partir de 4 000€</div>
+              <p style="margin-top:12px"><a class="btn service-link" data-service="saas" href="#service/saas" aria-label="Voir le détail Applications / SaaS">Voir le détail</a></p>
+            </article>
+            <article class="card" data-reveal style="transition-delay:.06s">
+              <div class="icon">🖥️</div>
+              <h3>Site web</h3>
+              <p class="muted">Vitrine rapide, clair, SEO propre, formulaires & admin simple.</p>
+              <div class="price-chip" aria-label="Tarif Site web">À partir de 500€</div>
+              <p style="margin-top:12px"><a class="btn service-link" data-service="site" href="#service/site" aria-label="Voir le détail Site web">Voir le détail</a></p>
+            </article>
           </div>
         </div>
-        <aside class="hero-card" aria-label="Pourquoi Omera" data-reveal>
-          <div class="pill" style="margin-bottom:10px">Pourquoi Omera ?</div>
-          <div class="check"><i></i><div>Des solutions pensées <b>sur mesure</b>, pas des modèles figés</div></div>
-          <div class="check"><i></i><div>Une exécution rapide à <b>coût optimisé</b></div></div>
-          <div class="check"><i></i><div>Une approche <b>humaine</b>, centrée sur la clarté et la performance</div></div>
-        </aside>
-      </div>
-    </section>
+      </section>
 
-    <!-- SERVICES -->
-    <section id="services">
-      <div class="container">
-        <h2 class="section-title" data-reveal>Nos services</h2>
-        <p class="muted" data-reveal style="max-width:64ch">Transformez vos besoins en interfaces nettes, efficaces et faciles à piloter.</p>
-        <div class="grid cols-3" style="margin-top:20px">
-          <article class="card" data-reveal>
-            <div class="icon">📦</div>
-            <h3>Applications & SaaS sur mesure</h3>
-            <p class="muted">Développement d’outils adaptés à vos besoins internes: gestion, automatisation, suivi d’activité, reporting, etc.</p>
-          </article>
-          <article class="card" data-reveal style="transition-delay:.06s">
-            <div class="icon">🖥️</div>
-            <h3>Sites & plateformes web</h3>
-            <p class="muted">Conception de sites rapides, accessibles et simples à administrer, du site vitrine au portail métier.</p>
-          </article>
-          <article class="card" data-reveal style="transition-delay:.12s">
-            <div class="icon">🚀</div>
-            <h3>Landing pages optimisées</h3>
-            <p class="muted">Pages d’acquisition prêtes à déployer avec tracking propre et tests A/B.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- WHY -->
-    <section id="why">
-      <div class="container">
-        <h2 class="section-title" data-reveal>Pourquoi nous choisir</h2>
-        <div class="grid cols-3" style="margin-top:10px">
-          <div class="card" data-reveal>
-            <h3>Clarté & lisibilité</h3>
-            <p class="muted">Des interfaces sobres qui mettent l’important en avant. Chaque écran a un objectif.</p>
-          </div>
-          <div class="card" data-reveal style="transition-delay:.06s">
-            <h3>Performance</h3>
-            <p class="muted">Chargements rapides, SEO propre, accessibilité soignée et code maintenable.</p>
-          </div>
-          <div class="card" data-reveal style="transition-delay:.12s">
-            <h3>Accompagnement</h3>
-            <p class="muted">Échanges réguliers, prototypes clairs et transparence sur les coûts et délais.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROCESS -->
-    <section id="process">
-      <div class="container">
-        <h2 class="section-title" data-reveal>Notre approche</h2>
-        <div class="grid" style="gap:16px; margin-top:8px">
-          <div class="card step" data-reveal>
-            <div class="step-num">1</div>
-            <div>
-              <h3>Écoute & compréhension</h3>
-              <p class="muted">Atelier de cadrage pour cerner vos objectifs, contraintes et indicateurs de succès.</p>
+      <!-- Pourquoi -->
+      <section id="why">
+        <div class="container">
+          <h2 class="section-title" data-reveal>Pourquoi nous choisir</h2>
+          <div class="grid cols-2" style="margin-top:10px">
+            <div class="card" data-reveal>
+              <h3>Clarté & lisibilité</h3>
+              <p class="muted">Des interfaces sobres qui vont à l’essentiel. Chaque écran a un objectif mesurable.</p>
             </div>
-          </div>
-          <div class="card step" data-reveal style="transition-delay:.06s">
-            <div class="step-num">2</div>
-            <div>
-              <h3>Design & maquettes</h3>
-              <p class="muted">Maquettes interactives pour valider l’expérience avant le développement.</p>
-            </div>
-          </div>
-          <div class="card step" data-reveal style="transition-delay:.12s">
-            <div class="step-num">3</div>
-            <div>
-              <h3>Développement rapide</h3>
-              <p class="muted">Livraisons itératives, intégration des retours, qualité et tests.</p>
-            </div>
-          </div>
-          <div class="card step" data-reveal style="transition-delay:.18s">
-            <div class="step-num">4</div>
-            <div>
-              <h3>Mesure & amélioration</h3>
-              <p class="muted">Métriques, SEO, instrumentation analytics et roadmap d’optimisation.</p>
+            <div class="card" data-reveal style="transition-delay:.06s">
+              <h3>Performance</h3>
+              <p class="muted">Chargements rapides, accessibilité soignée et code maintenable.</p>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- PRICING -->
-    <section id="pricing">
-      <div class="container">
-        <h2 class="section-title" data-reveal>Tarifs transparents</h2>
-        <p class="muted" data-reveal style="max-width:64ch">Des prix indicatifs pour vous guider. Chaque projet est unique — on affine le devis après un court échange.</p>
-        <div class="pricing" style="margin-top:18px">
-          <div class="price" data-reveal>
-            <div class="kicker">Landing page</div>
-            <div class="value">à partir de 590€</div>
-            <h4>Idéale pour démarrer vite</h4>
-            <ul class="muted">
-              <li>Design personnalisé</li>
-              <li>Intégration tracking (GA4, Pixel…)</li>
-              <li>Déploiement & SEO de base</li>
-            </ul>
-          </div>
-          <div class="price featured" data-reveal style="transition-delay:.06s">
-            <div class="kicker">Site vitrine</div>
-            <div class="value">à partir de 1 500€</div>
-            <h4>3–6 pages, administration simple</h4>
-            <ul class="muted">
-              <li>Performance & accessibilité</li>
-              <li>Formulaire & emails</li>
-              <li>Hébergement économique</li>
-            </ul>
-          </div>
-          <div class="price" data-reveal style="transition-delay:.12s">
-            <div class="kicker">Plateforme / Portail</div>
-            <div class="value">sur devis</div>
-            <h4>Fonctionnalités métier</h4>
-            <ul class="muted">
-              <li>Auth, rôles & dashboards</li>
-              <li>Intégrations API</li>
-              <li>Tests & documentation</li>
-            </ul>
-          </div>
-          <div class="price" data-reveal style="transition-delay:.18s">
-            <div class="kicker">SaaS sur mesure</div>
-            <div class="value">à partir de 3 500€</div>
-            <h4>Automatisations & reporting</h4>
-            <ul class="muted">
-              <li>Conception produit</li>
-              <li>Itérations rapides</li>
-              <li>Accompagnement au déploiement</li>
-            </ul>
+      <!-- Process -->
+      <section id="process">
+        <div class="container">
+          <h2 class="section-title" data-reveal>Notre approche</h2>
+          <div class="grid" style="gap:16px; margin-top:8px">
+            <div class="card step" data-reveal><div class="step-num">1</div><div><h3>Écoute & cadrage</h3><p class="muted">Objectifs, utilisateurs, KPIs, périmètre clair.</p></div></div>
+            <div class="card step" data-reveal style="transition-delay:.06s"><div class="step-num">2</div><div><h3>Design validé</h3><p class="muted">Maquettes interactives validées ensemble.</p></div></div>
+            <div class="card step" data-reveal style="transition-delay:.12s"><div class="step-num">3</div><div><h3>Développement</h3><p class="muted">Sprints courts, QA, livrables nets.</p></div></div>
+            <div class="card step" data-reveal style="transition-delay:.18s"><div class="step-num">4</div><div><h3>Mise en ligne & suivi</h3><p class="muted">Instrumentation, SEO, amélioration continue.</p></div></div>
           </div>
         </div>
-        <p class="muted" style="margin-top:10px" data-reveal>Maintenance & évolutions à partir de <b>49€/mois</b> (surveillance, correctifs, petites demandes).</p>
-      </div>
-    </section>
+      </section>
 
-    <!-- STORY -->
-    <section id="story">
-      <div class="container story">
-        <div class="glass" data-reveal>
-          <h2 class="section-title">Une petite histoire</h2>
-          <p class="muted">Omera est née d’un constat simple : beaucoup d’équipes jonglent encore avec des tableurs, des emails et des outils qui ne se parlent pas. Nous avons commencé en créant de petits outils qui faisaient gagner des heures — puis des plateformes entières, toujours avec la même obsession : <b>clarifier, automatiser, performer</b>.</p>
-          <p class="muted">Aujourd’hui, nous concevons des expériences sobres, rapides et centrées sur l’essentiel. Des solutions qui s’utilisent sans manuel — et qui font une vraie différence dans l’opérationnel.</p>
-        </div>
-        <div class="card" data-reveal style="padding:26px">
-          <h3>Ce que vous obtenez</h3>
-          <ul class="muted">
-            <li>Un interlocuteur unique et disponible</li>
-            <li>Des livrables nets à chaque étape</li>
-            <li>Une mise en ligne sans surprise</li>
-          </ul>
-          <a class="btn" href="#contact" style="margin-top:10px">Parler de votre cas</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact">
-      <div class="container contact">
-        <div>
-          <h2 class="section-title" data-reveal>Nous contacter</h2>
-          <p class="muted" data-reveal>Expliquez-nous brièvement votre besoin — on revient vers vous sous 24h avec des pistes concrètes.</p>
-          <div class="card" data-reveal style="margin-top:14px">
-            <form name="contact">
-              <input required type="text" name="name" placeholder="Votre nom" aria-label="Votre nom" />
-              <input required type="email" name="email" placeholder="Votre email" aria-label="Votre email" />
-              <input type="tel" name="phone" placeholder="Téléphone (optionnel)" aria-label="Téléphone" />
-              <textarea required name="message" placeholder="Parlez-nous de votre projet…" aria-label="Message"></textarea>
-              <button class="btn" type="submit">Envoyer</button>
-            </form>
-            <p class="muted" style="margin-top:12px">Ou écrivez-nous à <a href="mailto:contact.omera@gmail.com">contact.omera@gmail.com</a> • LinkedIn : <a href="#">Paul LASNÉ</a></p>
+      <!-- Contact -->
+      <section id="contact">
+        <div class="container contact">
+          <div>
+            <h2 class="section-title" data-reveal>Nous contacter</h2>
+            <p class="muted" data-reveal>Expliquez votre besoin — retour sous 24h avec des pistes concrètes.</p>
+            <div class="card" data-reveal style="margin-top:14px">
+              <form id="contactForm" name="contact">
+                <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+                <input required type="text" name="name" placeholder="Votre nom" aria-label="Votre nom" />
+                <input required type="email" name="email" placeholder="Votre email" aria-label="Votre email" />
+                <input type="tel" name="phone" placeholder="Téléphone (optionnel)" aria-label="Téléphone" />
+                <textarea required name="message" placeholder="Parlez-nous de votre projet…" aria-label="Message"></textarea>
+                <button class="btn" type="submit">Envoyer</button>
+                <p id="formNote" class="muted" style="margin:8px 0 0"></p>
+              </form>
+              <p class="muted" style="margin-top:12px">
+                Ou écrivez directement à
+                <a id="mailtoDirect" href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a>
+                • LinkedIn :
+                <a href="https://www.linkedin.com/in/paul-laisn%C3%A9/" target="_blank" rel="noopener">Paul&nbsp;LASNÉ</a>
+              </p>
+            </div>
           </div>
+          <aside class="card" data-reveal>
+            <h3>Infos rapides</h3>
+            <ul class="muted">
+              <li>Délais usuels : 1–3 semaines</li>
+              <li>Stack : HTML/CSS/JS, Next.js, Tailwind, Supabase</li>
+              <li>Hébergement : Vercel, Netlify, GitHub Pages</li>
+            </ul>
+            <a class="btn secondary" href="#services">Voir les offres</a>
+          </aside>
         </div>
-        <aside class="card" data-reveal>
-          <h3>Infos rapides</h3>
-          <ul class="muted">
-            <li>Délais usuels : 1–3 semaines selon la portée</li>
-            <li>Stack typique : HTML/CSS/JS, Next.js, Tailwind, Supabase</li>
-            <li>Hébergement économique (Vercel, Netlify, GitHub Pages)</li>
-          </ul>
-          <p class="muted">Besoin d’un chiffrage express ? Joignez un cahier des charges ou des exemples de sites que vous aimez.</p>
-        </aside>
-      </div>
-    </section>
+      </section>
+    </div>
+
+    <!-- DETAIL: SaaS -->
+    <div id="view-saas" class="view" role="region" aria-labelledby="saas-title">
+      <section class="container">
+        <nav class="breadcrumb" style="margin:14px 0 8px"><a href="#" data-nav="home">Accueil</a> › <a href="#services" data-nav="home">Services</a> › <span>SaaS</span></nav>
+        <div class="grid cols-2" style="align-items:start">
+          <div>
+            <h1 id="saas-title" class="section-title">Applications / SaaS sur mesure</h1>
+            <p class="muted">Dashboards, automatisations, portails, rôles & permissions, intégrations API.</p>
+            <div class="price-chip" style="margin:10px 0 16px">À partir de 4 000€</div>
+            <div class="glass" style="margin-top:8px">
+              <h3>Comment ça se passe</h3>
+              <ul class="muted">
+                <li><b>Cadrage</b> : objectifs, users, KPIs, priorités.</li>
+                <li><b>Design</b> : maquettes interactives validées ensemble.</li>
+                <li><b>Dev</b> : sprints courts, démos, QA.</li>
+                <li><b>Go-live</b> : auth, analytics, docs & transfert.</li>
+              </ul>
+            </div>
+            <p style="margin-top:16px"><a class="btn" href="#contact">Discuter de votre SaaS</a> <a class="btn secondary" href="#" data-nav="home" style="margin-left:8px">← Retour</a></p>
+          </div>
+          <aside class="card">
+            <h3>Contact express</h3>
+            <p class="muted">Un email prérempli s’ouvrira si l’envoi direct échoue.</p>
+            <a class="btn" id="saasMailto" href="#">Écrire maintenant</a>
+          </aside>
+        </div>
+      </section>
+    </div>
+
+    <!-- DETAIL: Site -->
+    <div id="view-site" class="view" role="region" aria-labelledby="site-title">
+      <section class="container">
+        <nav class="breadcrumb" style="margin:14px 0 8px"><a href="#" data-nav="home">Accueil</a> › <a href="#services" data-nav="home">Services</a> › <span>Site web</span></nav>
+        <div class="grid cols-2" style="align-items:start">
+          <div>
+            <h1 id="site-title" class="section-title">Site web</h1>
+            <p class="muted">Vitrine rapide, lisible et bien référencée, avec formulaires et admin simple.</p>
+            <div class="price-chip" style="margin:10px 0 16px">À partir de 500€</div>
+            <div class="glass" style="margin-top:8px">
+              <h3>Comment ça se passe</h3>
+              <ul class="muted">
+                <li><b>Brief</b> : pages, contenus, inspirations.</li>
+                <li><b>Maquette</b> : 1–2 allers-retours.</li>
+                <li><b>Intégration</b> : perf, accessibilité, SEO.</li>
+                <li><b>Mise en ligne</b> : domaine, analytics, guide.</li>
+              </ul>
+            </div>
+            <p style="margin-top:16px"><a class="btn" href="#contact">Parler de votre site</a> <a class="btn secondary" href="#" data-nav="home" style="margin-left:8px">← Retour</a></p>
+          </div>
+          <aside class="card">
+            <h3>Contact express</h3>
+            <p class="muted">Un email prérempli s’ouvrira si l’envoi direct échoue.</p>
+            <a class="btn" id="siteMailto" href="#">Écrire maintenant</a>
+          </aside>
+        </div>
+      </section>
+    </div>
+
+    <!-- MERCI -->
+    <div id="view-thanks" class="view" role="region" aria-labelledby="thanks-title">
+      <section class="container" style="text-align:center">
+        <h1 id="thanks-title" class="section-title">Merci, bien reçu ✅</h1>
+        <p class="muted">Nous revenons vers vous sous 24h avec des pistes concrètes.</p>
+        <p style="margin-top:16px"><a class="btn" href="#" data-nav="home">← Retour à l’accueil</a></p>
+      </section>
+    </div>
   </main>
 
   <footer>
@@ -482,11 +324,7 @@
       <div class="logo">
         <svg viewBox="0 0 40 40" aria-hidden="true" role="img" style="width:28px;height:28px">
           <circle cx="20" cy="20" r="14" fill="url(#gf)" />
-          <defs>
-            <linearGradient id="gf" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#8a6bff"/><stop offset="1" stop-color="#6b46ff"/>
-            </linearGradient>
-          </defs>
+          <defs><linearGradient id="gf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6bff"/><stop offset="1" stop-color="#6b46ff"/></linearGradient></defs>
         </svg>
         <span>Omera</span>
       </div>
@@ -494,53 +332,64 @@
     </div>
   </footer>
 
-  <!-- Back to top button -->
   <button class="to-top" id="toTop" aria-label="Remonter en haut">↑</button>
 
   <script>
-    // Reveal on scroll
-    const IO = new IntersectionObserver((entries)=>{
-      for(const e of entries){ if(e.isIntersecting){ e.target.classList.add('in'); IO.unobserve(e.target); } }
-    }, { threshold: .08 });
+    // Reveal
+    const IO = new IntersectionObserver((entries)=>{ for(const e of entries){ if(e.isIntersecting){ e.target.classList.add('in'); IO.unobserve(e.target); } } }, { threshold: .08 });
     document.querySelectorAll('[data-reveal]').forEach(el=>IO.observe(el));
 
     // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Contact (demo only)
-    document.forms.contact.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      alert('Merci ! Votre message a été envoyé (démo). On vous répond sous 24h.');
-      e.target.reset();
-    });
+    // Menu
+    const burger = document.getElementById('burger'); const drawer = document.getElementById('drawer');
+    const toggleMenu = () => { const open = drawer.classList.toggle('open'); burger.classList.toggle('active', open); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); document.body.style.overflow = open ? 'hidden' : ''; };
+    burger.addEventListener('click', toggleMenu); drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { if(drawer.classList.contains('open')) toggleMenu(); }));
 
-    // Burger menu (mobile)
-    const burger = document.getElementById('burger');
-    const drawer = document.getElementById('drawer');
-    const toggleMenu = () => {
-      const open = drawer.classList.toggle('open');
-      burger.classList.toggle('active', open);
-      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-      document.body.style.overflow = open ? 'hidden' : '';
-    };
-    burger.addEventListener('click', toggleMenu);
-    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      if(drawer.classList.contains('open')) toggleMenu();
-    }));
-
-    // Back to top button logic
-    const toTop = document.getElementById('toTop');
-    const onScroll = () => {
-      const y = window.scrollY || document.documentElement.scrollTop;
-      if (y > 200) toTop.classList.add('show'); else toTop.classList.remove('show');
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
+    // To top
+    const toTop = document.getElementById('toTop'); window.addEventListener('scroll', ()=>{ const y = window.scrollY || document.documentElement.scrollTop; if (y > 200) toTop.classList.add('show'); else toTop.classList.remove('show'); }, { passive:true });
     toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    // Respect reduced motion
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.documentElement.style.scrollBehavior = 'auto';
-    }
+    // Router
+    const views = { home:document.getElementById('view-home'), saas:document.getElementById('view-saas'), site:document.getElementById('view-site'), thanks:document.getElementById('view-thanks') };
+    function show(key){ Object.values(views).forEach(v=>v.classList.remove('active')); (views[key]||views.home).classList.add('active'); window.scrollTo({ top: 0, behavior: 'instant' }); }
+    function parseRoute(){ const h = location.hash || ''; if(h.startsWith('#service/')){ const key = h.split('/')[1]; show(key==='site'?'site':'saas'); } else if(h==='#merci'){ show('thanks'); } else { show('home'); } }
+    window.addEventListener('hashchange', parseRoute); parseRoute();
+    document.querySelectorAll('[data-nav="home"]').forEach(a=>a.addEventListener('click', (e)=>{ e.preventDefault(); history.pushState(null,'','#'); parseRoute(); }));
+
+    // Quick mailto (fallback / express)
+    function quickMailto(subject){ const body = encodeURIComponent('Bonjour,\\n\\nJe souhaite échanger sur ce sujet.\\n\\n—'); return `mailto:Contact.OmeraFrance@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`; }
+    const saasMail = document.getElementById('saasMailto'); if(saasMail) saasMail.setAttribute('href', quickMailto('Projet SaaS — prise de contact'));
+    const siteMail = document.getElementById('siteMailto'); if(siteMail) siteMail.setAttribute('href', quickMailto('Projet Site web — prise de contact'));
+
+    // CONTACT FORM — envoi direct via /api/contact (Vercel) + fallback mailto
+    const contactForm = document.getElementById('contactForm'); const formNote = document.getElementById('formNote');
+    contactForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const data = new FormData(contactForm);
+      if (data.get('_gotcha')) return; // bot trap
+      const payload = { name:data.get('name'), email:data.get('email'), phone:data.get('phone'), message:data.get('message') };
+      formNote.textContent = 'Envoi en cours…';
+      try{
+        const res = await fetch('/api/contact', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        if(!res.ok) throw new Error('send_failed');
+        formNote.textContent = 'Message envoyé ✅';
+        contactForm.reset();
+        location.hash = '#merci';
+      }catch(err){
+        // Fallback mailto si l’API n’est pas prête
+        const subject = encodeURIComponent('Demande de projet — ' + (payload.name||'')); 
+        const body = encodeURIComponent(`Nom: ${payload.name||''}\nEmail: ${payload.email||''}\nTéléphone: ${payload.phone||''}\n\nMessage:\n${payload.message||''}`);
+        window.location.href = `mailto:Contact.OmeraFrance@gmail.com?subject=${subject}&body=${body}`;
+        formNote.textContent = 'Ouverture de votre messagerie…';
+      }
+    });
+
+    // Reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { document.documentElement.style.scrollBehavior = 'auto'; }
   </script>
+
+  <div class="site-bg"></div><div class="noise"></div>
 </body>
 </html>
