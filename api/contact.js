@@ -1,12 +1,13 @@
 // api/contact.js
 import { Resend } from 'resend';
-export const config = { runtime: 'nodejs20.x' }; // <-- force le runtime côté fonction
-import { Resend } from 'resend';
 
+// force explicitement le runtime côté fonction
+export const config = { runtime: 'nodejs20.x' };
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const TO = 'Contact.OmeraFrance@gmail.com';
 const FROM = 'Omera <onboarding@resend.dev>'; // marche sans config de domaine
+
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
