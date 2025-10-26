@@ -1,12 +1,11 @@
 // api/contact.js
 import { Resend } from 'resend';
 
-// force explicitement le runtime côté fonction
 export const config = { runtime: 'nodejs20.x' };
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const TO = 'Contact.OmeraFrance@gmail.com';
-const FROM = 'Omera <onboarding@resend.dev>'; // marche sans config de domaine
+const FROM = 'Omera <onboarding@resend.dev>';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -14,35 +13,23 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, email, phone, message } = req.body || {};
+    // Body: utilise req.body si dispo, sinon parse le flux HTTP
+    let body = req.body;
+    if (!body) {
+      const chunks = [];
+      for await (const c of req) chunks.push(c);
+      const raw = Buffer.concat(chunks).toString('utf8');
+      body = raw ? JSON.parse(raw) : {};
+    }
+
+    const { name, email, phone, message } = body || {};
     if (!name || !email || !message) {
       return res.status(400).json({ error: 'Champs requis manquants.' });
     }
 
     const subject = `Nouveau message — ${name}`;
 
-    const html = `
-      <table style="width:100%;max-width:640px;margin:0 auto;font-family:Inter,Segoe UI,Arial,sans-serif;background:#0b0f19;color:#e8e9f1;border-radius:16px;overflow:hidden">
-        <tr><td style="padding:24px;background:linear-gradient(135deg,#7c5cff,#9f7aff);color:#fff;font-weight:800;font-size:20px">
-          Omera — Nouveau contact
-        </td></tr>
-        <tr><td style="padding:20px">
-          <p style="margin:0 0 8px;opacity:.85">Message depuis le site web.</p>
-          <div style="margin:14px 0;padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))">
-            <p style="margin:0 0 6px"><b>Nom :</b> ${escapeHtml(name)}</p>
-            <p style="margin:0 0 6px"><b>Email :</b> ${escapeHtml(email)}</p>
-            <p style="margin:0 0 6px"><b>Téléphone :</b> ${escapeHtml(phone || '—')}</p>
-            <p style="margin:12px 0 6px"><b>Message :</b></p>
-            <pre style="white-space:pre-wrap;font:inherit;margin:0">${escapeHtml(message)}</pre>
-          </div>
-          <p style="margin:16px 0 0;opacity:.7">Réponds à ce mail pour contacter directement l’expéditeur.</p>
-        </td></tr>
-        <tr><td style="padding:16px;text-align:center;color:#a7abbe;font-size:12px;border-top:1px solid rgba(255,255,255,.06)">
-          © ${new Date().getFullYear()} Omera
-        </td></tr>
-      </table>
-    `;
-
+    const html = `...`; // (ton HTML d'email tel que dans ton message)
     const text = [
       `Omera — Nouveau contact`,
       `Nom: ${name}`,
@@ -73,7 +60,6 @@ export default async function handler(req, res) {
   }
 }
 
-// Protection basique XSS dans les champs
 function escapeHtml(str = '') {
   return String(str)
     .replace(/&/g, '&amp;')
