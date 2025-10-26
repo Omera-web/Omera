@@ -8,9 +8,10 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const TO = 'Contact.OmeraFrance@gmail.com';
 const FROM = 'Omera <onboarding@resend.dev>'; // marche sans config de domaine
 
-
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Méthode non autorisée' });
+  }
 
   try {
     const { name, email, phone, message } = req.body || {};
@@ -19,13 +20,14 @@ export default async function handler(req, res) {
     }
 
     const subject = `Nouveau message — ${name}`;
+
     const html = `
       <table style="width:100%;max-width:640px;margin:0 auto;font-family:Inter,Segoe UI,Arial,sans-serif;background:#0b0f19;color:#e8e9f1;border-radius:16px;overflow:hidden">
         <tr><td style="padding:24px;background:linear-gradient(135deg,#7c5cff,#9f7aff);color:#fff;font-weight:800;font-size:20px">
           Omera — Nouveau contact
         </td></tr>
         <tr><td style="padding:20px">
-          <p style="margin:0 0 8px;opacity:.85">Message depuis le site.</p>
+          <p style="margin:0 0 8px;opacity:.85">Message depuis le site web.</p>
           <div style="margin:14px 0;padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))">
             <p style="margin:0 0 6px"><b>Nom :</b> ${escapeHtml(name)}</p>
             <p style="margin:0 0 6px"><b>Email :</b> ${escapeHtml(email)}</p>
@@ -60,15 +62,23 @@ export default async function handler(req, res) {
       text
     });
 
-    if (send?.error) return res.status(500).json({ error: 'Send error', detail: send.error });
+    if (send?.error) {
+      return res.status(500).json({ error: 'Erreur lors de l’envoi', detail: send.error });
+    }
+
     return res.status(200).json({ ok: true });
   } catch (err) {
-    return res.status(500).json({ error: 'Server error' });
+    console.error('Erreur serveur :', err);
+    return res.status(500).json({ error: 'Erreur serveur' });
   }
 }
 
-function escapeHtml(str='') {
+// Protection basique XSS dans les champs
+function escapeHtml(str = '') {
   return String(str)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
