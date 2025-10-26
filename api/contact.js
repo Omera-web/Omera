@@ -1,5 +1,8 @@
 // api/contact.js
 import { Resend } from 'resend';
+export const config = { runtime: 'nodejs20.x' }; // <-- force le runtime côté fonction
+import { Resend } from 'resend';
+
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const TO = 'Contact.OmeraFrance@gmail.com';
