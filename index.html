@@ -164,7 +164,7 @@
       <section id="services">
         <div class="container">
           <h2 class="section-title" data-reveal>Nos services</h2>
-          <p class="muted" data-reveal>Choisissez votre format et découvrez le déroulé complet.</p>
+        <p class="muted" data-reveal>Choisissez votre format et découvrez le déroulé complet.</p>
           <div class="grid cols-2" style="margin-top:20px">
             <article class="card" data-reveal>
               <div class="icon">📱</div>
@@ -359,12 +359,18 @@
     document.querySelectorAll('[data-nav="home"]').forEach(a=>a.addEventListener('click', (e)=>{ e.preventDefault(); history.pushState(null,'','#'); parseRoute(); }));
 
     // Quick mailto (fallback / express)
-    function quickMailto(subject){ const body = encodeURIComponent('Bonjour,\\n\\nJe souhaite échanger sur ce sujet.\\n\\n—'); return `mailto:Contact.OmeraFrance@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`; }
+    function quickMailto(subject){
+      const body = encodeURIComponent('Bonjour,\n\nJe souhaite échanger sur ce sujet.\n\n—');
+      return `mailto:Contact.OmeraFrance@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
+    }
     const saasMail = document.getElementById('saasMailto'); if(saasMail) saasMail.setAttribute('href', quickMailto('Projet SaaS — prise de contact'));
     const siteMail = document.getElementById('siteMailto'); if(siteMail) siteMail.setAttribute('href', quickMailto('Projet Site web — prise de contact'));
 
-    // CONTACT FORM — envoi direct via /api/contact (Vercel) + fallback mailto
+    // CONTACT FORM — envoi direct via /api/contact (même domaine) + fallback mailto
     const contactForm = document.getElementById('contactForm'); const formNote = document.getElementById('formNote');
+    // Important: construit l'URL absolue vers /api/contact du domaine courant
+    const apiUrl = new URL('/api/contact', window.location.origin).toString();
+
     contactForm.addEventListener('submit', async (e)=>{
       e.preventDefault();
       const data = new FormData(contactForm);
@@ -372,14 +378,18 @@
       const payload = { name:data.get('name'), email:data.get('email'), phone:data.get('phone'), message:data.get('message') };
       formNote.textContent = 'Envoi en cours…';
       try{
-        const res = await fetch('/api/contact', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        const res = await fetch(apiUrl, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
         if(!res.ok) throw new Error('send_failed');
         formNote.textContent = 'Message envoyé ✅';
         contactForm.reset();
         location.hash = '#merci';
       }catch(err){
-        // Fallback mailto si l’API n’est pas prête
-        const subject = encodeURIComponent('Demande de projet — ' + (payload.name||'')); 
+        // Fallback mailto si l’API n’est pas prête / réseau HS
+        const subject = encodeURIComponent('Demande de projet — ' + (payload.name||''));
         const body = encodeURIComponent(`Nom: ${payload.name||''}\nEmail: ${payload.email||''}\nTéléphone: ${payload.phone||''}\n\nMessage:\n${payload.message||''}`);
         window.location.href = `mailto:Contact.OmeraFrance@gmail.com?subject=${subject}&body=${body}`;
         formNote.textContent = 'Ouverture de votre messagerie…';
@@ -387,7 +397,9 @@
     });
 
     // Reduced motion
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { document.documentElement.style.scrollBehavior = 'auto'; }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.style.scrollBehavior = 'auto';
+    }
   </script>
 
   <div class="site-bg"></div><div class="noise"></div>
