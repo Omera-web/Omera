@@ -164,7 +164,7 @@
       <section id="services">
         <div class="container">
           <h2 class="section-title" data-reveal>Nos services</h2>
-        <p class="muted" data-reveal>Choisissez votre format et découvrez le déroulé complet.</p>
+          <p class="muted" data-reveal>Choisissez votre format et découvrez le déroulé complet.</p>
           <div class="grid cols-2" style="margin-top:20px">
             <article class="card" data-reveal>
               <div class="icon">📱</div>
@@ -221,7 +221,7 @@
             <h2 class="section-title" data-reveal>Nous contacter</h2>
             <p class="muted" data-reveal>Expliquez votre besoin — retour sous 24h avec des pistes concrètes.</p>
             <div class="card" data-reveal style="margin-top:14px">
-              <form id="contactForm" name="contact">
+              <form id="contactForm" name="contact" novalidate>
                 <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
                 <input required type="text" name="name" placeholder="Votre nom" aria-label="Votre nom" />
                 <input required type="email" name="email" placeholder="Votre email" aria-label="Votre email" />
@@ -358,7 +358,7 @@
     window.addEventListener('hashchange', parseRoute); parseRoute();
     document.querySelectorAll('[data-nav="home"]').forEach(a=>a.addEventListener('click', (e)=>{ e.preventDefault(); history.pushState(null,'','#'); parseRoute(); }));
 
-    // Quick mailto (fallback / express)
+    // Quick mailto (contact express volontaire, CLIQUÉ manuellement)
     function quickMailto(subject){
       const body = encodeURIComponent('Bonjour,\n\nJe souhaite échanger sur ce sujet.\n\n—');
       return `mailto:Contact.OmeraFrance@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
@@ -366,33 +366,50 @@
     const saasMail = document.getElementById('saasMailto'); if(saasMail) saasMail.setAttribute('href', quickMailto('Projet SaaS — prise de contact'));
     const siteMail = document.getElementById('siteMailto'); if(siteMail) siteMail.setAttribute('href', quickMailto('Projet Site web — prise de contact'));
 
-    // CONTACT FORM — envoi direct via /api/contact (même domaine) + fallback mailto
-    const contactForm = document.getElementById('contactForm'); const formNote = document.getElementById('formNote');
-    // Important: construit l'URL absolue vers /api/contact du domaine courant
+    // CONTACT FORM — envoi direct via /api/contact (même domaine) — SANS fallback mailto auto
+    const contactForm = document.getElementById('contactForm');
+    const formNote = document.getElementById('formNote');
     const apiUrl = new URL('/api/contact', window.location.origin).toString();
 
     contactForm.addEventListener('submit', async (e)=>{
       e.preventDefault();
       const data = new FormData(contactForm);
       if (data.get('_gotcha')) return; // bot trap
-      const payload = { name:data.get('name'), email:data.get('email'), phone:data.get('phone'), message:data.get('message') };
+
+      const payload = {
+        name: data.get('name')?.toString().trim(),
+        email: data.get('email')?.toString().trim(),
+        phone: data.get('phone')?.toString().trim(),
+        message: data.get('message')?.toString().trim()
+      };
+
+      const btn = contactForm.querySelector('button[type="submit"]');
+      if (btn) btn.disabled = true;
       formNote.textContent = 'Envoi en cours…';
+
       try{
         const res = await fetch(apiUrl, {
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body: JSON.stringify(payload)
         });
-        if(!res.ok) throw new Error('send_failed');
+
+        const payloadRes = await res.json().catch(()=> ({}));
+        if(!res.ok){
+          const msg = payloadRes?.error || `Erreur HTTP ${res.status}`;
+          throw new Error(msg);
+        }
+
+        // Succès
         formNote.textContent = 'Message envoyé ✅';
         contactForm.reset();
+        if (btn) btn.disabled = false;
         location.hash = '#merci';
       }catch(err){
-        // Fallback mailto si l’API n’est pas prête / réseau HS
-        const subject = encodeURIComponent('Demande de projet — ' + (payload.name||''));
-        const body = encodeURIComponent(`Nom: ${payload.name||''}\nEmail: ${payload.email||''}\nTéléphone: ${payload.phone||''}\n\nMessage:\n${payload.message||''}`);
-        window.location.href = `mailto:Contact.OmeraFrance@gmail.com?subject=${subject}&body=${body}`;
-        formNote.textContent = 'Ouverture de votre messagerie…';
+        console.error('Contact form error:', err);
+        formNote.textContent = 'Envoi impossible. Réessayez dans un instant.';
+        if (btn) btn.disabled = false;
+        // IMPORTANT : aucun mailto automatique ici
       }
     });
 
