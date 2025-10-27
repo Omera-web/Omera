@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Méthode non autorisée' });
 
   try {
-    // lecture body JSON (compatible fetch)
+    // --- Body JSON safe ---
     let body = req.body;
     if (!body) {
       const chunks = [];
@@ -19,17 +19,18 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Champs requis manquants (name, email, message)' });
     }
 
-    const resendKey = process.env.RESEND_API_KEY;
-    if (!resendKey) return res.status(500).json({ error: 'RESEND_API_KEY manquante' });
+    const key = process.env.RESEND_API_KEY;
+    if (!key) return res.status(500).json({ error: 'RESEND_API_KEY manquante' });
 
-    const resend = new Resend(resendKey);
+    const resend = new Resend(key);
 
     // === MODE TEST RESEND ===
-    // DOIT être exactement l'email de connexion de ton compte Resend,
-    // en minuscules, un seul destinataire.
-    const FROM = 'onboarding@resend.dev';
-    const TO = 'contact.omerafrance@gmail.com'; // <-- ton email de compte Resend, en minuscules
+    // Doit être EXACTEMENT l’email du compte Resend avec lequel cette clé a été créée.
+    // Mets-le en dur en minuscules, sans espace.
+    const ACCOUNT_EMAIL = 'contact.omerafrance@gmail.com';
+    const TO = [ACCOUNT_EMAIL.toLowerCase().trim()];
 
+    const FROM = 'onboarding@resend.dev'; // obligatoire en mode test
     const subject = `Demande de projet — ${name}`;
     const text = [
       `Nom: ${name}`,
@@ -41,14 +42,21 @@ export default async function handler(req, res) {
     ].filter(Boolean).join('\n');
 
     const { error } = await resend.emails.send({
-      from: FROM,        // expéditeur test
-      to: [TO],          // UN SEUL destinataire, exactement ton mail Resend
+      from: FROM,
+      to: TO,            // UN SEUL destinataire: ton propre email de compte
       subject,
       text,
-      reply_to: email,   // OK en mode test
+      reply_to: email,   // ok en mode test
     });
 
-    if (error) return res.status(502).json({ error: `Resend: ${error.message || String(error)}` });
+    if (error) {
+      // on renvoie un message utile pour debug
+      return res.status(502).json({
+        error: `Resend: ${error.message || String(error)}`,
+        debug_to: TO, // pour vérifier ce qui part réellement
+      });
+    }
+
     return res.status(200).json({ ok: true });
   } catch (e) {
     console.error(e);
