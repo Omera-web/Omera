@@ -2,11 +2,26 @@
 import { Resend } from 'resend';
 
 export default async function handler(req, res) {
-  if (req.method === 'GET') return res.status(200).json({ ok: true, msg: 'Contact API up' });
+  // --- MODE DEBUG EN GET ---
+  if (req.method === 'GET') {
+    const envKey = !!process.env.RESEND_API_KEY;
+    const to = (process.env.RECEIVER_EMAIL || 'contact.omerafrance@gmail.com').trim().toLowerCase();
+    return res.status(200).json({
+      ok: true,
+      msg: 'Contact API up',
+      debug: {
+        env_RESEND_API_KEY_present: envKey,
+        will_send_from: 'onboarding@resend.dev',
+        will_send_to: to,
+        note: 'En mode test Resend, "to" doit être exactement le mail du compte Resend.'
+      }
+    });
+  }
+
   if (req.method !== 'POST') return res.status(405).json({ error: 'Méthode non autorisée' });
 
   try {
-    // --- Body JSON safe ---
+    // lecture body JSON
     let body = req.body;
     if (!body) {
       const chunks = [];
@@ -24,13 +39,14 @@ export default async function handler(req, res) {
 
     const resend = new Resend(key);
 
-    // === MODE TEST RESEND ===
-    // Doit être EXACTEMENT l’email du compte Resend avec lequel cette clé a été créée.
-    // Mets-le en dur en minuscules, sans espace.
-    const ACCOUNT_EMAIL = 'contact.omerafrance@gmail.com';
-    const TO = [ACCOUNT_EMAIL.toLowerCase().trim()];
+    // === CONFIG DESTINATAIRE ===
+    // 1) On lit d’abord l’ENV, sinon on prend ta boîte Gmail (en minuscules)
+    const ACCOUNT_EMAIL = (process.env.RECEIVER_EMAIL || 'contact.omerafrance@gmail.com')
+      .trim().toLowerCase();
 
     const FROM = 'onboarding@resend.dev'; // obligatoire en mode test
+    const TO = [ACCOUNT_EMAIL];           // UN SEUL destinataire, exactement l'email du compte Resend
+
     const subject = `Demande de projet — ${name}`;
     const text = [
       `Nom: ${name}`,
@@ -41,19 +57,21 @@ export default async function handler(req, res) {
       message,
     ].filter(Boolean).join('\n');
 
+    // petit log serveur (visible dans Vercel > Logs > Functions)
+    console.log('[contact] Sending to:', TO[0], 'from:', FROM);
+
     const { error } = await resend.emails.send({
       from: FROM,
-      to: TO,            // UN SEUL destinataire: ton propre email de compte
+      to: TO,
       subject,
       text,
-      reply_to: email,   // ok en mode test
+      reply_to: email,
     });
 
     if (error) {
-      // on renvoie un message utile pour debug
       return res.status(502).json({
         error: `Resend: ${error.message || String(error)}`,
-        debug_to: TO, // pour vérifier ce qui part réellement
+        debug: { tried_to: TO[0], from: FROM }
       });
     }
 
