@@ -94,6 +94,10 @@
     .to-top.show{opacity:1; pointer-events:auto; transform:none}
 
     /* ==== OFFERS WITH IMAGE ==== */
+    /* rendre toute la carte cliquable et accessible */
+    .offer { cursor: pointer; }
+    .offer-link { display:block; color:inherit; text-decoration:none; }
+    .offer-link:focus-visible { outline:3px solid var(--ring); outline-offset:3px; border-radius:var(--radius); }
     .offer{
       display:grid; grid-template-columns:1.05fr .95fr; gap:20px; align-items:center;
       background:linear-gradient(180deg, rgba(14,19,34,.9), rgba(14,19,34,.75));
@@ -205,43 +209,32 @@
           <p class="muted" data-reveal>Choisissez votre format et découvrez le déroulé complet.</p>
 
           <div class="grid cols-2" style="margin-top:20px">
-            <!-- Offre SaaS avec image -->
-            <article class="offer" data-reveal>
-              <div class="offer-content">
-                <div class="icon">📊</div>
-                <h3>Applications / SaaS sur mesure</h3>
-                <p class="muted">Automatisation, dashboards, portails clients, intégrations API.</p>
-                <div class="price-chip" aria-label="Tarif SaaS">À partir de 4 000€</div>
-                <div class="actions">
-                  <a class="btn service-link" data-service="saas" href="#service/saas" aria-label="Voir le détail Applications / SaaS">Voir le détail</a>
-                  <a class="btn secondary" href="#contact">Demander un devis</a>
-                </div>
-              </div>
-              <div class="offer-media" aria-hidden="true">
-                <span class="offer-glow"></span>
-                <img src="assets/offer-saas.jpg" alt="Aperçu d’un dashboard SaaS par Omera" />
-              </div>
-            </article>
+  <!-- Carte SaaS — toute la carte cliquable -->
+  <a href="#service/saas" class="offer offer-link" data-reveal aria-label="Voir le détail : Applications / SaaS sur mesure">
+    <div class="offer-content">
+      <h3>Applications / SaaS sur mesure</h3>
+      <p class="muted">Automatisation, dashboards, portails clients, intégrations API.</p>
+      <div class="price-chip" aria-label="Tarif SaaS">À partir de 4 000€</div>
+    </div>
+    <div class="offer-media" aria-hidden="true">
+      <span class="offer-glow"></span>
+      <img src="assets/offer-saas.jpg" alt="" />
+    </div>
+  </a>
 
-            <!-- Offre Site avec image -->
-            <article class="offer" data-reveal style="transition-delay:.06s">
-              <div class="offer-content">
-                <div class="icon">🖥️</div>
-                <h3>Site web</h3>
-                <p class="muted">Vitrine rapide, claire et SEO-friendly, formulaires & admin simple.</p>
-                <div class="price-chip" aria-label="Tarif Site web">À partir de 500€</div>
-                <div class="actions">
-                  <a class="btn service-link" data-service="site" href="#service/site" aria-label="Voir le détail Site web">Voir le détail</a>
-                  <a class="btn secondary" href="#contact">Demander un devis</a>
-                </div>
-              </div>
-              <div class="offer-media" aria-hidden="true">
-                <span class="offer-glow"></span>
-                <img src="assets/offer-site.jpg" alt="Aperçu d’un site web performant par Omera" />
-              </div>
-            </article>
-          </div>
-        </div>
+  <!-- Carte Site — toute la carte cliquable -->
+  <a href="#service/site" class="offer offer-link" data-reveal style="transition-delay:.06s" aria-label="Voir le détail : Site web">
+    <div class="offer-content">
+      <h3>Site web</h3>
+      <p class="muted">Vitrine rapide, claire et SEO-friendly, formulaires & admin simple.</p>
+      <div class="price-chip" aria-label="Tarif Site web">À partir de 500€</div>
+    </div>
+    <div class="offer-media" aria-hidden="true">
+      <span class="offer-glow"></span>
+      <img src="assets/offer-site.jpg" alt="" />
+    </div>
+  </a>
+</div>
       </section>
 
       <!-- Pourquoi -->
