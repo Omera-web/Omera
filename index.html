@@ -250,7 +250,6 @@
     </div>
   </div>
 </aside>
-          </aside>
         </div>
       </section>
 
@@ -650,10 +649,6 @@ const contactForm = document.getElementById('contactForm');
 const formNote = document.getElementById('formNote');
 const apiUrl = new URL('/api/contact', window.location.origin).toString();
 
-// Limites prudentes (compatibles boîtes mail & plan gratuit)
-// ~10 Mo par fichier ; ~20 Mo au total
-const MAX_PER_FILE = 10 * 1024 * 1024;
-const MAX_TOTAL    = 20 * 1024 * 1024;
 
 contactForm.addEventListener('submit', async (e)=>{
   e.preventDefault();
