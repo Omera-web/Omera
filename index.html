@@ -93,6 +93,42 @@
       color:#fff; font-weight:800; opacity:0; pointer-events:none; transform:translateY(10px); transition:.25s ease}
     .to-top.show{opacity:1; pointer-events:auto; transform:none}
 
+    /* ==== OFFERS WITH IMAGE ==== */
+    .offer{
+      display:grid; grid-template-columns:1.05fr .95fr; gap:20px; align-items:center;
+      background:linear-gradient(180deg, rgba(14,19,34,.9), rgba(14,19,34,.75));
+      border:1px solid rgba(255,255,255,.08); border-radius:var(--radius);
+      padding:22px; position:relative; overflow:hidden; box-shadow:var(--shadow-sm); transition:.25s ease;
+    }
+    .offer:hover{ transform:translateY(-2px) }
+    .offer::after{
+      content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none;
+      background:
+        radial-gradient(380px 160px at 20% 0%, rgba(124,92,255,.18), transparent 60%),
+        radial-gradient(380px 160px at 110% 120%, rgba(124,92,255,.12), transparent 60%);
+    }
+    .offer h3{margin:10px 0 6px; font-size:clamp(19px,4.8vw,22px)}
+    .offer p.muted{margin:0}
+    .offer .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    .offer .btn{padding:12px 16px}
+    .offer .price-chip{margin-top:10px}
+
+    .offer-media{
+      position:relative; aspect-ratio:16/11; border-radius:18px; overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow:0 12px 32px rgba(0,0,0,.35), 0 10px 26px rgba(124,92,255,.25);
+      transform:perspective(900px) rotateY(-8deg) rotateX(2deg);
+      will-change:transform, box-shadow; transition:.25s ease;
+    }
+    .offer:hover .offer-media{ transform:perspective(900px) rotateY(-4deg) rotateX(1deg) translateY(-2px) }
+    .offer-media img{width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.05) contrast(1.02)}
+    .offer-glow{
+      position:absolute; inset:-40%;
+      background:radial-gradient(closest-side, rgba(124,92,255,.35), transparent 70%);
+      mix-blend-mode:screen; pointer-events:none; opacity:.7;
+    }
+
     @media (max-width:980px){
       .hero{padding: clamp(40px, 12vw, 72px) 0 clamp(16px, 6vw, 36px)}
       .hero-grid{grid-template-columns:1fr; gap:14px}
@@ -101,6 +137,8 @@
       .cta{padding:14px 18px}
       .card{padding: clamp(18px, 4.5vw, 22px)}
       .badge{padding:7px 10px}
+      .offer{grid-template-columns:1fr; gap:14px}
+      .offer-media{transform:none}
     }
     @media (max-width:640px){
       .container{width:min(100%, 92vw)}
@@ -165,20 +203,42 @@
         <div class="container">
           <h2 class="section-title" data-reveal>Nos services</h2>
           <p class="muted" data-reveal>Choisissez votre format et découvrez le déroulé complet.</p>
+
           <div class="grid cols-2" style="margin-top:20px">
-            <article class="card" data-reveal>
-              <div class="icon">📱</div>
-              <h3>Applications / SaaS sur mesure</h3>
-              <p class="muted">Automatisation, dashboards, portails clients, intégrations API.</p>
-              <div class="price-chip" aria-label="Tarif SaaS">À partir de 4 000€</div>
-              <p style="margin-top:12px"><a class="btn service-link" data-service="saas" href="#service/saas" aria-label="Voir le détail Applications / SaaS">Voir le détail</a></p>
+            <!-- Offre SaaS avec image -->
+            <article class="offer" data-reveal>
+              <div class="offer-content">
+                <div class="icon">📊</div>
+                <h3>Applications / SaaS sur mesure</h3>
+                <p class="muted">Automatisation, dashboards, portails clients, intégrations API.</p>
+                <div class="price-chip" aria-label="Tarif SaaS">À partir de 4 000€</div>
+                <div class="actions">
+                  <a class="btn service-link" data-service="saas" href="#service/saas" aria-label="Voir le détail Applications / SaaS">Voir le détail</a>
+                  <a class="btn secondary" href="#contact">Demander un devis</a>
+                </div>
+              </div>
+              <div class="offer-media" aria-hidden="true">
+                <span class="offer-glow"></span>
+                <img src="assets/offer-saas.jpg" alt="Aperçu d’un dashboard SaaS par Omera" />
+              </div>
             </article>
-            <article class="card" data-reveal style="transition-delay:.06s">
-              <div class="icon">🖥️</div>
-              <h3>Site web</h3>
-              <p class="muted">Vitrine rapide, clair, SEO propre, formulaires & admin simple.</p>
-              <div class="price-chip" aria-label="Tarif Site web">À partir de 500€</div>
-              <p style="margin-top:12px"><a class="btn service-link" data-service="site" href="#service/site" aria-label="Voir le détail Site web">Voir le détail</a></p>
+
+            <!-- Offre Site avec image -->
+            <article class="offer" data-reveal style="transition-delay:.06s">
+              <div class="offer-content">
+                <div class="icon">🖥️</div>
+                <h3>Site web</h3>
+                <p class="muted">Vitrine rapide, claire et SEO-friendly, formulaires & admin simple.</p>
+                <div class="price-chip" aria-label="Tarif Site web">À partir de 500€</div>
+                <div class="actions">
+                  <a class="btn service-link" data-service="site" href="#service/site" aria-label="Voir le détail Site web">Voir le détail</a>
+                  <a class="btn secondary" href="#contact">Demander un devis</a>
+                </div>
+              </div>
+              <div class="offer-media" aria-hidden="true">
+                <span class="offer-glow"></span>
+                <img src="assets/offer-site.jpg" alt="Aperçu d’un site web performant par Omera" />
+              </div>
             </article>
           </div>
         </div>
@@ -205,7 +265,7 @@
       <section id="process">
         <div class="container">
           <h2 class="section-title" data-reveal>Notre approche</h2>
-          <div class="grid" style="gap:16px; margin-top:8px">
+        <div class="grid" style="gap:16px; margin-top:8px">
             <div class="card step" data-reveal><div class="step-num">1</div><div><h3>Écoute & cadrage</h3><p class="muted">Objectifs, utilisateurs, KPIs, périmètre clair.</p></div></div>
             <div class="card step" data-reveal style="transition-delay:.06s"><div class="step-num">2</div><div><h3>Design validé</h3><p class="muted">Maquettes interactives validées ensemble.</p></div></div>
             <div class="card step" data-reveal style="transition-delay:.12s"><div class="step-num">3</div><div><h3>Développement</h3><p class="muted">Sprints courts, QA, livrables nets.</p></div></div>
