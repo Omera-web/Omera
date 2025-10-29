@@ -150,7 +150,7 @@
       .section-title{font-size:clamp(22px, 7vw, 28px)}
       .drawer a{padding:18px var(--space)}
     }
-  /* Aide + upload (colonne droite) */
+/* Aide + upload (colonne droite) */
 .checklist { margin: 8px 0 0; padding-left: 18px; }
 .checklist li { margin: 6px 0; }
 
@@ -163,9 +163,32 @@
 }
 .upload .drop:hover { border-color: rgba(255,255,255,.28); }
 .small { font-size: 13px; }
-/* Liste des fichiers (un sous l'autre) */
-.file-list { list-style: none; padding-left: 0; }
-.file-list li { margin: 6px 0; opacity:.9 }
+
+/* Feedback upload (messages sous la dropzone) */
+.error   { color: #ffb4b4; margin: 8px 0 0; }
+.success { color: #b7ffcc; margin: 8px 0 0; }
+
+/* Focus visible sur la dropzone */
+.upload .drop:focus-within {
+  outline: 3px solid var(--ring);
+  outline-offset: 3px;
+}
+
+/* Alignement visuel de la colonne de droite (au niveau du texte d’intro) */
+#contactHelp { margin-top: 36px; }
+@media (max-width: 980px){
+  #contactHelp { margin-top: 0; }
+}
+
+/* Liste des fichiers + bouton suppression */
+.file-list { list-style: none; padding-left: 0; display: grid; gap: 6px; }
+.file-item { display:flex; align-items:center; gap:8px; opacity:.95 }
+.file-remove {
+  border:1px solid rgba(255,255,255,.16);
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border-radius:8px; padding:4px 8px; cursor:pointer; font-size:12px;
+}
+.file-remove:hover { border-color: rgba(255,255,255,.28); }
 </style>
 
 </head>
@@ -351,7 +374,7 @@
       </div>
     </div>
 
-    <!-- Colonne droite : aide + upload -->
+<!-- Colonne droite : aide + upload -->
 <aside class="card" data-reveal id="contactHelp">
   <h3>Pour bien cerner votre besoin</h3>
   <ul class="muted checklist">
@@ -363,15 +386,20 @@
 
   <div class="upload" style="margin-top:14px">
     <label class="drop" for="files">
-      <input id="files" type="file" multiple hidden />
+      <input id="files" type="file" multiple hidden
+  accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.csv,.txt,.xls,.xlsx,application/pdf,image/*,text/csv,text/plain,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
       <strong>Ajouter des fichiers</strong>
-      <span class="muted">PDF, images, Excel, etc. (limites appliquées automatiquement)</span>
+      <span class="muted">PDF, images, Excel, CSV, TXT — max 10&nbsp;Mo/fichier, 20&nbsp;Mo au total</span>
+      <span class="small">Si c’est trop lourd ou non pris en charge, envoyez-les à
+        <a href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a>.
+      </span>
     </label>
-    <ul id="fileList" class="file-list" style="margin:8px 0 0;"></ul>
-    <p class="muted small" style="margin-top:8px">
-      Si vos fichiers sont trop volumineux ou non pris en charge, envoyez-les directement à
-      <a href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a>.
-    </p>
+
+    <!-- Liste des fichiers sélectionnés -->
+    <ul id="fileList" class="file-list muted small"></ul>
+
+    <!-- Message d’erreur immédiat -->
+    <p id="fileError" class="error small" aria-live="polite"></p>
   </div>
 </aside>
   </div>
@@ -493,27 +521,120 @@
     const saasMail = document.getElementById('saasMailto'); if(saasMail) saasMail.setAttribute('href', quickMailto('Projet SaaS — prise de contact'));
     const siteMail = document.getElementById('siteMailto'); if(siteMail) siteMail.setAttribute('href', quickMailto('Projet Site web — prise de contact'));
 
-    // Helpers upload (sélection + aperçu cumulatif)
+    // Helpers upload (multi + suppression + limites immédiates)
 const fileInput  = document.getElementById('files');
 const fileListEl = document.getElementById('fileList');
+const fileError  = document.getElementById('fileError');
 
-// Cumul de toutes les sélections successives
+// Limites (alignées avec Resend gratuit côté API)
+const MAX_FILES    = 5;                  // max fichiers
+const MAX_PER_FILE = 10 * 1024 * 1024;   // 10 Mo par fichier
+const MAX_TOTAL    = 20 * 1024 * 1024;   // 20 Mo au total
+const ALLOWED_TYPES = new Set([
+  'application/pdf',
+  'image/png','image/jpeg','image/jpg','image/gif','image/webp',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'text/csv','text/plain'
+]);
+
 let selectedFiles = [];
 
-function renderFilesList() {
-  if (!fileListEl) return;
-  fileListEl.innerHTML = selectedFiles.map(f => `<li>${f.name}</li>`).join('') || '';
+function setError(msg){
+  if (!fileError) return;
+  fileError.textContent = msg || '';
+}
+function clearError(){ setError(''); }
+
+function rebuildInput(){
+  // reset pour pouvoir re-choisir les mêmes fichiers
+  if (fileInput) fileInput.value = '';
 }
 
-// Chaque nouvelle sélection s'ajoute (sans écraser la précédente)
-fileInput?.addEventListener('change', () => {
-  if (!fileInput?.files) return;
-  const newly = Array.from(fileInput.files);
-  selectedFiles = [...selectedFiles, ...newly];
-  renderFilesList();
-  // reset pour permettre de re-sélectionner le même fichier ensuite
-  fileInput.value = '';
+function currentTotalSize(files){
+  return files.reduce((n,f)=> n + (f.size||0), 0);
+}
+
+function renderFilesList(){
+  if (!fileListEl) return;
+  fileListEl.innerHTML = selectedFiles.map((f, i)=> `
+    <li class="file-item">
+      <span>${f.name}</span>
+      <button type="button" class="file-remove" data-i="${i}" aria-label="Retirer ${f.name}">✕</button>
+    </li>
+  `).join('') || '';
+}
+
+// suppression d’un fichier (délégation)
+fileListEl?.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.file-remove');
+  if (!btn) return;
+  const i = Number(btn.dataset.i);
+  if (!Number.isNaN(i)){
+    selectedFiles.splice(i, 1);
+    renderFilesList();
+    clearError();
+  }
 });
+
+function addFiles(newFiles){
+  clearError();
+  const incoming = Array.from(newFiles || []);
+  if (!incoming.length) return;
+
+  // limite de nombre
+  if (selectedFiles.length + incoming.length > MAX_FILES) {
+    setError(`Trop de fichiers (max ${MAX_FILES}). Supprimez-en avant d’ajouter d’autres éléments.`);
+  }
+
+  for (const f of incoming){
+    if (selectedFiles.length >= MAX_FILES) break;
+
+    // taille par fichier
+    if (f.size > MAX_PER_FILE){
+      setError(`"${f.name}" dépasse 10 Mo. Envoyez-le par mail à Contact.OmeraFrance@gmail.com.`);
+      continue;
+    }
+
+    // type souple : on tolère les inconnus (pas de blocage)
+    if (!ALLOWED_TYPES.has(f.type) && f.type){
+      // on pourrait afficher un rappel, mais on n’empêche pas
+    }
+
+    // taille totale
+    const nextTotal = currentTotalSize([...selectedFiles, f]);
+    if (nextTotal > MAX_TOTAL){
+      setError(`Taille totale > 20 Mo. Envoyez les plus volumineux par mail à Contact.OmeraFrance@gmail.com.`);
+      continue;
+    }
+
+    selectedFiles.push(f);
+  }
+
+  rebuildInput();
+  renderFilesList();
+}
+
+// input “fichiers”
+fileInput?.addEventListener('change', ()=>{
+  if (!fileInput?.files) return;
+  addFiles(fileInput.files);
+});
+
+// drag & drop sur la zone
+const dropZone = document.querySelector('.upload .drop');
+if (dropZone){
+  ['dragenter','dragover'].forEach(evt=>{
+    dropZone.addEventListener(evt, (e)=>{ e.preventDefault(); e.stopPropagation(); dropZone.classList.add('is-over'); });
+  });
+  ['dragleave','drop'].forEach(evt=>{
+    dropZone.addEventListener(evt, (e)=>{ e.preventDefault(); e.stopPropagation(); dropZone.classList.remove('is-over'); });
+  });
+  dropZone.addEventListener('drop', (e)=>{
+    const files = e.dataTransfer?.files;
+    if (files && files.length) addFiles(files);
+  });
+}
 
 function fileToBase64(file){
   return new Promise((resolve, reject)=>{
@@ -539,24 +660,35 @@ contactForm.addEventListener('submit', async (e)=>{
   const data = new FormData(contactForm);
   if (data.get('_gotcha')) return; // bot trap
 
-  // Vérifs tailles
+  // validations fichiers
+  clearError();
+  if (selectedFiles.length > MAX_FILES){
+    setError(`Trop de fichiers (max ${MAX_FILES}).`);
+    formNote.classList.remove('success'); formNote.classList.add('error');
+    formNote.textContent = `Veuillez retirer des pièces jointes.`;
+    return;
+  }
   let total = 0;
-  for (const f of selectedFiles) {
-    if (f.size > MAX_PER_FILE) {
-      formNote.textContent = `Le fichier "${f.name}" dépasse la taille autorisée (~10 Mo).`;
+  for (const f of selectedFiles){
+    if (f.size > MAX_PER_FILE){
+      setError(`"${f.name}" dépasse 10 Mo. Envoyez-le par mail à Contact.OmeraFrance@gmail.com.`);
+      formNote.classList.remove('success'); formNote.classList.add('error');
+      formNote.textContent = `Pièce jointe trop volumineuse.`;
       return;
     }
     total += f.size;
   }
-  if (total > MAX_TOTAL) {
-    formNote.textContent = `La taille cumulée des pièces jointes dépasse la limite (~20 Mo).`;
+  if (total > MAX_TOTAL){
+    setError(`Taille totale > 20 Mo. Envoyez les plus volumineux par mail à Contact.OmeraFrance@gmail.com.`);
+    formNote.classList.remove('success'); formNote.classList.add('error');
+    formNote.textContent = `Total des pièces jointes trop élevé.`;
     return;
   }
 
-  const attachments = await Promise.all(selectedFiles.map(async (f) => ({
+  const attachments = await Promise.all(selectedFiles.map(async (f)=>({
     filename: f.name,
     contentType: f.type || 'application/octet-stream',
-    content: await fileToBase64(f) // base64 (sans l'en-tête)
+    content: await fileToBase64(f)
   })));
 
   const payload = {
@@ -569,6 +701,7 @@ contactForm.addEventListener('submit', async (e)=>{
 
   const btn = contactForm.querySelector('button[type="submit"]');
   if (btn) btn.disabled = true;
+  formNote.classList.remove('success','error');
   formNote.textContent = 'Envoi en cours…';
 
   try{
@@ -577,7 +710,6 @@ contactForm.addEventListener('submit', async (e)=>{
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify(payload)
     });
-
     const payloadRes = await res.json().catch(()=> ({}));
     if(!res.ok){
       const msg = payloadRes?.error || `Erreur HTTP ${res.status}`;
@@ -586,6 +718,7 @@ contactForm.addEventListener('submit', async (e)=>{
 
     // Succès
     formNote.textContent = 'Message envoyé ✅';
+    formNote.classList.remove('error'); formNote.classList.add('success');
     contactForm.reset();
     selectedFiles = [];
     renderFilesList();
@@ -593,6 +726,7 @@ contactForm.addEventListener('submit', async (e)=>{
     location.hash = '#merci';
   }catch(err){
     console.error('Contact form error:', err);
+    formNote.classList.remove('success'); formNote.classList.add('error');
     formNote.textContent = 'Envoi impossible. Si besoin, envoyez vos fichiers à Contact.OmeraFrance@gmail.com.';
     if (btn) btn.disabled = false;
   }
