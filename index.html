@@ -79,7 +79,7 @@
     .breadcrumb a{color:#fff; opacity:.9}
     .glass{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.09); border-radius:22px; padding:24px; box-shadow:var(--shadow-lg)}
 
-    .contact{display:grid; grid-template-columns:1.1fr .9fr; gap:26px}
+    .contact{display:grid; grid-template-columns:1.1fr .9fr; gap:26px; align-items:start}
     form{display:grid; gap:12px}
     input,textarea{background:#0d1323; border:1px solid rgba(255,255,255,.08); color:var(--text); border-radius:14px; padding:14px 16px; font:inherit}
     input:focus, textarea:focus{outline:3px solid var(--ring); outline-offset:2px}
@@ -163,6 +163,9 @@
 }
 .upload .drop:hover { border-color: rgba(255,255,255,.28); }
 .small { font-size: 13px; }
+/* Liste des fichiers (un sous l'autre) */
+.file-list { list-style: none; padding-left: 0; }
+.file-list li { margin: 6px 0; opacity:.9 }
 </style>
 
 </head>
@@ -349,24 +352,28 @@
     </div>
 
     <!-- Colonne droite : aide + upload -->
-    <aside class="card" data-reveal id="contactHelp">
-      <h3>Pour bien cerner votre besoin</h3>
-      <ul class="muted checklist">
-        <li>Si vous utilisez un <b>Excel / Google Sheet</b> interne, joignez-le (ou des captures).</li>
-        <li>Précisez le <b>nombre d’utilisateurs</b> concernés.</li>
-        <li>Indiquez l’<b>objectif principal</b> de l’outil en une phrase.</li>
-        <li>Séparez les <b>indispensables</b> des “nice to have”.</li>
-      </ul>
+<aside class="card" data-reveal id="contactHelp">
+  <h3>Pour bien cerner votre besoin</h3>
+  <ul class="muted checklist">
+    <li>Si vous utilisez un <b>Excel / Google Sheet</b> interne, joignez-le (ou des captures).</li>
+    <li>Précisez le <b>nombre d’utilisateurs</b> concernés.</li>
+    <li>Indiquez l’<b>objectif principal</b> de l’outil en une phrase.</li>
+    <li>Séparez les <b>indispensables</b> des “nice to have”.</li>
+  </ul>
 
-      <div class="upload" style="margin-top:14px">
-        <label class="drop" for="files">
-          <input id="files" type="file" multiple hidden />
-          <strong>Ajouter des fichiers</strong>
-          <span class="muted">PDF, images, Excel, etc. (max 15&nbsp;Mo/fichier)</span>
-        </label>
-        <ul id="fileList" class="muted small" style="margin:8px 0 0; padding-left:18px"></ul>
-      </div>
-    </aside>
+  <div class="upload" style="margin-top:14px">
+    <label class="drop" for="files">
+      <input id="files" type="file" multiple hidden />
+      <strong>Ajouter des fichiers</strong>
+      <span class="muted">PDF, images, Excel, etc. (limites appliquées automatiquement)</span>
+    </label>
+    <ul id="fileList" class="file-list" style="margin:8px 0 0;"></ul>
+    <p class="muted small" style="margin-top:8px">
+      Si vos fichiers sont trop volumineux ou non pris en charge, envoyez-les directement à
+      <a href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a>.
+    </p>
+  </div>
+</aside>
   </div>
 </section>
 
@@ -486,16 +493,27 @@
     const saasMail = document.getElementById('saasMailto'); if(saasMail) saasMail.setAttribute('href', quickMailto('Projet SaaS — prise de contact'));
     const siteMail = document.getElementById('siteMailto'); if(siteMail) siteMail.setAttribute('href', quickMailto('Projet Site web — prise de contact'));
 
-    // Helpers upload (sélection + aperçu)
+    // Helpers upload (sélection + aperçu cumulatif)
 const fileInput  = document.getElementById('files');
 const fileListEl = document.getElementById('fileList');
 
+// Cumul de toutes les sélections successives
+let selectedFiles = [];
+
 function renderFilesList() {
-  if (!fileInput || !fileListEl) return;
-  const files = Array.from(fileInput.files || []);
-  fileListEl.innerHTML = files.map(f => `<li>${f.name}</li>`).join('') || '';
+  if (!fileListEl) return;
+  fileListEl.innerHTML = selectedFiles.map(f => `<li>${f.name}</li>`).join('') || '';
 }
-fileInput?.addEventListener('change', renderFilesList);
+
+// Chaque nouvelle sélection s'ajoute (sans écraser la précédente)
+fileInput?.addEventListener('change', () => {
+  if (!fileInput?.files) return;
+  const newly = Array.from(fileInput.files);
+  selectedFiles = [...selectedFiles, ...newly];
+  renderFilesList();
+  // reset pour permettre de re-sélectionner le même fichier ensuite
+  fileInput.value = '';
+});
 
 function fileToBase64(file){
   return new Promise((resolve, reject)=>{
@@ -511,22 +529,31 @@ const contactForm = document.getElementById('contactForm');
 const formNote = document.getElementById('formNote');
 const apiUrl = new URL('/api/contact', window.location.origin).toString();
 
+// Limites prudentes (compatibles boîtes mail & plan gratuit)
+// ~10 Mo par fichier ; ~20 Mo au total
+const MAX_PER_FILE = 10 * 1024 * 1024;
+const MAX_TOTAL    = 20 * 1024 * 1024;
+
 contactForm.addEventListener('submit', async (e)=>{
   e.preventDefault();
   const data = new FormData(contactForm);
   if (data.get('_gotcha')) return; // bot trap
 
-  // Fichiers (limite 15 Mo par fichier)
-  const files = fileInput?.files ? Array.from(fileInput.files) : [];
-  const MAX = 15 * 1024 * 1024;
-  for (const f of files) {
-    if (f.size > MAX) {
-      formNote.textContent = `Le fichier "${f.name}" dépasse 15 Mo.`;
+  // Vérifs tailles
+  let total = 0;
+  for (const f of selectedFiles) {
+    if (f.size > MAX_PER_FILE) {
+      formNote.textContent = `Le fichier "${f.name}" dépasse la taille autorisée (~10 Mo).`;
       return;
     }
+    total += f.size;
+  }
+  if (total > MAX_TOTAL) {
+    formNote.textContent = `La taille cumulée des pièces jointes dépasse la limite (~20 Mo).`;
+    return;
   }
 
-  const attachments = await Promise.all(files.map(async (f) => ({
+  const attachments = await Promise.all(selectedFiles.map(async (f) => ({
     filename: f.name,
     contentType: f.type || 'application/octet-stream',
     content: await fileToBase64(f) // base64 (sans l'en-tête)
@@ -560,16 +587,16 @@ contactForm.addEventListener('submit', async (e)=>{
     // Succès
     formNote.textContent = 'Message envoyé ✅';
     contactForm.reset();
+    selectedFiles = [];
     renderFilesList();
     if (btn) btn.disabled = false;
     location.hash = '#merci';
   }catch(err){
     console.error('Contact form error:', err);
-    formNote.textContent = 'Envoi impossible. Réessayez dans un instant.';
+    formNote.textContent = 'Envoi impossible. Si besoin, envoyez vos fichiers à Contact.OmeraFrance@gmail.com.';
     if (btn) btn.disabled = false;
   }
 });
-
 
     // Reduced motion
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
