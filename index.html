@@ -150,7 +150,21 @@
       .section-title{font-size:clamp(22px, 7vw, 28px)}
       .drawer a{padding:18px var(--space)}
     }
-  </style>
+  /* Aide + upload (colonne droite) */
+.checklist { margin: 8px 0 0; padding-left: 18px; }
+.checklist li { margin: 6px 0; }
+
+.upload .drop {
+  display: grid; gap: 6px; place-items: start;
+  border: 1px dashed rgba(255,255,255,.18);
+  border-radius: 14px; padding: 14px 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  cursor: pointer;
+}
+.upload .drop:hover { border-color: rgba(255,255,255,.28); }
+.small { font-size: 13px; }
+</style>
+
 </head>
 <body>
   <div class="site-bg"></div><div class="noise"></div>
@@ -305,42 +319,57 @@
     </div>
   </div>
 </section>
-      <!-- Contact -->
-      <section id="contact">
-        <div class="container contact">
-          <div>
-            <h2 class="section-title" data-reveal>Nous contacter</h2>
-            <p class="muted" data-reveal>Expliquez votre besoin — retour sous 24h avec des pistes concrètes.</p>
-            <div class="card" data-reveal style="margin-top:14px">
-              <form id="contactForm" name="contact" novalidate>
-                <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-                <input required type="text" name="name" placeholder="Votre nom" aria-label="Votre nom" />
-                <input required type="email" name="email" placeholder="Votre email" aria-label="Votre email" />
-                <input type="tel" name="phone" placeholder="Téléphone (optionnel)" aria-label="Téléphone" />
-                <textarea required name="message" placeholder="Parlez-nous de votre projet…" aria-label="Message"></textarea>
-                <button class="btn" type="submit">Envoyer</button>
-                <p id="formNote" class="muted" style="margin:8px 0 0"></p>
-              </form>
-              <p class="muted" style="margin-top:12px">
-                Ou écrivez directement à
-                <a id="mailtoDirect" href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a>
-                • LinkedIn :
-                <a href="https://www.linkedin.com/in/paul-laisn%C3%A9/" target="_blank" rel="noopener">Paul&nbsp;LASNÉ</a>
-              </p>
-            </div>
-          </div>
-          <aside class="card" data-reveal>
-            <h3>Infos rapides</h3>
-            <ul class="muted">
-              <li>Délais usuels : 1–3 semaines</li>
-              <li>Stack : HTML/CSS/JS, Next.js, Tailwind, Supabase</li>
-              <li>Hébergement : Vercel, Netlify, GitHub Pages</li>
-            </ul>
-            <a class="btn secondary" href="#services">Voir les offres</a>
-          </aside>
-        </div>
-      </section>
+     <!-- Contact -->
+<section id="contact">
+  <div class="container contact">
+    <!-- Colonne gauche : formulaire -->
+    <div>
+      <h2 class="section-title" data-reveal>Nous contacter</h2>
+      <p class="muted" data-reveal>Expliquez votre besoin — retour sous 24h avec des pistes concrètes.</p>
+
+      <div class="card" data-reveal style="margin-top:14px">
+        <form id="contactForm" name="contact" novalidate>
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+          <input required type="text" name="name" placeholder="Votre nom" aria-label="Votre nom" />
+          <input required type="email" name="email" placeholder="Votre email" aria-label="Votre email" />
+          <input type="tel" name="phone" placeholder="Téléphone (optionnel)" aria-label="Téléphone" />
+          <textarea required name="message" placeholder="Parlez-nous de votre projet…" aria-label="Message"></textarea>
+
+          <button class="btn" type="submit">Envoyer</button>
+          <p id="formNote" class="muted" style="margin:8px 0 0"></p>
+        </form>
+
+        <p class="muted" style="margin-top:12px">
+          Ou écrivez directement à
+          <a id="mailtoDirect" href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a>
+          • LinkedIn :
+          <a href="https://www.linkedin.com/in/paul-laisn%C3%A9/" target="_blank" rel="noopener">Paul&nbsp;LASNÉ</a>
+        </p>
+      </div>
     </div>
+
+    <!-- Colonne droite : aide + upload -->
+    <aside class="card" data-reveal id="contactHelp">
+      <h3>Pour bien cerner votre besoin</h3>
+      <ul class="muted checklist">
+        <li>Si vous utilisez un <b>Excel / Google Sheet</b> interne, joignez-le (ou des captures).</li>
+        <li>Précisez le <b>nombre d’utilisateurs</b> concernés.</li>
+        <li>Indiquez l’<b>objectif principal</b> de l’outil en une phrase.</li>
+        <li>Séparez les <b>indispensables</b> des “nice to have”.</li>
+      </ul>
+
+      <div class="upload" style="margin-top:14px">
+        <label class="drop" for="files">
+          <input id="files" type="file" multiple hidden />
+          <strong>Ajouter des fichiers</strong>
+          <span class="muted">PDF, images, Excel, etc. (max 15&nbsp;Mo/fichier)</span>
+        </label>
+        <ul id="fileList" class="muted small" style="margin:8px 0 0; padding-left:18px"></ul>
+      </div>
+    </aside>
+  </div>
+</section>
+
 
     <!-- DETAIL: SaaS -->
     <div id="view-saas" class="view" role="region" aria-labelledby="saas-title">
@@ -457,52 +486,90 @@
     const saasMail = document.getElementById('saasMailto'); if(saasMail) saasMail.setAttribute('href', quickMailto('Projet SaaS — prise de contact'));
     const siteMail = document.getElementById('siteMailto'); if(siteMail) siteMail.setAttribute('href', quickMailto('Projet Site web — prise de contact'));
 
-    // CONTACT FORM — envoi direct via /api/contact (même domaine) — SANS fallback mailto auto
-    const contactForm = document.getElementById('contactForm');
-    const formNote = document.getElementById('formNote');
-    const apiUrl = new URL('/api/contact', window.location.origin).toString();
+    // Helpers upload (sélection + aperçu)
+const fileInput  = document.getElementById('files');
+const fileListEl = document.getElementById('fileList');
 
-    contactForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const data = new FormData(contactForm);
-      if (data.get('_gotcha')) return; // bot trap
+function renderFilesList() {
+  if (!fileInput || !fileListEl) return;
+  const files = Array.from(fileInput.files || []);
+  fileListEl.innerHTML = files.map(f => `<li>${f.name}</li>`).join('') || '';
+}
+fileInput?.addEventListener('change', renderFilesList);
 
-      const payload = {
-        name: data.get('name')?.toString().trim(),
-        email: data.get('email')?.toString().trim(),
-        phone: data.get('phone')?.toString().trim(),
-        message: data.get('message')?.toString().trim()
-      };
+function fileToBase64(file){
+  return new Promise((resolve, reject)=>{
+    const r = new FileReader();
+    r.onload = () => resolve(String(r.result).split(',')[1] || '');
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
 
-      const btn = contactForm.querySelector('button[type="submit"]');
-      if (btn) btn.disabled = true;
-      formNote.textContent = 'Envoi en cours…';
+// CONTACT FORM — envoi direct via /api/contact (même domaine)
+const contactForm = document.getElementById('contactForm');
+const formNote = document.getElementById('formNote');
+const apiUrl = new URL('/api/contact', window.location.origin).toString();
 
-      try{
-        const res = await fetch(apiUrl, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify(payload)
-        });
+contactForm.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const data = new FormData(contactForm);
+  if (data.get('_gotcha')) return; // bot trap
 
-        const payloadRes = await res.json().catch(()=> ({}));
-        if(!res.ok){
-          const msg = payloadRes?.error || `Erreur HTTP ${res.status}`;
-          throw new Error(msg);
-        }
+  // Fichiers (limite 15 Mo par fichier)
+  const files = fileInput?.files ? Array.from(fileInput.files) : [];
+  const MAX = 15 * 1024 * 1024;
+  for (const f of files) {
+    if (f.size > MAX) {
+      formNote.textContent = `Le fichier "${f.name}" dépasse 15 Mo.`;
+      return;
+    }
+  }
 
-        // Succès
-        formNote.textContent = 'Message envoyé ✅';
-        contactForm.reset();
-        if (btn) btn.disabled = false;
-        location.hash = '#merci';
-      }catch(err){
-        console.error('Contact form error:', err);
-        formNote.textContent = 'Envoi impossible. Réessayez dans un instant.';
-        if (btn) btn.disabled = false;
-        // IMPORTANT : aucun mailto automatique ici
-      }
+  const attachments = await Promise.all(files.map(async (f) => ({
+    filename: f.name,
+    contentType: f.type || 'application/octet-stream',
+    content: await fileToBase64(f) // base64 (sans l'en-tête)
+  })));
+
+  const payload = {
+    name: data.get('name')?.toString().trim(),
+    email: data.get('email')?.toString().trim(),
+    phone: data.get('phone')?.toString().trim(),
+    message: data.get('message')?.toString().trim(),
+    attachments
+  };
+
+  const btn = contactForm.querySelector('button[type="submit"]');
+  if (btn) btn.disabled = true;
+  formNote.textContent = 'Envoi en cours…';
+
+  try{
+    const res = await fetch(apiUrl, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
     });
+
+    const payloadRes = await res.json().catch(()=> ({}));
+    if(!res.ok){
+      const msg = payloadRes?.error || `Erreur HTTP ${res.status}`;
+      throw new Error(msg);
+    }
+
+    // Succès
+    formNote.textContent = 'Message envoyé ✅';
+    contactForm.reset();
+    renderFilesList();
+    if (btn) btn.disabled = false;
+    location.hash = '#merci';
+  }catch(err){
+    console.error('Contact form error:', err);
+    formNote.textContent = 'Envoi impossible. Réessayez dans un instant.';
+    if (btn) btn.disabled = false;
+  }
+});
+
 
     // Reduced motion
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
