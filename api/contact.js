@@ -3,9 +3,8 @@ import { Resend } from 'resend';
 
 export const config = {
   api: {
-    bodyParser: {
-      sizeLimit: '12mb', // évite que Vercel coupe des petits envois
-    },
+    // Le JSON avec base64 grossit d’environ 33% : 25 Mo couvre confortablement ~20 Mo réels.
+    bodyParser: { sizeLimit: '25mb' },
   },
 };
 
@@ -13,9 +12,7 @@ export default async function handler(req, res) {
   // --- PING / DEBUG ---
   if (req.method === 'GET') {
     const envKey = !!process.env.RESEND_API_KEY;
-    const to = (process.env.RECEIVER_EMAIL || 'contact.omerafrance@gmail.com')
-      .trim()
-      .toLowerCase();
+    const to = (process.env.RECEIVER_EMAIL || 'contact.omerafrance@gmail.com').trim().toLowerCase();
     return res.status(200).json({
       ok: true,
       msg: 'Contact API up',
@@ -33,7 +30,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // lecture du body (JSON)
+    // --- Lecture body (JSON) ---
     let body = req.body;
     if (!body || typeof body !== 'object') {
       const chunks = [];
@@ -41,27 +38,36 @@ export default async function handler(req, res) {
       body = JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
     }
 
-    const { name, email, phone, message, attachments: clientAttachments } = body || {};
-    if (!name || !email || !message) {
+    const {
+      name = '',
+      email = '',
+      phone = '',
+      message = '',
+      attachments: clientAttachments,
+    } = body || {};
+
+    const clean = (s) => String(s || '').toString().trim();
+    const _name = clean(name);
+    const _email = clean(email);
+    const _phone = clean(phone);
+    const _message = clean(message);
+
+    if (!_name || !_email || !_message) {
       return res.status(400).json({ error: 'Champs requis manquants (name, email, message)' });
     }
 
     const key = process.env.RESEND_API_KEY;
     if (!key) return res.status(500).json({ error: 'RESEND_API_KEY manquante' });
 
-    // Destinataire (doit être l’adresse de TON compte Resend en mode test)
-    const ACCOUNT_EMAIL = (process.env.RECEIVER_EMAIL || 'contact.omerafrance@gmail.com')
-      .trim()
-      .toLowerCase();
+    // Destinataire (doit être l’adresse du compte Resend en mode test)
+    const ACCOUNT_EMAIL = (process.env.RECEIVER_EMAIL || 'contact.omerafrance@gmail.com').trim().toLowerCase();
 
     // --- Validation / préparation des pièces jointes ---
-    // Rappels Free/standard Resend :
-    // - Taille max email (après base64) ~40 Mo côté Resend.
-    // - Pour rester safe sur Vercel body, on limite ici à 10 Mo PAR FICHIER et max 5 fichiers.
     const MAX_FILES = 5;
-    const MAX_PER_FILE = 10 * 1024 * 1024; // 10 Mo (coté client tu affiches 15 Mo, mais ici on sécurise)
-
+    const MAX_PER_FILE = 10 * 1024 * 1024;     // 10 Mo par fichier (réels)
+    const MAX_TOTAL = 20 * 1024 * 1024;        // 20 Mo cumulés (réels)
     let resendAttachments = [];
+    let totalBytes = 0;
 
     if (Array.isArray(clientAttachments) && clientAttachments.length) {
       if (clientAttachments.length > MAX_FILES) {
@@ -71,15 +77,28 @@ export default async function handler(req, res) {
       resendAttachments = clientAttachments.map((att, idx) => {
         const filename = String(att?.filename || `fichier-${idx + 1}`);
         const b64 = String(att?.content || '');
-        // estimation taille (base64 ~ +33%) -> on tolère ~10 Mo réels ≃ 13.3 Mo b64
+
+        // Estimation taille réelle du b64 (~75% des caractères)
         const estimatedBytes = Math.floor(b64.length * 0.75);
         if (estimatedBytes > MAX_PER_FILE) {
           throw new Error(`"${filename}" dépasse la limite autorisée (${(MAX_PER_FILE / 1024 / 1024) | 0} Mo).`);
         }
-        // Resend accepte Buffer pour "content"
+        totalBytes += estimatedBytes;
+
+        const contentType = String(att?.contentType || '');
         const content = Buffer.from(b64, 'base64');
-        return { filename, content };
+
+        // Resend accepte { filename, content[, contentType] }
+        return contentType
+          ? { filename, content, contentType }
+          : { filename, content };
       });
+
+      if (totalBytes > MAX_TOTAL) {
+        return res.status(400).json({
+          error: `Taille totale des pièces jointes > ${(MAX_TOTAL / 1024 / 1024) | 0} Mo. Envoyez les plus volumineux par mail.`,
+        });
+      }
     }
 
     const resend = new Resend(key);
@@ -87,21 +106,19 @@ export default async function handler(req, res) {
     const FROM = 'onboarding@resend.dev'; // obligatoire en mode test
     const TO = [ACCOUNT_EMAIL];
 
-    const subject = `Demande de projet — ${name}`;
+    const subject = `Demande de projet — ${_name}`;
     const plain = [
-      `Nom: ${name}`,
-      `Email: ${email}`,
-      phone ? `Téléphone: ${phone}` : null,
+      `Nom: ${_name}`,
+      `Email: ${_email}`,
+      _phone ? `Téléphone: ${_phone}` : null,
       '',
       'Message:',
-      message,
+      _message,
       '',
       resendAttachments.length
         ? `Pièces jointes: ${resendAttachments.map(a => a.filename).join(', ')}`
         : null,
-    ]
-      .filter(Boolean)
-      .join('\n');
+    ].filter(Boolean).join('\n');
 
     console.log('[contact] Sending to:', TO[0], 'from:', FROM, 'attachments:', resendAttachments.length);
 
@@ -109,9 +126,9 @@ export default async function handler(req, res) {
       from: FROM,
       to: TO,
       subject,
-      text: plain,             // (tu peux ajouter html si tu veux)
-      replyTo: email,          // <- clé correcte pour Resend
-      attachments: resendAttachments, // <- envoi des pièces jointes
+      text: plain,
+      reply_to: _email,          // <- clé correcte pour le SDK Resend
+      attachments: resendAttachments,
     });
 
     if (error) {
