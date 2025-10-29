@@ -213,6 +213,8 @@
 
 /* Cacher le footer uniquement sur la vue #merci */
 body.mode-thanks footer{ display:none; }
+    #view-thanks.view.active { display:block; }
+#view-thanks .thanks-card { opacity:1; transform:none; }
 </style>
 
 </head>
@@ -490,13 +492,12 @@ body.mode-thanks footer{ display:none; }
 <!-- MERCI -->
 <div id="view-thanks" class="view" role="region" aria-labelledby="thanks-title">
   <section class="container">
-    <div class="thanks-card" data-reveal>
+    <div class="thanks-card">
       <div class="thanks-icon" aria-hidden="true">✓</div>
       <h1 id="thanks-title" class="section-title" style="margin:0">Message envoyé</h1>
       <p class="muted" style="margin:6px 0 0">
         Bien reçu — je reviens vers vous sous 24&nbsp;h avec des pistes concrètes.
       </p>
-
       <div class="btn-row">
         <a class="btn" href="#" data-nav="home">← Retour à l’accueil</a>
         <a class="btn secondary" href="#contact">Envoyer un autre message</a>
@@ -547,10 +548,28 @@ body.mode-thanks footer{ display:none; }
   document.body.classList.toggle('mode-thanks', key === 'thanks');
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
-    function parseRoute(){ const h = location.hash || ''; if(h.startsWith('#service/')){ const key = h.split('/')[1]; show(key==='site'?'site':'saas'); } else if(h==='#merci'){ show('thanks'); } else { show('home'); } }
-    window.addEventListener('hashchange', parseRoute); parseRoute();
-    document.querySelectorAll('[data-nav="home"]').forEach(a=>a.addEventListener('click', (e)=>{ e.preventDefault(); history.pushState(null,'','#'); parseRoute(); }));
+    function parseRoute(){
+  const h = location.hash || '';
+  if (h.startsWith('#service/')) {
+    const key = h.replace('#service/', ''); // récupère 'site' ou 'saas'
+    show(key === 'site' ? 'site' : 'saas');
+  } else if (h === '#merci') {
+    show('thanks');
+  } else {
+    show('home');
+  }
+}
 
+window.addEventListener('hashchange', parseRoute);
+parseRoute();
+
+document.querySelectorAll('[data-nav="home"]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    e.preventDefault();
+    history.pushState(null, '', '#');
+    parseRoute();
+  });
+});
     // Quick mailto (contact express volontaire, CLIQUÉ manuellement)
     function quickMailto(subject){
       const body = encodeURIComponent('Bonjour,\n\nJe souhaite échanger sur ce sujet.\n\n—');
