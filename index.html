@@ -8,32 +8,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
- 
-  /* Écran de succès #merci */
-
-  .thanks-card{
-  margin:40px auto 0;
-  max-width:640px;
-  text-align:center;
-  padding:28px 26px;
-  border-radius:22px;
-  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-  border:1px solid rgba(255,255,255,.08);
-  box-shadow:var(--shadow-lg);
-}
-.thanks-icon{
-  width:52px; height:52px; margin:0 auto 10px;
-  border-radius:50%;
-  display:grid; place-items:center;
-  font-weight:900; font-size:26px; color:#fff;
-  background:linear-gradient(135deg, var(--primary), var(--accent));
-  box-shadow:0 10px 24px rgba(124,92,255,.35);
-}
-.btn-row{ display:flex; gap:10px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
-
-/* Cacher le footer uniquement sur la vue #merci */
-body.mode-thanks footer{ display:none; }
-
   <style>
     :root{
       --bg-dark:#0b0f19; --bg-elev:#0e1322; --card:#12182a;
@@ -215,6 +189,30 @@ body.mode-thanks footer{ display:none; }
   border-radius:8px; padding:4px 8px; cursor:pointer; font-size:12px;
 }
 .file-remove:hover { border-color: rgba(255,255,255,.28); }
+     /* Écran de succès #merci */
+
+  .thanks-card{
+  margin:40px auto 0;
+  max-width:640px;
+  text-align:center;
+  padding:28px 26px;
+  border-radius:22px;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:var(--shadow-lg);
+}
+.thanks-icon{
+  width:52px; height:52px; margin:0 auto 10px;
+  border-radius:50%;
+  display:grid; place-items:center;
+  font-weight:900; font-size:26px; color:#fff;
+  background:linear-gradient(135deg, var(--primary), var(--accent));
+  box-shadow:0 10px 24px rgba(124,92,255,.35);
+}
+.btn-row{ display:flex; gap:10px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
+
+/* Cacher le footer uniquement sur la vue #merci */
+body.mode-thanks footer{ display:none; }
 </style>
 
 </head>
