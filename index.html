@@ -491,7 +491,7 @@ body.mode-thanks footer{ display:none; }
 
 <!-- MERCI -->
 <div id="view-thanks" class="view" role="region" aria-labelledby="thanks-title">
-  <section class="container">
+  <section class="container" style="min-height:calc(100vh - var(--header-h));display:grid;place-items:center">
     <div class="thanks-card">
       <div class="thanks-icon" aria-hidden="true">✓</div>
       <h1 id="thanks-title" class="section-title" style="margin:0">Message envoyé</h1>
@@ -539,21 +539,29 @@ body.mode-thanks footer{ display:none; }
     const toTop = document.getElementById('toTop'); window.addEventListener('scroll', ()=>{ const y = window.scrollY || document.documentElement.scrollTop; if (y > 200) toTop.classList.add('show'); else toTop.classList.remove('show'); }, { passive:true });
     toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    // Router
-    const views = { home:document.getElementById('view-home'), saas:document.getElementById('view-saas'), site:document.getElementById('view-site'), thanks:document.getElementById('view-thanks') };
-   function show(key){
-  Object.values(views).forEach(v=>v.classList.remove('active'));
-  (views[key]||views.home).classList.add('active');
-  // Footer masqué uniquement sur la page de remerciement
-  document.body.classList.toggle('mode-thanks', key === 'thanks');
+// Router (robuste : gère #merci, #/merci, #!/merci)
+const views = {
+  home:  document.getElementById('view-home'),
+  saas:  document.getElementById('view-saas'),
+  site:  document.getElementById('view-site'),
+  thanks:document.getElementById('view-thanks')
+};
+
+function show(key){
+  Object.values(views).forEach(v => v.classList.remove('active'));
+  (views[key] || views.home).classList.add('active');
+  document.body.classList.toggle('mode-thanks', key === 'thanks'); // masque footer sur merci
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
-    function parseRoute(){
-  const h = location.hash || '';
-  if (h.startsWith('#service/')) {
-    const key = h.replace('#service/', ''); // récupère 'site' ou 'saas'
+
+function parseRoute(){
+  let h = (location.hash || '').trim();
+  // normalisation (ex: #/merci, #!/merci -> #merci)
+  if (/^#!?\//.test(h)) h = '#' + h.replace(/^#!?\//,'');
+  if (/^#\/?service\//.test(h)) {
+    const key = h.replace(/^#\/?service\//,''); // 'site' ou 'saas'
     show(key === 'site' ? 'site' : 'saas');
-  } else if (h === '#merci') {
+  } else if (/^#\/?merci$/.test(h)) {
     show('thanks');
   } else {
     show('home');
