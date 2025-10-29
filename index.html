@@ -8,6 +8,32 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+ 
+  /* Écran de succès #merci */
+
+  .thanks-card{
+  margin:40px auto 0;
+  max-width:640px;
+  text-align:center;
+  padding:28px 26px;
+  border-radius:22px;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:var(--shadow-lg);
+}
+.thanks-icon{
+  width:52px; height:52px; margin:0 auto 10px;
+  border-radius:50%;
+  display:grid; place-items:center;
+  font-weight:900; font-size:26px; color:#fff;
+  background:linear-gradient(135deg, var(--primary), var(--accent));
+  box-shadow:0 10px 24px rgba(124,92,255,.35);
+}
+.btn-row{ display:flex; gap:10px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
+
+/* Cacher le footer uniquement sur la vue #merci */
+body.mode-thanks footer{ display:none; }
+
   <style>
     :root{
       --bg-dark:#0b0f19; --bg-elev:#0e1322; --card:#12182a;
@@ -463,14 +489,23 @@
       </section>
     </div>
 
-    <!-- MERCI -->
-    <div id="view-thanks" class="view" role="region" aria-labelledby="thanks-title">
-      <section class="container" style="text-align:center">
-        <h1 id="thanks-title" class="section-title">Merci, bien reçu ✅</h1>
-        <p class="muted">Nous revenons vers vous sous 24h avec des pistes concrètes.</p>
-        <p style="margin-top:16px"><a class="btn" href="#" data-nav="home">← Retour à l’accueil</a></p>
-      </section>
+<!-- MERCI -->
+<div id="view-thanks" class="view" role="region" aria-labelledby="thanks-title">
+  <section class="container">
+    <div class="thanks-card" data-reveal>
+      <div class="thanks-icon" aria-hidden="true">✓</div>
+      <h1 id="thanks-title" class="section-title" style="margin:0">Message envoyé</h1>
+      <p class="muted" style="margin:6px 0 0">
+        Bien reçu — je reviens vers vous sous 24&nbsp;h avec des pistes concrètes.
+      </p>
+
+      <div class="btn-row">
+        <a class="btn" href="#" data-nav="home">← Retour à l’accueil</a>
+        <a class="btn secondary" href="#contact">Envoyer un autre message</a>
+      </div>
     </div>
+  </section>
+</div>
   </main>
 
   <footer>
@@ -507,7 +542,13 @@
 
     // Router
     const views = { home:document.getElementById('view-home'), saas:document.getElementById('view-saas'), site:document.getElementById('view-site'), thanks:document.getElementById('view-thanks') };
-    function show(key){ Object.values(views).forEach(v=>v.classList.remove('active')); (views[key]||views.home).classList.add('active'); window.scrollTo({ top: 0, behavior: 'instant' }); }
+   function show(key){
+  Object.values(views).forEach(v=>v.classList.remove('active'));
+  (views[key]||views.home).classList.add('active');
+  // Footer masqué uniquement sur la page de remerciement
+  document.body.classList.toggle('mode-thanks', key === 'thanks');
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
     function parseRoute(){ const h = location.hash || ''; if(h.startsWith('#service/')){ const key = h.split('/')[1]; show(key==='site'?'site':'saas'); } else if(h==='#merci'){ show('thanks'); } else { show('home'); } }
     window.addEventListener('hashchange', parseRoute); parseRoute();
     document.querySelectorAll('[data-nav="home"]').forEach(a=>a.addEventListener('click', (e)=>{ e.preventDefault(); history.pushState(null,'','#'); parseRoute(); }));
@@ -711,14 +752,15 @@ contactForm.addEventListener('submit', async (e)=>{
       throw new Error(msg);
     }
 
-    // Succès
-    formNote.textContent = 'Message envoyé ✅';
-    formNote.classList.remove('error'); formNote.classList.add('success');
-    contactForm.reset();
-    selectedFiles = [];
-    renderFilesList();
-    if (btn) btn.disabled = false;
-    location.hash = '#merci';
+// Succès
+formNote.textContent = 'Message envoyé ✅';
+formNote.classList.remove('error'); formNote.classList.add('success');
+contactForm.reset();
+selectedFiles = [];
+renderFilesList();
+if (btn) btn.disabled = false;
+// Laisse le message visible un court instant, puis affiche l'écran Merci
+setTimeout(() => { location.hash = '#merci'; }, 400);
   }catch(err){
     console.error('Contact form error:', err);
     formNote.classList.remove('success'); formNote.classList.add('error');
