@@ -248,6 +248,80 @@
 
 .service-panels .service-panel{display:none;}
 .service-panels .service-panel.active{display:block;}
+.services-switch{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+  margin-bottom:26px;
+}
+.switch-card{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:14px;
+  align-items:center;
+  background:linear-gradient(180deg, rgba(14,19,34,.75), rgba(14,19,34,.35));
+  border:1px solid rgba(255,255,255,.03);
+  border-radius:20px;
+  padding:18px 18px 16px;
+  cursor:pointer;
+  transition:.2s ease;
+  position:relative;
+  overflow:hidden;
+}
+.switch-card::after{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  pointer-events:none;
+  background:
+    radial-gradient(420px 180px at 20% 0%, rgba(124,92,255,.08), transparent 60%),
+    radial-gradient(380px 160px at 120% 120%, rgba(124,92,255,.04), transparent 60%);
+}
+.switch-card.inactive{
+  opacity:.7;
+  border-color:rgba(255,255,255,.01);
+}
+.switch-card.active{
+  border:1px solid rgba(124,92,255,.55);
+  background:linear-gradient(180deg, rgba(124,92,255,.25), rgba(14,19,34,.25));
+  box-shadow:0 12px 28px rgba(124,92,255,.15);
+}
+.switch-info h3{
+  margin:0 0 4px;
+  font-size:18px;
+}
+.switch-info p{
+  margin:0;
+  color:var(--muted);
+}
+.switch-price{
+  margin-top:10px;
+  display:inline-flex;
+  padding:7px 16px 8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(11,15,25,.08);
+  font-weight:600;
+}
+.switch-media{
+  position:relative;
+  aspect-ratio:16/10;
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.02);
+  background:radial-gradient(circle, rgba(10,12,18,.4), rgba(10,12,18,0));
+}
+.switch-media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+@media (max-width:880px){
+  .services-switch{grid-template-columns:1fr;}
+  .switch-card{grid-template-columns:1fr;}
+}
+
   </style>
 </head>
 <body>
@@ -463,18 +537,30 @@
       <a href="#" data-nav="home">Accueil</a> › <span>Services</span>
     </nav>
 
-    <!-- Onglets -->
-    <div class="grid cols-2" style="gap:16px; margin-bottom:22px;">
-      <button class="service-tab active" data-service="saas" type="button">
-        <div class="service-tab-title">Applications web / SaaS</div>
-        <p class="muted" style="margin:4px 0 0;">Dashboards, automatisations, portails, intégrations.</p>
-      </button>
-      <button class="service-tab" data-service="site" type="button">
-        <div class="service-tab-title">Site web</div>
-        <p class="muted" style="margin:4px 0 0;">Vitrine rapide, claire et SEO-friendly.</p>
-      </button>
+    <!-- Switch Services -->
+<div class="services-switch">
+  <button class="switch-card active" data-service="saas" type="button">
+    <div class="switch-info">
+      <h3>Applications web / SaaS sur mesure</h3>
+      <p>Automatisations, dashboards, portails clients, intégrations API.</p>
+      <span class="switch-price">À partir de 4 000€</span>
     </div>
+    <div class="switch-media" aria-hidden="true">
+      <img src="assets/offer-saas.jpg" alt="">
+    </div>
+  </button>
 
+  <button class="switch-card inactive" data-service="site" type="button">
+    <div class="switch-info">
+      <h3>Site web</h3>
+      <p>Vitrine rapide, claire et SEO-friendly, formulaires & admin simple.</p>
+      <span class="switch-price">À partir de 500€</span>
+    </div>
+    <div class="switch-media" aria-hidden="true">
+      <img src="assets/offer-site.jpg" alt="">
+    </div>
+  </button>
+</div>
     <!-- Contenus -->
     <div class="service-panels">
       <!-- Panel SaaS -->
@@ -556,16 +642,30 @@
     </nav>
 
     <!-- Onglets -->
-    <div class="grid cols-2" style="gap:16px; margin-bottom:22px;">
-      <button class="service-tab" data-service="saas" type="button">
-        <div class="service-tab-title">Applications web / SaaS</div>
-        <p class="muted" style="margin:4px 0 0;">Dashboards, automatisations, portails, intégrations.</p>
-      </button>
-      <button class="service-tab active" data-service="site" type="button">
-        <div class="service-tab-title">Site web</div>
-        <p class="muted" style="margin:4px 0 0;">Vitrine rapide, claire et SEO-friendly.</p>
-      </button>
+<!-- Switch Services -->
+<div class="services-switch">
+  <button class="switch-card inactive" data-service="saas" type="button">
+    <div class="switch-info">
+      <h3>Applications web / SaaS sur mesure</h3>
+      <p>Automatisations, dashboards, portails clients, intégrations API.</p>
+      <span class="switch-price">À partir de 4 000€</span>
     </div>
+    <div class="switch-media" aria-hidden="true">
+      <img src="assets/offer-saas.jpg" alt="">
+    </div>
+  </button>
+
+  <button class="switch-card active" data-service="site" type="button">
+    <div class="switch-info">
+      <h3>Site web</h3>
+      <p>Vitrine rapide, claire et SEO-friendly, formulaires & admin simple.</p>
+      <span class="switch-price">À partir de 500€</span>
+    </div>
+    <div class="switch-media" aria-hidden="true">
+      <img src="assets/offer-site.jpg" alt="">
+    </div>
+  </button>
+</div>
 
     <!-- Contenus -->
     <div class="service-panels">
@@ -773,17 +873,16 @@ function parseRoute(){
       });
     });
 
-    // clic sur les onglets services (délégation)
+// clic sur les cartes de switch services
 document.addEventListener('click', (e) => {
-  const tab = e.target.closest('.service-tab');
-  if (!tab) return;
-  const service = tab.dataset.service;
+  const card = e.target.closest('.switch-card');
+  if (!card) return;
+  const service = card.dataset.service;
   if (!service) return;
 
-  // on force le hash pour garder l’URL propre
   location.hash = '#service/' + service;
-  // parseRoute() sera rappelé par hashchange
 });
+
 
     // Quick mailto
     function quickMailto(subject){
