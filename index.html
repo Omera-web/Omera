@@ -227,6 +227,27 @@
       box-shadow:0 10px 24px rgba(124,92,255,.35);
     }
     .btn-row{ display:flex; gap:10px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
+    .service-tab{
+  text-align:left;
+  background:linear-gradient(180deg, rgba(14,19,34,.45), rgba(14,19,34,.12));
+  border:1px solid rgba(255,255,255,.04);
+  border-radius:16px;
+  padding:14px 16px 12px;
+  cursor:pointer;
+  transition:.18s ease;
+}
+.service-tab:hover{
+  border-color:rgba(124,92,255,.45);
+}
+.service-tab.active{
+  border:1px solid rgba(124,92,255,.65);
+  background:linear-gradient(180deg, rgba(124,92,255,.20), rgba(14,19,34,.05));
+  box-shadow:0 10px 25px rgba(124,92,255,.18);
+}
+.service-tab-title{font-weight:600;}
+
+.service-panels .service-panel{display:none;}
+.service-panels .service-panel.active{display:block;}
   </style>
 </head>
 <body>
@@ -242,7 +263,7 @@
         </a>
       </div>
       <nav class="menu" aria-label="Navigation principale">
-        <a href="#services">Services</a>
+        <a href="#service/saas">Services</a>
         <a href="#why">Pourquoi nous</a>
         <a href="#process">Approche</a>
         <a class="cta" href="#contact">Nous contacter</a>
@@ -250,7 +271,7 @@
       <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="drawer"><span></span></button>
     </div>
     <nav id="drawer" class="drawer" aria-label="Menu mobile">
-      <a href="#services">Services</a>
+      <a href="#service/saas">Services</a>
       <a href="#why">Pourquoi nous</a>
       <a href="#process">Approche</a>
       <a class="cta" href="#contact">Nous contacter</a>
@@ -436,9 +457,28 @@
     </div>
 
     <!-- DETAIL: SaaS -->
-    <div id="view-saas" class="view" role="region" aria-labelledby="saas-title">
-      <section class="container">
-        <nav class="breadcrumb" style="margin:14px 0 8px"><a href="#" data-nav="home">Accueil</a> › <a href="#services" data-nav="home">Services</a> › <span>SaaS</span></nav>
+<div id="view-saas" class="view" role="region" aria-labelledby="saas-title">
+  <section class="container" style="min-height:calc(100vh - var(--header-h));">
+    <nav class="breadcrumb" style="margin:14px 0 18px">
+      <a href="#" data-nav="home">Accueil</a> › <span>Services</span>
+    </nav>
+
+    <!-- Onglets -->
+    <div class="grid cols-2" style="gap:16px; margin-bottom:22px;">
+      <button class="service-tab active" data-service="saas" type="button">
+        <div class="service-tab-title">Applications web / SaaS</div>
+        <p class="muted" style="margin:4px 0 0;">Dashboards, automatisations, portails, intégrations.</p>
+      </button>
+      <button class="service-tab" data-service="site" type="button">
+        <div class="service-tab-title">Site web</div>
+        <p class="muted" style="margin:4px 0 0;">Vitrine rapide, claire et SEO-friendly.</p>
+      </button>
+    </div>
+
+    <!-- Contenus -->
+    <div class="service-panels">
+      <!-- Panel SaaS -->
+      <div class="service-panel service-panel-saas active">
         <div class="grid cols-2" style="align-items:start">
           <div>
             <h1 id="saas-title" class="section-title">Applications web / SaaS sur mesure</h1>
@@ -459,18 +499,112 @@
             </p>
           </div>
           <aside class="card">
-            <h3>Contact express</h3>
-            <p class="muted">Un email prérempli s’ouvrira si l’envoi direct échoue.</p>
+            <h3>Tips pour un bon brief</h3>
+            <ul class="muted checklist">
+              <li>Listez les rôles (admin, manager, client…)</li>
+              <li>Notez les intégrations attendues (CRM, outil compta…)</li>
+              <li>Précisez les volumes (nb d’utilisateurs, nb de lignes…)</li>
+            </ul>
+            <p class="muted" style="margin-top:10px">Un email prérempli s’ouvrira si l’envoi direct échoue.</p>
             <a class="btn" id="saasMailto" href="#">Écrire maintenant</a>
           </aside>
         </div>
-      </section>
+      </div>
+
+      <!-- Panel Site -->
+      <div class="service-panel service-panel-site">
+        <div class="grid cols-2" style="align-items:start">
+          <div>
+            <h1 class="section-title">Site web</h1>
+            <p class="muted">Vitrine rapide, lisible et bien référencée, avec formulaires et admin simple.</p>
+            <div class="price-chip" style="margin:10px 0 16px">À partir de 500€</div>
+            <div class="glass" style="margin-top:8px">
+              <h3>Comment ça se passe</h3>
+              <ul class="muted">
+                <li><b>Brief</b> : pages, contenus, inspirations.</li>
+                <li><b>Maquette</b> : 1–2 allers-retours.</li>
+                <li><b>Intégration</b> : perf, accessibilité, SEO.</li>
+                <li><b>Mise en ligne</b> : domaine, analytics, guide.</li>
+              </ul>
+            </div>
+            <p style="margin-top:16px">
+              <a class="btn" href="#contact">Parler de votre site</a>
+              <a class="btn secondary" href="#" data-nav="home" style="margin-left:8px">← Retour</a>
+            </p>
+          </div>
+          <aside class="card">
+            <h3>Inclure dans le message</h3>
+            <ul class="muted checklist">
+              <li>Exemples de sites que vous aimez</li>
+              <li>Nombre de pages (Accueil, Services, À propos…)</li>
+              <li>Si vous avez déjà un domaine / hébergement</li>
+            </ul>
+            <p class="muted" style="margin-top:10px">Un email prérempli s’ouvrira si l’envoi direct échoue.</p>
+            <a class="btn" id="siteMailto" href="#">Écrire maintenant</a>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+    
+    <!-- DETAIL: Site (même structure, on laisse pour le routeur) -->
+<div id="view-site" class="view" role="region" aria-labelledby="site-title">
+  <section class="container" style="min-height:calc(100vh - var(--header-h));">
+    <nav class="breadcrumb" style="margin:14px 0 18px">
+      <a href="#" data-nav="home">Accueil</a> › <span>Services</span>
+    </nav>
+
+    <!-- Onglets -->
+    <div class="grid cols-2" style="gap:16px; margin-bottom:22px;">
+      <button class="service-tab" data-service="saas" type="button">
+        <div class="service-tab-title">Applications web / SaaS</div>
+        <p class="muted" style="margin:4px 0 0;">Dashboards, automatisations, portails, intégrations.</p>
+      </button>
+      <button class="service-tab active" data-service="site" type="button">
+        <div class="service-tab-title">Site web</div>
+        <p class="muted" style="margin:4px 0 0;">Vitrine rapide, claire et SEO-friendly.</p>
+      </button>
     </div>
 
-    <!-- DETAIL: Site -->
-    <div id="view-site" class="view" role="region" aria-labelledby="site-title">
-      <section class="container">
-        <nav class="breadcrumb" style="margin:14px 0 8px"><a href="#" data-nav="home">Accueil</a> › <a href="#services" data-nav="home">Services</a> › <span>Site web</span></nav>
+    <!-- Contenus -->
+    <div class="service-panels">
+      <!-- Panel SaaS -->
+      <div class="service-panel service-panel-saas">
+        <div class="grid cols-2" style="align-items:start">
+          <div>
+            <h1 class="section-title">Applications web / SaaS sur mesure</h1>
+            <p class="muted">Dashboards, automatisations, portails, rôles & permissions, intégrations API.</p>
+            <div class="price-chip" style="margin:10px 0 16px">À partir de 4 000€</div>
+            <div class="glass" style="margin-top:8px">
+              <h3>Comment ça se passe</h3>
+              <ul class="muted">
+                <li><b>Cadrage</b> : objectifs, users, KPIs, priorités.</li>
+                <li><b>Design</b> : maquettes interactives validées ensemble.</li>
+                <li><b>Dev</b> : sprints courts, démos, QA.</li>
+                <li><b>Go-live</b> : auth, analytics, docs & transfert.</li>
+              </ul>
+            </div>
+            <p style="margin-top:16px">
+              <a class="btn" href="#contact">Discuter de votre SaaS</a>
+              <a class="btn secondary" href="#" data-nav="home" style="margin-left:8px">← Retour</a>
+            </p>
+          </div>
+          <aside class="card">
+            <h3>Tips pour un bon brief</h3>
+            <ul class="muted checklist">
+              <li>Listez les rôles (admin, manager, client…)</li>
+              <li>Notez les intégrations attendues (CRM, outil compta…)</li>
+              <li>Précisez les volumes (nb d’utilisateurs, nb de lignes…)</li>
+            </ul>
+            <p class="muted" style="margin-top:10px">Un email prérempli s’ouvrira si l’envoi direct échoue.</p>
+            <a class="btn" id="saasMailto2" href="#">Écrire maintenant</a>
+          </aside>
+        </div>
+      </div>
+
+      <!-- Panel Site -->
+      <div class="service-panel service-panel-site active">
         <div class="grid cols-2" style="align-items:start">
           <div>
             <h1 id="site-title" class="section-title">Site web</h1>
@@ -491,14 +625,20 @@
             </p>
           </div>
           <aside class="card">
-            <h3>Contact express</h3>
-            <p class="muted">Un email prérempli s’ouvrira si l’envoi direct échoue.</p>
-            <a class="btn" id="siteMailto" href="#">Écrire maintenant</a>
+            <h3>Inclure dans le message</h3>
+            <ul class="muted checklist">
+              <li>Exemples de sites que vous aimez</li>
+              <li>Nombre de pages (Accueil, Services, À propos…)</li>
+              <li>Si vous avez déjà un domaine / hébergement</li>
+            </ul>
+            <p class="muted" style="margin-top:10px">Un email prérempli s’ouvrira si l’envoi direct échoue.</p>
+            <a class="btn" id="siteMailto2" href="#">Écrire maintenant</a>
           </aside>
         </div>
-      </section>
+      </div>
     </div>
-
+  </section>
+</div>
     <!-- MERCI -->
     <div id="view-thanks" class="view" role="region" aria-labelledby="thanks-title">
       <section class="container" style="min-height:calc(100vh - var(--header-h));display:grid;place-items:center">
@@ -584,20 +724,42 @@
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
-    function parseRoute(){
-      let h = (location.hash || '').trim();
-      // normalisation Vercel /#/… → #…
-      h = h.replace(/^\/#/, '#').replace(/^#!?\//, '#');
+function parseRoute(){
+  let h = (location.hash || '').trim();
+  h = h.replace(/^\/#/, '#').replace(/^#!?\//, '#');
 
-      if (h.startsWith('#service/')) {
-        const key = h.replace('#service/', '');
-        show(key === 'site' ? 'site' : 'saas');
-      } else if (h === '#merci') {
-        show('thanks');
-      } else {
-        show('home');
-      }
-    }
+  if (h.startsWith('#service/')) {
+    const key = h.replace('#service/', '');
+    // on montre la vue
+    show(key === 'site' ? 'site' : 'saas');
+
+    // et on active le bon onglet dans la vue affichée
+    activateServiceTab(key === 'site' ? 'site' : 'saas');
+  } else if (h === '#merci') {
+    show('thanks');
+  } else {
+    show('home');
+  }
+}
+    function activateServiceTab(service){
+  // on regarde dans la vue visible
+  const currentView = document.querySelector('.view.active');
+  if (!currentView) return;
+
+  const tabs = currentView.querySelectorAll('.service-tab');
+  const panels = currentView.querySelectorAll('.service-panel');
+
+  tabs.forEach(t => {
+    const isActive = t.dataset.service === service;
+    t.classList.toggle('active', isActive);
+  });
+
+  panels.forEach(p => {
+    const isActive = p.classList.contains('service-panel-' + service);
+    p.classList.toggle('active', isActive);
+  });
+}
+
 
     window.addEventListener('hashchange', parseRoute);
     parseRoute();
@@ -610,6 +772,18 @@
         parseRoute();
       });
     });
+
+    // clic sur les onglets services (délégation)
+document.addEventListener('click', (e) => {
+  const tab = e.target.closest('.service-tab');
+  if (!tab) return;
+  const service = tab.dataset.service;
+  if (!service) return;
+
+  // on force le hash pour garder l’URL propre
+  location.hash = '#service/' + service;
+  // parseRoute() sera rappelé par hashchange
+});
 
     // Quick mailto
     function quickMailto(subject){
