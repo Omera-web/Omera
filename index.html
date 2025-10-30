@@ -306,7 +306,7 @@
 .switch-info h3{
   margin:0 0 4px;
   font-size:18px;
-  color:#fff;
+  color:#d3abfe; /* Violet pour les titres */
   font-weight:700;
 }
 .switch-info p{
@@ -319,10 +319,17 @@
   display:inline-flex;
   padding:8px 16px 9px;
   border-radius:999px;
-  border:1px solid rgba(255,255,255,.18);
-  background:rgba(255,255,255,.07);
+  border:1px solid rgba(211,171,254,.45);
+  background:linear-gradient(135deg, rgba(211,171,254,.35), rgba(124,92,255,.25));
   font-weight:700;
   color:#fff;
+  box-shadow:0 4px 14px rgba(124,92,255,.25);
+}
+.switch-card.inactive .switch-info h3,
+.switch-card.inactive .switch-info p,
+.switch-card.inactive .switch-price{
+  color:#b7b9c9;
+  opacity:.8;
 }
 .switch-card.inactive .switch-info h3,
 .switch-card.inactive .switch-info p,
