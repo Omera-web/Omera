@@ -539,7 +539,7 @@ body.mode-thanks footer{ display:none; }
     const toTop = document.getElementById('toTop'); window.addEventListener('scroll', ()=>{ const y = window.scrollY || document.documentElement.scrollTop; if (y > 200) toTop.classList.add('show'); else toTop.classList.remove('show'); }, { passive:true });
     toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-// Router (robuste : gère #merci, #/merci, #!/merci)
+// Router (version finale)
 const views = {
   home:  document.getElementById('view-home'),
   saas:  document.getElementById('view-saas'),
@@ -550,20 +550,30 @@ const views = {
 function show(key){
   Object.values(views).forEach(v => v.classList.remove('active'));
   (views[key] || views.home).classList.add('active');
-  document.body.classList.toggle('mode-thanks', key === 'thanks'); // masque footer sur merci
+  document.body.classList.toggle('mode-thanks', key === 'thanks');
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 function parseRoute(){
+  // récup le hash actuel
   let h = (location.hash || '').trim();
-  // normalisation (ex: #/merci, #!/merci -> #merci)
-  if (/^#!?\//.test(h)) h = '#' + h.replace(/^#!?\//,'');
-  if (/^#\/?service\//.test(h)) {
-    const key = h.replace(/^#\/?service\//,''); // 'site' ou 'saas'
+
+  // 🔧 normalisation : /#merci, #/merci, #!/merci → #merci
+  h = h
+    .replace(/^\/#/, '#')     // /#merci → #merci
+    .replace(/^#!?\//, '#');  // #/merci ou #!/merci → #merci
+
+  // services
+  if (h.startsWith('#service/')) {
+    const key = h.replace('#service/', ''); // site ou saas
     show(key === 'site' ? 'site' : 'saas');
-  } else if (/^#\/?merci$/.test(h)) {
+  }
+  // merci
+  else if (h === '#merci') {
     show('thanks');
-  } else {
+  }
+  // défaut
+  else {
     show('home');
   }
 }
@@ -571,6 +581,7 @@ function parseRoute(){
 window.addEventListener('hashchange', parseRoute);
 parseRoute();
 
+// liens “retour accueil”
 document.querySelectorAll('[data-nav="home"]').forEach(a => {
   a.addEventListener('click', (e) => {
     e.preventDefault();
