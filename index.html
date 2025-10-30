@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Omera — Solutions web sur mesure</title>
- <meta name="description" content="Solutions web intuitives, flexibles et à votre image. Création de sites et applications sur mesure, pensés pour vos besoins réels."/>
+  <meta name="description" content="Solutions web intuitives, flexibles et à votre image. Création de sites et applications sur mesure, pensés pour vos besoins réels."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -17,9 +17,14 @@
       --space: clamp(16px, 2.8vw, 24px);
     }
     *{box-sizing:border-box} html,body{height:100%} html{scroll-behavior:smooth}
-    body{margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
-      background:var(--bg-dark); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; overflow-x:hidden; padding-top:var(--header-h)}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      background:var(--bg-dark); color:var(--text); line-height:1.6;
+      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      overflow-x:hidden; padding-top:var(--header-h)
+    }
     @media (max-width:768px){ body{padding-top:var(--header-h-mobile)} }
+
     .site-bg{position:fixed; inset:0; z-index:-2; background:
       radial-gradient(1200px 600px at 75% -10%, rgba(124,92,255,.35), transparent 60%),
       radial-gradient(900px 600px at -10% 20%, rgba(159,122,255,.25), transparent 55%),
@@ -32,15 +37,21 @@
     section{padding: clamp(40px, 7vw, 64px) 0}
     .section-title{font-family:Poppins,Inter,sans-serif; font-size:clamp(22px, 5.5vw, 36px); margin:0 0 16px}
     .muted{color:var(--muted)}
-    [data-reveal]{opacity:0; transform:translateY(14px); transition:.6s ease} [data-reveal].in{opacity:1; transform:none}
+    [data-reveal]{opacity:0; transform:translateY(14px); transition:.6s ease}
+    [data-reveal].in{opacity:1; transform:none}
 
-    header{position:fixed; top:0; left:0; right:0; z-index:50; backdrop-filter:saturate(1.2) blur(12px);
-      background:linear-gradient(180deg, rgba(11,15,25,.86), rgba(11,15,25,.55)); border-bottom:1px solid rgba(255,255,255,.06); height:var(--header-h)}
+    header{
+      position:fixed; top:0; left:0; right:0; z-index:50;
+      backdrop-filter:saturate(1.2) blur(12px);
+      background:linear-gradient(180deg, rgba(11,15,25,.86), rgba(11,15,25,.55));
+      border-bottom:1px solid rgba(255,255,255,.06); height:var(--header-h)
+    }
     .nav{display:flex; align-items:center; justify-content:space-between; height:100%}
     .nav-inner{display:flex; align-items:center; gap:16px; padding:0 10px}
     .logo{display:inline-flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.3px}
     .logo svg{width:34px; height:34px; filter:drop-shadow(0 6px 12px rgba(124,92,255,.45))}
-    .menu{display:flex; align-items:center} .nav a{color:var(--text); opacity:.9; margin:0 8px; font-weight:500}
+    .menu{display:flex; align-items:center}
+    .nav a{color:var(--text); opacity:.9; margin:0 8px; font-weight:500}
     .cta{padding:12px 18px; background:linear-gradient(135deg, var(--primary), var(--accent)); border-radius:999px; box-shadow:var(--shadow-sm); border:1px solid rgba(255,255,255,.08)}
     .burger{display:none; width:44px; height:44px; border-radius:14px; border:1px solid rgba(255,255,255,.08);
       background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); box-shadow:var(--shadow-sm); align-items:center; justify-content:center; cursor:pointer}
@@ -58,15 +69,25 @@
     .lead{font-size:clamp(15px, 4.3vw, 19px); color:var(--muted); max-width:64ch}
     .badges{display:flex; gap:10px; margin:16px 0 24px; flex-wrap:wrap}
     .badge{border:1px solid rgba(124,92,255,.35); color:#dcd7ff; padding:8px 12px; border-radius:999px; background:linear-gradient(180deg, rgba(124,92,255,.18), rgba(124,92,255,.08)); font-weight:600}
-    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:22px; box-shadow:var(--shadow-lg)}
+    .hero-card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px; padding:22px; box-shadow:var(--shadow-lg)
+    }
 
     .grid{display:grid; gap:18px}
     .grid.cols-2{grid-template-columns:repeat(2, minmax(0,1fr))}
-    .card{background:linear-gradient(180deg, rgba(14,19,34,.9), rgba(14,19,34,.75)); border:1px solid rgba(255,255,255,.08);
-      border-radius:var(--radius); padding:22px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden; transition:.25s}
+    .card{
+      background:linear-gradient(180deg, rgba(14,19,34,.9), rgba(14,19,34,.75));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius); padding:22px; box-shadow:var(--shadow-sm);
+      position:relative; overflow:hidden; transition:.25s
+    }
     .card:hover{transform:translateY(-2px)}
-    .card::after{content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none;
-      background:radial-gradient(300px 120px at 20% 0%, rgba(124,92,255,.18), transparent), radial-gradient(300px 120px at 100% 120%, rgba(124,92,255,.12), transparent)}
+    .card::after{
+      content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none;
+      background:radial-gradient(300px 120px at 20% 0%, rgba(124,92,255,.18), transparent), radial-gradient(300px 120px at 100% 120%, rgba(124,92,255,.12), transparent)
+    }
     .icon{width:42px; height:42px; border-radius:12px; display:grid; place-items:center; background:linear-gradient(135deg, var(--primary), var(--accent)); box-shadow:0 6px 18px rgba(124,92,255,.45)}
     .card h3{margin:12px 0 6px; font-size:clamp(18px, 4.8vw, 20px)}
     .price-chip{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px; border:1px solid rgba(124,92,255,.35); background:linear-gradient(180deg, rgba(124,92,255,.16), rgba(124,92,255,.06)); color:#dcd7ff; font-weight:700}
@@ -74,9 +95,9 @@
     .step{display:flex; gap:16px; align-items:flex-start}
     .step-num{width:36px; height:36px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(135deg, var(--primary), var(--accent)); font-weight:800; box-shadow:0 6px 18px rgba(124,92,255,.45)}
 
-    /* on laisse tout visible par défaut */
-.view{display:block}
-.view.active{display:block}
+    /* 🔥 IMPORTANT : on cache toutes les vues, on montre seulement .active */
+    .view{display:none}
+    .view.active{display:block}
 
     .breadcrumb{display:flex; gap:10px; align-items:center; font-size:14px; color:var(--muted)}
     .breadcrumb a{color:#fff; opacity:.9}
@@ -91,13 +112,13 @@
     .btn.secondary{background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.12); color:#fff}
     footer{padding:36px 0; color:var(--muted); border-top:1px solid rgba(255,255,255,.06)}
 
+    body.mode-thanks footer{ display:none; }
+
     .to-top{position:fixed; left:16px; bottom:16px; z-index:60; width:48px; height:48px; border-radius:14px; display:grid; place-items:center; cursor:pointer;
       border:1px solid rgba(255,255,255,.10); background:linear-gradient(135deg, var(--primary), var(--accent)); box-shadow:0 10px 24px rgba(0,0,0,.35), 0 8px 22px rgba(124,92,255,.35);
       color:#fff; font-weight:800; opacity:0; pointer-events:none; transform:translateY(10px); transition:.25s ease}
     .to-top.show{opacity:1; pointer-events:auto; transform:none}
 
-    /* ==== OFFERS WITH IMAGE ==== */
-    /* rendre toute la carte cliquable et accessible */
     .offer { cursor: pointer; }
     .offer-link { display:block; color:inherit; text-decoration:none; }
     .offer-link:focus-visible { outline:3px solid var(--ring); outline-offset:3px; border-radius:var(--radius); }
@@ -116,8 +137,6 @@
     }
     .offer h3{margin:10px 0 6px; font-size:clamp(19px,4.8vw,22px)}
     .offer p.muted{margin:0}
-    .offer .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
-    .offer .btn{padding:12px 16px}
     .offer .price-chip{margin-top:10px}
 
     .offer-media{
@@ -153,78 +172,66 @@
       .section-title{font-size:clamp(22px, 7vw, 28px)}
       .drawer a{padding:18px var(--space)}
     }
-/* Aide + upload (colonne droite) */
-.checklist { margin: 8px 0 0; padding-left: 18px; }
-.checklist li { margin: 6px 0; }
 
-.upload .drop {
-  display: grid; gap: 6px; place-items: start;
-  border: 1px dashed rgba(255,255,255,.18);
-  border-radius: 14px; padding: 14px 16px;
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-  cursor: pointer;
-}
-.upload .drop:hover { border-color: rgba(255,255,255,.28); }
-.small { font-size: 13px; }
+    .checklist { margin: 8px 0 0; padding-left: 18px; }
+    .checklist li { margin: 6px 0; }
 
-/* Feedback upload (messages sous la dropzone) */
-.error   { color: #ffb4b4; margin: 8px 0 0; }
-.success { color: #b7ffcc; margin: 8px 0 0; }
+    .upload .drop {
+      display: grid; gap: 6px; place-items: start;
+      border: 1px dashed rgba(255,255,255,.18);
+      border-radius: 14px; padding: 14px 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      cursor: pointer;
+    }
+    .upload .drop:hover { border-color: rgba(255,255,255,.28); }
+    .small { font-size: 13px; }
 
-/* Focus visible sur la dropzone */
-.upload .drop:focus-within {
-  outline: 3px solid var(--ring);
-  outline-offset: 3px;
-}
+    .error   { color: #ffb4b4; margin: 8px 0 0; }
+    .success { color: #b7ffcc; margin: 8px 0 0; }
 
-/* Alignement visuel de la colonne de droite (au niveau du texte d’intro) */
-#contactHelp { margin-top: 36px; }
-@media (max-width: 980px){
-  #contactHelp { margin-top: 0; }
-}
+    .upload .drop:focus-within {
+      outline: 3px solid var(--ring);
+      outline-offset: 3px;
+    }
 
-/* Liste des fichiers + bouton suppression */
-.file-list { list-style: none; padding-left: 0; display: grid; gap: 6px; }
-.file-item { display:flex; align-items:center; gap:8px; opacity:.95 }
-.file-remove {
-  border:1px solid rgba(255,255,255,.16);
-  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-  border-radius:8px; padding:4px 8px; cursor:pointer; font-size:12px;
-}
-.file-remove:hover { border-color: rgba(255,255,255,.28); }
-     /* Écran de succès #merci */
+    #contactHelp { margin-top: 36px; }
+    @media (max-width: 980px){
+      #contactHelp { margin-top: 0; }
+    }
 
-  .thanks-card{
-  margin:40px auto 0;
-  max-width:640px;
-  text-align:center;
-  padding:28px 26px;
-  border-radius:22px;
-  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-  border:1px solid rgba(255,255,255,.08);
-  box-shadow:var(--shadow-lg);
-}
-.thanks-icon{
-  width:52px; height:52px; margin:0 auto 10px;
-  border-radius:50%;
-  display:grid; place-items:center;
-  font-weight:900; font-size:26px; color:#fff;
-  background:linear-gradient(135deg, var(--primary), var(--accent));
-  box-shadow:0 10px 24px rgba(124,92,255,.35);
-}
-.btn-row{ display:flex; gap:10px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
+    .file-list { list-style: none; padding-left: 0; display: grid; gap: 6px; }
+    .file-item { display:flex; align-items:center; gap:8px; opacity:.95 }
+    .file-remove {
+      border:1px solid rgba(255,255,255,.16);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border-radius:8px; padding:4px 8px; cursor:pointer; font-size:12px;
+    }
+    .file-remove:hover { border-color: rgba(255,255,255,.28); }
 
-/* Cacher le footer uniquement sur la vue #merci */
-body.mode-thanks footer{ display:none; }
-    #view-thanks.view.active { display:block; }
-#view-thanks .thanks-card { opacity:1; transform:none; }
-</style>
-
+    .thanks-card{
+      margin:40px auto 0;
+      max-width:640px;
+      text-align:center;
+      padding:28px 26px;
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--shadow-lg);
+    }
+    .thanks-icon{
+      width:52px; height:52px; margin:0 auto 10px;
+      border-radius:50%;
+      display:grid; place-items:center;
+      font-weight:900; font-size:26px; color:#fff;
+      background:linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow:0 10px 24px rgba(124,92,255,.35);
+    }
+    .btn-row{ display:flex; gap:10px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
+  </style>
 </head>
 <body>
   <div class="site-bg"></div><div class="noise"></div>
 
-  <!-- Header -->
   <header>
     <div class="container nav">
       <div class="nav-inner">
@@ -263,22 +270,22 @@ body.mode-thanks footer{ display:none; }
             </div>
             <div data-reveal style="transition-delay:.2s"><a class="btn" href="#contact">Parler de votre projet</a></div>
           </div>
-<aside class="hero-card" aria-label="Pourquoi Omera" data-reveal>
-  <div class="hero-values">
-    <div class="value">
-      <h3>Solutions sur mesure</h3>
-      <p>Conçues pour vos objectifs, pas pour des modèles préfabriqués.</p>
-    </div>
-    <div class="value">
-      <h3>Livraisons rapides</h3>
-      <p>Des délais courts, une méthode claire et des résultats tangibles.</p>
-    </div>
-    <div class="value">
-      <h3>Partenaire humain</h3>
-      <p>Un accompagnement transparent, du premier échange jusqu’au suivi.</p>
-    </div>
-  </div>
-</aside>
+          <aside class="hero-card" aria-label="Pourquoi Omera" data-reveal>
+            <div class="hero-values">
+              <div class="value">
+                <h3>Solutions sur mesure</h3>
+                <p>Conçues pour vos objectifs, pas pour des modèles préfabriqués.</p>
+              </div>
+              <div class="value">
+                <h3>Livraisons rapides</h3>
+                <p>Des délais courts, une méthode claire et des résultats tangibles.</p>
+              </div>
+              <div class="value">
+                <h3>Partenaire humain</h3>
+                <p>Un accompagnement transparent, du premier échange jusqu’au suivi.</p>
+              </div>
+            </div>
+          </aside>
         </div>
       </section>
 
@@ -289,32 +296,33 @@ body.mode-thanks footer{ display:none; }
           <p class="muted" data-reveal>Choisissez votre format et découvrez le déroulé complet.</p>
 
           <div class="grid cols-2" style="margin-top:20px">
-  <!-- Carte SaaS — toute la carte cliquable -->
-  <a href="#service/saas" class="offer offer-link" data-reveal aria-label="Voir le détail : Applications web / SaaS sur mesure">
-    <div class="offer-content">
-      <h3>Applications web / SaaS sur mesure</h3>
-      <p class="muted">Automatisation, dashboards, portails clients, intégrations API.</p>
-      <div class="price-chip" aria-label="Tarif SaaS">À partir de 4 000€</div>
-    </div>
-    <div class="offer-media" aria-hidden="true">
-      <span class="offer-glow"></span>
-      <img src="assets/offer-saas.jpg" alt="" />
-    </div>
-  </a>
+            <!-- SaaS -->
+            <a href="#service/saas" class="offer offer-link" data-reveal aria-label="Voir le détail : Applications web / SaaS sur mesure">
+              <div class="offer-content">
+                <h3>Applications web / SaaS sur mesure</h3>
+                <p class="muted">Automatisation, dashboards, portails clients, intégrations API.</p>
+                <div class="price-chip" aria-label="Tarif SaaS">À partir de 4 000€</div>
+              </div>
+              <div class="offer-media" aria-hidden="true">
+                <span class="offer-glow"></span>
+                <img src="assets/offer-saas.jpg" alt="">
+              </div>
+            </a>
 
-  <!-- Carte Site — toute la carte cliquable -->
-  <a href="#service/site" class="offer offer-link" data-reveal style="transition-delay:.06s" aria-label="Voir le détail : Site web">
-    <div class="offer-content">
-      <h3>Site web</h3>
-      <p class="muted">Vitrine rapide, claire et SEO-friendly, formulaires & admin simple.</p>
-      <div class="price-chip" aria-label="Tarif Site web">À partir de 500€</div>
-    </div>
-    <div class="offer-media" aria-hidden="true">
-      <span class="offer-glow"></span>
-      <img src="assets/offer-site.jpg" alt="" />
-    </div>
-  </a>
-</div>
+            <!-- Site -->
+            <a href="#service/site" class="offer offer-link" data-reveal style="transition-delay:.06s" aria-label="Voir le détail : Site web">
+              <div class="offer-content">
+                <h3>Site web</h3>
+                <p class="muted">Vitrine rapide, claire et SEO-friendly, formulaires & admin simple.</p>
+                <div class="price-chip" aria-label="Tarif Site web">À partir de 500€</div>
+              </div>
+              <div class="offer-media" aria-hidden="true">
+                <span class="offer-glow"></span>
+                <img src="assets/offer-site.jpg" alt="">
+              </div>
+            </a>
+          </div>
+        </div>
       </section>
 
       <!-- Pourquoi -->
@@ -334,105 +342,98 @@ body.mode-thanks footer{ display:none; }
         </div>
       </section>
 
-     <!-- Process -->
-<section id="process">
-  <div class="container">
-    <h2 class="section-title" data-reveal>Notre approche</h2>
-    <div class="grid" style="gap:16px; margin-top:8px">
-      <div class="card step" data-reveal>
-        <div class="step-num">1</div>
-        <div>
-          <h3>Analyse & cadrage</h3>
-          <p class="muted">Compréhension du besoin, des objectifs et des solutions possibles.</p>
+      <!-- Process -->
+      <section id="process">
+        <div class="container">
+          <h2 class="section-title" data-reveal>Notre approche</h2>
+          <div class="grid" style="gap:16px; margin-top:8px">
+            <div class="card step" data-reveal>
+              <div class="step-num">1</div>
+              <div>
+                <h3>Analyse & cadrage</h3>
+                <p class="muted">Compréhension du besoin, des objectifs et des solutions possibles.</p>
+              </div>
+            </div>
+            <div class="card step" data-reveal style="transition-delay:.06s">
+              <div class="step-num">2</div>
+              <div>
+                <h3>Maquettes & chiffrage</h3>
+                <p class="muted">Création des maquettes et élaboration du devis sur mesure.</p>
+              </div>
+            </div>
+            <div class="card step" data-reveal style="transition-delay:.12s">
+              <div class="step-num">3</div>
+              <div>
+                <h3>Conception & amélioration continue</h3>
+                <p class="muted">Développement de l’outil avec des propositions d’optimisation en parallèle.</p>
+              </div>
+            </div>
+            <div class="card step" data-reveal style="transition-delay:.18s">
+              <div class="step-num">4</div>
+              <div>
+                <h3>Livraison & suivi évolutif</h3>
+                <p class="muted">Mise en ligne, tests et ajustements selon vos retours.</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="card step" data-reveal style="transition-delay:.06s">
-        <div class="step-num">2</div>
-        <div>
-          <h3>Maquettes & chiffrage</h3>
-          <p class="muted">Création des maquettes et élaboration du devis sur mesure.</p>
-        </div>
-      </div>
+      <!-- Contact -->
+      <section id="contact">
+        <div class="container contact">
+          <div>
+            <h2 class="section-title" data-reveal>Nous contacter</h2>
+            <p class="muted" data-reveal>Expliquez votre besoin — retour sous 24h avec des pistes concrètes.</p>
 
-      <div class="card step" data-reveal style="transition-delay:.12s">
-        <div class="step-num">3</div>
-        <div>
-          <h3>Conception & amélioration continue</h3>
-          <p class="muted">Développement de l’outil avec des propositions d’optimisation en parallèle.</p>
-        </div>
-      </div>
+            <div class="card" data-reveal style="margin-top:14px">
+              <form id="contactForm" name="contact" novalidate>
+                <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+                <input required type="text" name="name" placeholder="Votre nom" aria-label="Votre nom" />
+                <input required type="email" name="email" placeholder="Votre email" aria-label="Votre email" />
+                <input type="tel" name="phone" placeholder="Téléphone (optionnel)" aria-label="Téléphone" />
+                <textarea required name="message" placeholder="Parlez-nous de votre projet…" aria-label="Message"></textarea>
 
-      <div class="card step" data-reveal style="transition-delay:.18s">
-        <div class="step-num">4</div>
-        <div>
-          <h3>Livraison & suivi évolutif</h3>
-          <p class="muted">Mise en ligne, tests et ajustements selon vos retours.</p>
+                <button class="btn" type="submit">Envoyer</button>
+                <p id="formNote" class="muted" style="margin:8px 0 0"></p>
+              </form>
+
+              <p class="muted" style="margin-top:12px">
+                Ou écrivez directement à
+                <a id="mailtoDirect" href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a>
+                • LinkedIn :
+                <a href="https://www.linkedin.com/in/paul-laisn%C3%A9/" target="_blank" rel="noopener">Paul&nbsp;LASNÉ</a>
+              </p>
+            </div>
+          </div>
+
+          <aside class="card" data-reveal id="contactHelp">
+            <h3>Pour bien cerner votre besoin</h3>
+            <ul class="muted checklist">
+              <li>Si vous utilisez un <b>Excel / Google Sheet</b> interne, joignez-le (ou des captures).</li>
+              <li>Précisez le <b>nombre d’utilisateurs</b> concernés.</li>
+              <li>Indiquez l’<b>objectif principal</b> de l’outil en une phrase.</li>
+              <li>Séparez les <b>indispensables</b> des “nice to have”.</li>
+            </ul>
+
+            <div class="upload" style="margin-top:14px">
+              <label class="drop" for="files">
+                <input id="files" type="file" multiple hidden
+                  accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.csv,.txt,.xls,.xlsx,application/pdf,image/*,text/csv,text/plain,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                <strong>Ajouter des fichiers</strong>
+                <span class="muted">PDF, images, Excel, CSV, TXT — max 10&nbsp;Mo/fichier, 20&nbsp;Mo au total</span>
+                <span class="small">Si c’est trop lourd ou non pris en charge, envoyez-les à
+                  <a href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a>.
+                </span>
+              </label>
+
+              <ul id="fileList" class="file-list muted small"></ul>
+              <p id="fileError" class="error small" aria-live="polite"></p>
+            </div>
+          </aside>
         </div>
-      </div>
+      </section>
     </div>
-  </div>
-</section>
-     <!-- Contact -->
-<section id="contact">
-  <div class="container contact">
-    <!-- Colonne gauche : formulaire -->
-    <div>
-      <h2 class="section-title" data-reveal>Nous contacter</h2>
-      <p class="muted" data-reveal>Expliquez votre besoin — retour sous 24h avec des pistes concrètes.</p>
-
-      <div class="card" data-reveal style="margin-top:14px">
-        <form id="contactForm" name="contact" novalidate>
-          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-          <input required type="text" name="name" placeholder="Votre nom" aria-label="Votre nom" />
-          <input required type="email" name="email" placeholder="Votre email" aria-label="Votre email" />
-          <input type="tel" name="phone" placeholder="Téléphone (optionnel)" aria-label="Téléphone" />
-          <textarea required name="message" placeholder="Parlez-nous de votre projet…" aria-label="Message"></textarea>
-
-          <button class="btn" type="submit">Envoyer</button>
-          <p id="formNote" class="muted" style="margin:8px 0 0"></p>
-        </form>
-
-        <p class="muted" style="margin-top:12px">
-          Ou écrivez directement à
-          <a id="mailtoDirect" href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a>
-          • LinkedIn :
-          <a href="https://www.linkedin.com/in/paul-laisn%C3%A9/" target="_blank" rel="noopener">Paul&nbsp;LASNÉ</a>
-        </p>
-      </div>
-    </div>
-
-<!-- Colonne droite : aide + upload -->
-<aside class="card" data-reveal id="contactHelp">
-  <h3>Pour bien cerner votre besoin</h3>
-  <ul class="muted checklist">
-    <li>Si vous utilisez un <b>Excel / Google Sheet</b> interne, joignez-le (ou des captures).</li>
-    <li>Précisez le <b>nombre d’utilisateurs</b> concernés.</li>
-    <li>Indiquez l’<b>objectif principal</b> de l’outil en une phrase.</li>
-    <li>Séparez les <b>indispensables</b> des “nice to have”.</li>
-  </ul>
-
-  <div class="upload" style="margin-top:14px">
-    <label class="drop" for="files">
-      <input id="files" type="file" multiple hidden
-  accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.csv,.txt,.xls,.xlsx,application/pdf,image/*,text/csv,text/plain,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
-      <strong>Ajouter des fichiers</strong>
-      <span class="muted">PDF, images, Excel, CSV, TXT — max 10&nbsp;Mo/fichier, 20&nbsp;Mo au total</span>
-      <span class="small">Si c’est trop lourd ou non pris en charge, envoyez-les à
-        <a href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a>.
-      </span>
-    </label>
-
-    <!-- Liste des fichiers sélectionnés -->
-    <ul id="fileList" class="file-list muted small"></ul>
-
-    <!-- Message d’erreur immédiat -->
-    <p id="fileError" class="error small" aria-live="polite"></p>
-  </div>
-</aside>
-  </div>
-</section>
-
 
     <!-- DETAIL: SaaS -->
     <div id="view-saas" class="view" role="region" aria-labelledby="saas-title">
@@ -452,7 +453,10 @@ body.mode-thanks footer{ display:none; }
                 <li><b>Go-live</b> : auth, analytics, docs & transfert.</li>
               </ul>
             </div>
-            <p style="margin-top:16px"><a class="btn" href="#contact">Discuter de votre SaaS</a> <a class="btn secondary" href="#" data-nav="home" style="margin-left:8px">← Retour</a></p>
+            <p style="margin-top:16px">
+              <a class="btn" href="#contact">Discuter de votre SaaS</a>
+              <a class="btn secondary" href="#" data-nav="home" style="margin-left:8px">← Retour</a>
+            </p>
           </div>
           <aside class="card">
             <h3>Contact express</h3>
@@ -481,7 +485,10 @@ body.mode-thanks footer{ display:none; }
                 <li><b>Mise en ligne</b> : domaine, analytics, guide.</li>
               </ul>
             </div>
-            <p style="margin-top:16px"><a class="btn" href="#contact">Parler de votre site</a> <a class="btn secondary" href="#" data-nav="home" style="margin-left:8px">← Retour</a></p>
+            <p style="margin-top:16px">
+              <a class="btn" href="#contact">Parler de votre site</a>
+              <a class="btn secondary" href="#" data-nav="home" style="margin-left:8px">← Retour</a>
+            </p>
           </div>
           <aside class="card">
             <h3>Contact express</h3>
@@ -492,22 +499,22 @@ body.mode-thanks footer{ display:none; }
       </section>
     </div>
 
-<!-- MERCI -->
-<div id="view-thanks" class="view" role="region" aria-labelledby="thanks-title">
-  <section class="container" style="min-height:calc(100vh - var(--header-h));display:grid;place-items:center">
-    <div class="thanks-card">
-      <div class="thanks-icon" aria-hidden="true">✓</div>
-      <h1 id="thanks-title" class="section-title" style="margin:0">Message envoyé</h1>
-      <p class="muted" style="margin:6px 0 0">
-        Bien reçu — je reviens vers vous sous 24&nbsp;h avec des pistes concrètes.
-      </p>
-      <div class="btn-row">
-        <a class="btn" href="#" data-nav="home">← Retour à l’accueil</a>
-        <a class="btn secondary" href="#contact">Envoyer un autre message</a>
-      </div>
+    <!-- MERCI -->
+    <div id="view-thanks" class="view" role="region" aria-labelledby="thanks-title">
+      <section class="container" style="min-height:calc(100vh - var(--header-h));display:grid;place-items:center">
+        <div class="thanks-card">
+          <div class="thanks-icon" aria-hidden="true">✓</div>
+          <h1 id="thanks-title" class="section-title" style="margin:0">Message envoyé</h1>
+          <p class="muted" style="margin:6px 0 0">
+            Bien reçu — je reviens vers vous sous 24&nbsp;h avec des pistes concrètes.
+          </p>
+          <div class="btn-row">
+            <a class="btn" href="#" data-nav="home">← Retour à l’accueil</a>
+            <a class="btn secondary" href="#contact">Envoyer un autre message</a>
+          </div>
+        </div>
+      </section>
     </div>
-  </section>
-</div>
   </main>
 
   <footer>
@@ -527,72 +534,84 @@ body.mode-thanks footer{ display:none; }
 
   <script>
     // Reveal
-    const IO = new IntersectionObserver((entries)=>{ for(const e of entries){ if(e.isIntersecting){ e.target.classList.add('in'); IO.unobserve(e.target); } } }, { threshold: .08 });
+    const IO = new IntersectionObserver((entries)=>{
+      for(const e of entries){
+        if(e.isIntersecting){
+          e.target.classList.add('in');
+          IO.unobserve(e.target);
+        }
+      }
+    }, { threshold: .08 });
     document.querySelectorAll('[data-reveal]').forEach(el=>IO.observe(el));
 
     // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Menu
-    const burger = document.getElementById('burger'); const drawer = document.getElementById('drawer');
-    const toggleMenu = () => { const open = drawer.classList.toggle('open'); burger.classList.toggle('active', open); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); document.body.style.overflow = open ? 'hidden' : ''; };
-    burger.addEventListener('click', toggleMenu); drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { if(drawer.classList.contains('open')) toggleMenu(); }));
+    const burger = document.getElementById('burger');
+    const drawer = document.getElementById('drawer');
+    const toggleMenu = () => {
+      const open = drawer.classList.toggle('open');
+      burger.classList.toggle('active', open);
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+    burger.addEventListener('click', toggleMenu);
+    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      if(drawer.classList.contains('open')) toggleMenu();
+    }));
 
     // To top
-    const toTop = document.getElementById('toTop'); window.addEventListener('scroll', ()=>{ const y = window.scrollY || document.documentElement.scrollTop; if (y > 200) toTop.classList.add('show'); else toTop.classList.remove('show'); }, { passive:true });
+    const toTop = document.getElementById('toTop');
+    window.addEventListener('scroll', ()=>{
+      const y = window.scrollY || document.documentElement.scrollTop;
+      if (y > 200) toTop.classList.add('show'); else toTop.classList.remove('show');
+    }, { passive:true });
     toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-// Router (version finale)
-const views = {
-  home:  document.getElementById('view-home'),
-  saas:  document.getElementById('view-saas'),
-  site:  document.getElementById('view-site'),
-  thanks:document.getElementById('view-thanks')
-};
+    // Router
+    const views = {
+      home:  document.getElementById('view-home'),
+      saas:  document.getElementById('view-saas'),
+      site:  document.getElementById('view-site'),
+      thanks:document.getElementById('view-thanks')
+    };
 
-function show(key){
-  Object.values(views).forEach(v => v.classList.remove('active'));
-  (views[key] || views.home).classList.add('active');
-  document.body.classList.toggle('mode-thanks', key === 'thanks');
-  window.scrollTo({ top: 0, behavior: 'instant' });
-}
+    function show(key){
+      Object.values(views).forEach(v => v.classList.remove('active'));
+      (views[key] || views.home).classList.add('active');
+      document.body.classList.toggle('mode-thanks', key === 'thanks');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
 
-function parseRoute(){
-  // récup le hash actuel
-  let h = (location.hash || '').trim();
+    function parseRoute(){
+      let h = (location.hash || '').trim();
+      // normalisation Vercel /#/… → #…
+      h = h.replace(/^\/#/, '#').replace(/^#!?\//, '#');
 
-  // 🔧 normalisation : /#merci, #/merci, #!/merci → #merci
-  h = h
-    .replace(/^\/#/, '#')     // /#merci → #merci
-    .replace(/^#!?\//, '#');  // #/merci ou #!/merci → #merci
+      if (h.startsWith('#service/')) {
+        const key = h.replace('#service/', '');
+        show(key === 'site' ? 'site' : 'saas');
+      } else if (h === '#merci') {
+        show('thanks');
+      } else {
+        show('home');
+      }
+    }
 
-  // services
-  if (h.startsWith('#service/')) {
-    const key = h.replace('#service/', ''); // site ou saas
-    show(key === 'site' ? 'site' : 'saas');
-  }
-  // merci
-  else if (h === '#merci') {
-    show('thanks');
-  }
-  // défaut
-  else {
-    show('home');
-  }
-}
-
-window.addEventListener('hashchange', parseRoute);
-parseRoute();
-
-// liens “retour accueil”
-document.querySelectorAll('[data-nav="home"]').forEach(a => {
-  a.addEventListener('click', (e) => {
-    e.preventDefault();
-    history.pushState(null, '', '#');
+    window.addEventListener('hashchange', parseRoute);
     parseRoute();
-  });
-});
-    // Quick mailto (contact express volontaire, CLIQUÉ manuellement)
+
+    // liens "retour"
+    document.querySelectorAll('[data-nav="home"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        history.pushState(null, '', '#');
+        parseRoute();
+      });
+    });
+
+    // Quick mailto
     function quickMailto(subject){
       const body = encodeURIComponent('Bonjour,\n\nJe souhaite échanger sur ce sujet.\n\n—');
       return `mailto:Contact.OmeraFrance@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
@@ -600,215 +619,191 @@ document.querySelectorAll('[data-nav="home"]').forEach(a => {
     const saasMail = document.getElementById('saasMailto'); if(saasMail) saasMail.setAttribute('href', quickMailto('Projet SaaS — prise de contact'));
     const siteMail = document.getElementById('siteMailto'); if(siteMail) siteMail.setAttribute('href', quickMailto('Projet Site web — prise de contact'));
 
-    // Helpers upload (multi + suppression + limites immédiates)
-const fileInput  = document.getElementById('files');
-const fileListEl = document.getElementById('fileList');
-const fileError  = document.getElementById('fileError');
+    // Upload
+    const fileInput  = document.getElementById('files');
+    const fileListEl = document.getElementById('fileList');
+    const fileError  = document.getElementById('fileError');
 
-// Limites (alignées avec Resend gratuit côté API)
-const MAX_FILES    = 5;                  // max fichiers
-const MAX_PER_FILE = 10 * 1024 * 1024;   // 10 Mo par fichier
-const MAX_TOTAL    = 20 * 1024 * 1024;   // 20 Mo au total
-const ALLOWED_TYPES = new Set([
-  'application/pdf',
-  'image/png','image/jpeg','image/jpg','image/gif','image/webp',
-  'application/vnd.ms-excel',
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  'text/csv','text/plain'
-]);
+    const MAX_FILES    = 5;
+    const MAX_PER_FILE = 10 * 1024 * 1024;
+    const MAX_TOTAL    = 20 * 1024 * 1024;
+    const ALLOWED_TYPES = new Set([
+      'application/pdf',
+      'image/png','image/jpeg','image/jpg','image/gif','image/webp',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'text/csv','text/plain'
+    ]);
 
-let selectedFiles = [];
+    let selectedFiles = [];
 
-function setError(msg){
-  if (!fileError) return;
-  fileError.textContent = msg || '';
-}
-function clearError(){ setError(''); }
-
-function rebuildInput(){
-  // reset pour pouvoir re-choisir les mêmes fichiers
-  if (fileInput) fileInput.value = '';
-}
-
-function currentTotalSize(files){
-  return files.reduce((n,f)=> n + (f.size||0), 0);
-}
-
-function renderFilesList(){
-  if (!fileListEl) return;
-  fileListEl.innerHTML = selectedFiles.map((f, i)=> `
-    <li class="file-item">
-      <span>${f.name}</span>
-      <button type="button" class="file-remove" data-i="${i}" aria-label="Retirer ${f.name}">✕</button>
-    </li>
-  `).join('') || '';
-}
-
-// suppression d’un fichier (délégation)
-fileListEl?.addEventListener('click', (e)=>{
-  const btn = e.target.closest('.file-remove');
-  if (!btn) return;
-  const i = Number(btn.dataset.i);
-  if (!Number.isNaN(i)){
-    selectedFiles.splice(i, 1);
-    renderFilesList();
-    clearError();
-  }
-});
-
-function addFiles(newFiles){
-  clearError();
-  const incoming = Array.from(newFiles || []);
-  if (!incoming.length) return;
-
-  // limite de nombre
-  if (selectedFiles.length + incoming.length > MAX_FILES) {
-    setError(`Trop de fichiers (max ${MAX_FILES}). Supprimez-en avant d’ajouter d’autres éléments.`);
-  }
-
-  for (const f of incoming){
-    if (selectedFiles.length >= MAX_FILES) break;
-
-    // taille par fichier
-    if (f.size > MAX_PER_FILE){
-      setError(`"${f.name}" dépasse 10 Mo. Envoyez-le par mail à Contact.OmeraFrance@gmail.com.`);
-      continue;
+    function setError(msg){
+      if (!fileError) return;
+      fileError.textContent = msg || '';
+    }
+    function clearError(){ setError(''); }
+    function rebuildInput(){ if (fileInput) fileInput.value = ''; }
+    function currentTotalSize(files){ return files.reduce((n,f)=> n + (f.size||0), 0); }
+    function renderFilesList(){
+      if (!fileListEl) return;
+      fileListEl.innerHTML = selectedFiles.map((f, i)=> `
+        <li class="file-item">
+          <span>${f.name}</span>
+          <button type="button" class="file-remove" data-i="${i}" aria-label="Retirer ${f.name}">✕</button>
+        </li>
+      `).join('') || '';
     }
 
-    // type souple : on tolère les inconnus (pas de blocage)
-    if (!ALLOWED_TYPES.has(f.type) && f.type){
-      // on pourrait afficher un rappel, mais on n’empêche pas
-    }
-
-    // taille totale
-    const nextTotal = currentTotalSize([...selectedFiles, f]);
-    if (nextTotal > MAX_TOTAL){
-      setError(`Taille totale > 20 Mo. Envoyez les plus volumineux par mail à Contact.OmeraFrance@gmail.com.`);
-      continue;
-    }
-
-    selectedFiles.push(f);
-  }
-
-  rebuildInput();
-  renderFilesList();
-}
-
-// input “fichiers”
-fileInput?.addEventListener('change', ()=>{
-  if (!fileInput?.files) return;
-  addFiles(fileInput.files);
-});
-
-// drag & drop sur la zone
-const dropZone = document.querySelector('.upload .drop');
-if (dropZone){
-  ['dragenter','dragover'].forEach(evt=>{
-    dropZone.addEventListener(evt, (e)=>{ e.preventDefault(); e.stopPropagation(); dropZone.classList.add('is-over'); });
-  });
-  ['dragleave','drop'].forEach(evt=>{
-    dropZone.addEventListener(evt, (e)=>{ e.preventDefault(); e.stopPropagation(); dropZone.classList.remove('is-over'); });
-  });
-  dropZone.addEventListener('drop', (e)=>{
-    const files = e.dataTransfer?.files;
-    if (files && files.length) addFiles(files);
-  });
-}
-
-function fileToBase64(file){
-  return new Promise((resolve, reject)=>{
-    const r = new FileReader();
-    r.onload = () => resolve(String(r.result).split(',')[1] || '');
-    r.onerror = reject;
-    r.readAsDataURL(file);
-  });
-}
-
-// CONTACT FORM — envoi direct via /api/contact (même domaine)
-const contactForm = document.getElementById('contactForm');
-const formNote = document.getElementById('formNote');
-const apiUrl = new URL('/api/contact', window.location.origin).toString();
-
-
-contactForm.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  const data = new FormData(contactForm);
-  if (data.get('_gotcha')) return; // bot trap
-
-  // validations fichiers
-  clearError();
-  if (selectedFiles.length > MAX_FILES){
-    setError(`Trop de fichiers (max ${MAX_FILES}).`);
-    formNote.classList.remove('success'); formNote.classList.add('error');
-    formNote.textContent = `Veuillez retirer des pièces jointes.`;
-    return;
-  }
-  let total = 0;
-  for (const f of selectedFiles){
-    if (f.size > MAX_PER_FILE){
-      setError(`"${f.name}" dépasse 10 Mo. Envoyez-le par mail à Contact.OmeraFrance@gmail.com.`);
-      formNote.classList.remove('success'); formNote.classList.add('error');
-      formNote.textContent = `Pièce jointe trop volumineuse.`;
-      return;
-    }
-    total += f.size;
-  }
-  if (total > MAX_TOTAL){
-    setError(`Taille totale > 20 Mo. Envoyez les plus volumineux par mail à Contact.OmeraFrance@gmail.com.`);
-    formNote.classList.remove('success'); formNote.classList.add('error');
-    formNote.textContent = `Total des pièces jointes trop élevé.`;
-    return;
-  }
-
-  const attachments = await Promise.all(selectedFiles.map(async (f)=>({
-    filename: f.name,
-    contentType: f.type || 'application/octet-stream',
-    content: await fileToBase64(f)
-  })));
-
-  const payload = {
-    name: data.get('name')?.toString().trim(),
-    email: data.get('email')?.toString().trim(),
-    phone: data.get('phone')?.toString().trim(),
-    message: data.get('message')?.toString().trim(),
-    attachments
-  };
-
-  const btn = contactForm.querySelector('button[type="submit"]');
-  if (btn) btn.disabled = true;
-  formNote.classList.remove('success','error');
-  formNote.textContent = 'Envoi en cours…';
-
-  try{
-    const res = await fetch(apiUrl, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
+    fileListEl?.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.file-remove');
+      if (!btn) return;
+      const i = Number(btn.dataset.i);
+      if (!Number.isNaN(i)){
+        selectedFiles.splice(i, 1);
+        renderFilesList();
+        clearError();
+      }
     });
-    const payloadRes = await res.json().catch(()=> ({}));
-    if(!res.ok){
-      const msg = payloadRes?.error || `Erreur HTTP ${res.status}`;
-      throw new Error(msg);
+
+    function addFiles(newFiles){
+      clearError();
+      const incoming = Array.from(newFiles || []);
+      if (!incoming.length) return;
+
+      if (selectedFiles.length + incoming.length > MAX_FILES) {
+        setError(`Trop de fichiers (max ${MAX_FILES}). Supprimez-en avant d’ajouter d’autres éléments.`);
+      }
+
+      for (const f of incoming){
+        if (selectedFiles.length >= MAX_FILES) break;
+
+        if (f.size > MAX_PER_FILE){
+          setError(`"${f.name}" dépasse 10 Mo. Envoyez-le par mail à Contact.OmeraFrance@gmail.com.`);
+          continue;
+        }
+
+        const nextTotal = currentTotalSize([...selectedFiles, f]);
+        if (nextTotal > MAX_TOTAL){
+          setError(`Taille totale > 20 Mo. Envoyez les plus volumineux par mail à Contact.OmeraFrance@gmail.com.`);
+          continue;
+        }
+
+        selectedFiles.push(f);
+      }
+
+      rebuildInput();
+      renderFilesList();
     }
 
-// Succès
-formNote.textContent = 'Message envoyé ✅';
-formNote.classList.remove('error'); formNote.classList.add('success');
-contactForm.reset();
-selectedFiles = [];
-renderFilesList();
-if (btn) btn.disabled = false;
-// Laisse le message visible un court instant, puis affiche l'écran Merci
-setTimeout(() => { location.hash = '#merci'; }, 400);
-  }catch(err){
-    console.error('Contact form error:', err);
-    formNote.classList.remove('success'); formNote.classList.add('error');
-    formNote.textContent = 'Envoi impossible. Si besoin, envoyez vos fichiers à Contact.OmeraFrance@gmail.com.';
-    if (btn) btn.disabled = false;
-  }
-});
+    fileInput?.addEventListener('change', ()=>{
+      if (!fileInput?.files) return;
+      addFiles(fileInput.files);
+    });
 
-    // Reduced motion
+    const dropZone = document.querySelector('.upload .drop');
+    if (dropZone){
+      ['dragenter','dragover'].forEach(evt=>{
+        dropZone.addEventListener(evt, (e)=>{ e.preventDefault(); e.stopPropagation(); dropZone.classList.add('is-over'); });
+      });
+      ['dragleave','drop'].forEach(evt=>{
+        dropZone.addEventListener(evt, (e)=>{ e.preventDefault(); e.stopPropagation(); dropZone.classList.remove('is-over'); });
+      });
+      dropZone.addEventListener('drop', (e)=>{
+        const files = e.dataTransfer?.files;
+        if (files && files.length) addFiles(files);
+      });
+    }
+
+    function fileToBase64(file){
+      return new Promise((resolve, reject)=>{
+        const r = new FileReader();
+        r.onload = () => resolve(String(r.result).split(',')[1] || '');
+        r.onerror = reject;
+        r.readAsDataURL(file);
+      });
+    }
+
+    // CONTACT FORM
+    const contactForm = document.getElementById('contactForm');
+    const formNote = document.getElementById('formNote');
+    const apiUrl = new URL('/api/contact', window.location.origin).toString();
+
+    contactForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const data = new FormData(contactForm);
+      if (data.get('_gotcha')) return;
+
+      clearError();
+      if (selectedFiles.length > MAX_FILES){
+        setError(`Trop de fichiers (max ${MAX_FILES}).`);
+        formNote.classList.remove('success'); formNote.classList.add('error');
+        formNote.textContent = `Veuillez retirer des pièces jointes.`;
+        return;
+      }
+      let total = 0;
+      for (const f of selectedFiles){
+        if (f.size > MAX_PER_FILE){
+          setError(`"${f.name}" dépasse 10 Mo. Envoyez-le par mail à Contact.OmeraFrance@gmail.com.`);
+          formNote.classList.remove('success'); formNote.classList.add('error');
+          formNote.textContent = `Pièce jointe trop volumineuse.`;
+          return;
+        }
+        total += f.size;
+      }
+      if (total > MAX_TOTAL){
+        setError(`Taille totale > 20 Mo. Envoyez les plus volumineux par mail à Contact.OmeraFrance@gmail.com.`);
+        formNote.classList.remove('success'); formNote.classList.add('error');
+        formNote.textContent = `Total des pièces jointes trop élevé.`;
+        return;
+      }
+
+      const attachments = await Promise.all(selectedFiles.map(async (f)=>({
+        filename: f.name,
+        contentType: f.type || 'application/octet-stream',
+        content: await fileToBase64(f)
+      })));
+
+      const payload = {
+        name: data.get('name')?.toString().trim(),
+        email: data.get('email')?.toString().trim(),
+        phone: data.get('phone')?.toString().trim(),
+        message: data.get('message')?.toString().trim(),
+        attachments
+      };
+
+      const btn = contactForm.querySelector('button[type="submit"]');
+      if (btn) btn.disabled = true;
+      formNote.classList.remove('success','error');
+      formNote.textContent = 'Envoi en cours…';
+
+      try{
+        const res = await fetch(apiUrl, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const payloadRes = await res.json().catch(()=> ({}));
+        if(!res.ok){
+          const msg = payloadRes?.error || `Erreur HTTP ${res.status}`;
+          throw new Error(msg);
+        }
+
+        formNote.textContent = 'Message envoyé ✅';
+        formNote.classList.remove('error'); formNote.classList.add('success');
+        contactForm.reset();
+        selectedFiles = [];
+        renderFilesList();
+        if (btn) btn.disabled = false;
+
+        setTimeout(() => { location.hash = '#merci'; }, 400);
+      }catch(err){
+        console.error('Contact form error:', err);
+        formNote.classList.remove('success'); formNote.classList.add('error');
+        formNote.textContent = 'Envoi impossible. Si besoin, envoyez vos fichiers à Contact.OmeraFrance@gmail.com.';
+        if (btn) btn.disabled = false;
+      }
+    });
+
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       document.documentElement.style.scrollBehavior = 'auto';
     }
