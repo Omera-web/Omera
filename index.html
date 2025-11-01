@@ -510,7 +510,61 @@
   </div>
 </section>
 
-      <!-- Contact --> <section id="contact"> <div class="container contact"> <div> <h2 class="section-title" data-reveal>Nous contacter</h2> <p class="muted" data-reveal>Expliquez votre besoin — retour sous 24h avec des pistes concrètes.</p> <div class="card" data-reveal style="margin-top:14px"> <form id="contactForm" name="contact" novalidate> <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off"> <input required type="text" name="name" placeholder="Votre nom" aria-label="Votre nom" /> <input required type="email" name="email" placeholder="Votre email" aria-label="Votre email" /> <input type="tel" name="phone" placeholder="Téléphone (optionnel)" aria-label="Téléphone" /> <textarea required name="message" placeholder="Parlez-nous de votre projet…" aria-label="Message"></textarea> <button class="btn" type="submit">Envoyer</button> <p id="formNote" class="muted" style="margin:8px 0 0"></p> </form> <p class="muted" style="margin-top:12px"> Ou écrivez directement à <a id="mailtoDirect" href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a> • LinkedIn : <a href="https://www.linkedin.com/in/paul-laisn%C3%A9/" target="_blank" rel="noopener">Paul&nbsp;LASNÉ</a> </p> </div> </div> <aside class="card" data-reveal id="contactHelp"> <h3>Pour bien cerner votre besoin</h3> <ul class="muted checklist"> <li>Si vous utilisez un <b>Excel / Google Sheet</b> interne, joignez-le (ou des captures).</li> <li>Précisez le <b>nombre d’utilisateurs</b> concernés.</li> <li>Indiquez l’<b>objectif principal</b> de l’outil en une phrase.</li> </ul> <div class="upload" style="margin-top:14px"> <label class="drop" for="files"> <input id="files" type="file" multiple hidden accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.csv,.txt,.xls,.xlsx,application/pdf,image/*,text/csv,text/plain,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /> <strong>Ajouter des fichiers</strong> <span class="small">Si les fichiers sont trop lourds ou non pris en charge, envoyez-les à <a href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a>. </span> </label> <ul id="fileList" class="file-list muted small"></ul> <p id="fileError" class="error small" aria-live="polite"></p> </div> </aside> </div> </section> </div>
+     <!-- Contact -->
+<section id="contact">
+  <div class="container contact">
+    <div>
+      <h2 class="section-title" data-reveal>Nous contacter</h2>
+      <p class="muted" data-reveal>Expliquez votre besoin — retour sous 24h avec des pistes concrètes.</p>
+
+      <div class="card" data-reveal style="margin-top:14px">
+        <form id="contactForm" name="contact" novalidate>
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+          <input required type="text" name="name" placeholder="Votre nom" aria-label="Votre nom" />
+          <input required type="email" name="email" placeholder="Votre email" aria-label="Votre email" />
+          <input type="tel" name="phone" placeholder="Téléphone (optionnel)" aria-label="Téléphone" />
+          <textarea required name="message" placeholder="Parlez-nous de votre projet…" aria-label="Message"></textarea>
+
+          <button class="btn" type="submit">Envoyer</button>
+          <p id="formNote" class="muted" style="margin:8px 0 0"></p>
+        </form>
+
+        <p class="muted" style="margin-top:12px">
+          Ou écrivez directement à
+          <a id="mailtoDirect" href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a>
+          • LinkedIn :
+          <a href="https://www.linkedin.com/in/paul-laisn%C3%A9/" target="_blank" rel="noopener">Paul&nbsp;LASNÉ</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- seule modif ICI -->
+    <aside class="card" data-reveal id="contactHelp" style="margin-top:14px">
+      <h3>Pour bien cerner votre besoin</h3>
+      <ul class="muted checklist">
+        <li>Si vous utilisez un <b>Excel / Google Sheet</b> interne, joignez-le (ou des captures).</li>
+        <li>Précisez le <b>nombre d’utilisateurs</b> concernés.</li>
+        <li>Indiquez l’<b>objectif principal</b> de l’outil en une phrase.</li>
+      </ul>
+
+      <div class="upload" style="margin-top:14px">
+        <label class="drop" for="files">
+          <input id="files" type="file" multiple hidden
+            accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.csv,.txt,.xls,.xlsx,application/pdf,image/*,text/csv,text/plain,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+          <strong>Ajouter des fichiers</strong>
+          <span class="small">
+            Si les fichiers sont trop lourds ou non pris en charge, envoyez-les à
+            <a href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a>.
+          </span>
+        </label>
+
+        <ul id="fileList" class="file-list muted small"></ul>
+        <p id="fileError" class="error small" aria-live="polite"></p>
+      </div>
+    </aside>
+  </div>
+</section>
+</div>
 
     <!-- 👇 seule modif : margin-top:14px -->
     <aside class="card" data-reveal id="contactHelp" style="margin-top:14px">
