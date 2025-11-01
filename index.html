@@ -626,7 +626,7 @@
               </ul>
             </div>
             <p style="margin-top:16px">
-              <a class="btn" href="#contact" data-nav="home">Discuter de votre SaaS</a>
+              <a class="btn" href="#contact" data-go-home-contact>Discuter de votre SaaS</a>
               <a class="btn secondary" href="#" data-nav="home" style="margin-left:8px">← Retour</a>
             </p>
           </div>
@@ -728,7 +728,7 @@
               </ul>
             </div>
             <p style="margin-top:16px">
-              <a class="btn" href="#contact" data-nav="home">Discuter de votre SaaS</a>
+              <a class="btn" href="#contact" data-go-home-contact>Discuter de votre SaaS</a>
               <a class="btn secondary" href="#" data-nav="home" style="margin-left:8px">← Retour</a>
             </p>
           </div>
@@ -1120,6 +1120,23 @@ document.addEventListener('click', (e) => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       document.documentElement.style.scrollBehavior = 'auto';
     }
+    // 🟣 Bouton "Discuter de votre SaaS" -> revient à la home + scroll contact
+document.querySelectorAll('[data-go-home-contact]').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    // revient à la home
+    history.pushState(null, '', '#');
+    parseRoute();
+    // petit délai pour que la home s'affiche, puis scroll vers #contact
+    setTimeout(() => {
+      const contactSection = document.querySelector('#contact');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 300);
+  });
+});
+
   </script>
 </body>
 </html>
