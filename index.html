@@ -509,9 +509,9 @@
     </div>
   </div>
 </section>
- <!-- Contact -->
+<!-- Contact -->
 <section id="contact">
-  <div class="container contact" style="display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start;">
+  <div class="container contact">
     <div>
       <h2 class="section-title" data-reveal>Nous contacter</h2>
       <p class="muted" data-reveal>Expliquez votre besoin — retour sous 24h avec des pistes concrètes.</p>
@@ -537,6 +537,7 @@
       </div>
     </div>
 
+    <!-- 👇 seule modif : margin-top:14px -->
     <aside class="card" data-reveal id="contactHelp" style="margin-top:14px">
       <h3>Pour bien cerner votre besoin</h3>
       <ul class="muted checklist">
@@ -550,7 +551,8 @@
           <input id="files" type="file" multiple hidden
             accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.csv,.txt,.xls,.xlsx,application/pdf,image/*,text/csv,text/plain,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
           <strong>Ajouter des fichiers</strong>
-          <span class="small">Si les fichiers sont trop lourds ou non pris en charge, envoyez-les à
+          <span class="small">
+            Si les fichiers sont trop lourds ou non pris en charge, envoyez-les à
             <a href="mailto:Contact.OmeraFrance@gmail.com">Contact.OmeraFrance@gmail.com</a>.
           </span>
         </label>
