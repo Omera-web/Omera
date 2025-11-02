@@ -886,30 +886,50 @@
       thanks:document.getElementById('view-thanks')
     };
 
-    function show(key){
-      Object.values(views).forEach(v => v.classList.remove('active'));
-      (views[key] || views.home).classList.add('active');
-      document.body.classList.toggle('mode-thanks', key === 'thanks');
-      window.scrollTo({ top: 0, behavior: 'instant' });
-    }
+function show(key, { noScroll } = {}){
+  Object.values(views).forEach(v => v.classList.remove('active'));
+  (views[key] || views.home).classList.add('active');
+  document.body.classList.toggle('mode-thanks', key === 'thanks');
+
+  if (!noScroll) {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+}
 
 function parseRoute(){
   let h = (location.hash || '').trim();
   h = h.replace(/^\/#/, '#').replace(/^#!?\//, '#');
 
+  // détail services
   if (h.startsWith('#service/')) {
     const key = h.replace('#service/', '');
-    // on montre la vue
     show(key === 'site' ? 'site' : 'saas');
-
-    // et on active le bon onglet dans la vue affichée
     activateServiceTab(key === 'site' ? 'site' : 'saas');
-  } else if (h === '#merci') {
-    show('thanks');
-  } else {
-    show('home');
+    return;
   }
+
+  // page merci
+  if (h === '#merci') {
+    show('thanks');
+    return;
+  }
+
+  // ancres de la home (#why, #process, #contact…)
+  if (h && h !== '#') {
+    show('home', { noScroll: true });
+    requestAnimationFrame(() => {
+      const target = document.querySelector(h);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+    return;
+  }
+
+  // défaut
+  show('home');
 }
+
     function activateServiceTab(service){
   // on regarde dans la vue visible
   const currentView = document.querySelector('.view.active');
