@@ -53,11 +53,51 @@
     .menu{display:flex; align-items:center}
     .nav a{color:var(--text); opacity:.9; margin:0 8px; font-weight:500}
     .cta{padding:12px 18px; background:linear-gradient(135deg, var(--primary), var(--accent)); border-radius:999px; box-shadow:var(--shadow-sm); border:1px solid rgba(255,255,255,.08)}
-    .burger{display:none; width:44px; height:44px; border-radius:14px; border:1px solid rgba(255,255,255,.08);
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); box-shadow:var(--shadow-sm); align-items:center; justify-content:center; cursor:pointer}
-    .burger span,.burger::before,.burger::after{content:""; display:block; width:20px; height:2px; background:#fff; opacity:.9; border-radius:2px; transition:.25s}
-    .burger::before{transform:translateY(-6px)} .burger::after{transform:translateY(6px)}
-    .burger.active span{opacity:0} .burger.active::before{transform:translateY(0) rotate(45deg)} .burger.active::after{transform:translateY(0) rotate(-45deg)}
+    /* bouton burger */
+.burger{
+  display:none;
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  border:1px solid rgba(124,92,255,.35);
+  background:rgba(14,19,34,.35);
+  backdrop-filter:blur(10px);
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:.2s ease;
+}
+.burger:hover{
+  border-color:rgba(124,92,255,.7);
+}
+
+/* les 3 traits */
+.burger span,
+.burger::before,
+.burger::after{
+  content:"";
+  display:block;
+  width:18px;
+  height:2.5px;
+  background:#fff;
+  border-radius:99px;
+  transition:.22s ease;
+  transform-origin:center;
+}
+.burger::before{ transform:translateY(-5.5px); }
+.burger::after { transform:translateY(5.5px); }
+
+/* état ouvert → croix bien centrée */
+.burger.active span{
+  opacity:0;
+}
+.burger.active::before{
+  transform:rotate(45deg);
+}
+.burger.active::after{
+  transform:rotate(-45deg);
+}
     .drawer{position:fixed; top:var(--header-h-mobile); left:0; right:0; background:linear-gradient(180deg, rgba(14,19,34,.98), rgba(14,19,34,.92)); border-bottom:1px solid rgba(255,255,255,.08); display:none}
     .drawer.open{display:block} .drawer a{display:block; padding:16px var(--space); border-top:1px solid rgba(255,255,255,.06); color:#fff; opacity:.95}
     .drawer .cta{display:block; margin:12px var(--space)}
@@ -395,7 +435,15 @@
   .services-switch{grid-template-columns:1fr;}
   .switch-card{grid-template-columns:1fr;}
 }
-
+@media (max-width: 640px){
+  .badges{
+    display:none;
+  }
+  /* on rapproche un peu le bouton du texte */
+  .hero .btn{
+    margin-top: 6px;
+  }
+}
 
   </style>
 </head>
