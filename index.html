@@ -77,7 +77,16 @@
     .logo svg{width:34px; height:34px; filter:drop-shadow(0 6px 12px rgba(124,92,255,.45))}
     .menu{display:flex; align-items:center}
     .nav a{color:var(--text); opacity:.9; margin:0 8px; font-weight:500}
-    .cta{padding:12px 18px; background:linear-gradient(135deg, var(--primary), var(--accent)); border-radius:999px; box-shadow:var(--shadow-sm); border:1px solid rgba(255,255,255,.08)}
+    .cta{
+  padding:8px 14px; /* plus fin */
+  font-size:14px;   /* texte légèrement plus petit */
+  background:linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius:999px;
+  box-shadow:0 2px 8px rgba(124,92,255,.25); /* ombre plus douce */
+  border:1px solid rgba(255,255,255,.1);
+  font-weight:500;  /* texte un peu moins épais */
+}
+
     /* bouton burger */
 .burger{
   display:none;
