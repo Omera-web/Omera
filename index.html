@@ -75,7 +75,19 @@
     .nav{display:flex; align-items:center; justify-content:space-between; height:100%}
     .nav-inner{display:flex; align-items:center; gap:16px; padding:0 10px}
     .logo{display:inline-flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.3px}
-    .logo svg{width:34px; height:34px; filter:drop-shadow(0 6px 12px rgba(124,92,255,.45))}
+    .logo-img {
+  height: 34px;
+  width: auto;
+  display: block;
+}
+header .logo-img {
+  filter: drop-shadow(0 6px 12px rgba(124,92,255,.45));
+}
+footer .logo-img {
+  height: 26px;
+  width: auto;
+}
+
     .menu{display:flex; align-items:center}
     .nav a{color:var(--text); opacity:.9; margin:0 8px; font-weight:500}
     .cta{
@@ -483,11 +495,9 @@
   <header>
     <div class="container nav">
       <div class="nav-inner">
-        <a class="logo" href="#" aria-label="Accueil Omera">
-          <svg viewBox="0 0 40 40" aria-hidden="true" role="img"><circle cx="20" cy="20" r="14" fill="url(#g)"/>
-            <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6bff"/><stop offset="1" stop-color="#6b46ff"/></linearGradient></defs>
-          </svg><span>Omera</span>
-        </a>
+<a class="logo" href="#" aria-label="Accueil Omera">
+  <img src="/assets/Logo%20Omera%20(grand).png" alt="Omera" class="logo-img">
+</a>
       </div>
       <nav class="menu" aria-label="Navigation principale">
         <a href="#service/saas">Services</a>
@@ -906,13 +916,9 @@
 
   <footer>
     <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-      <div class="logo">
-        <svg viewBox="0 0 40 40" aria-hidden="true" role="img" style="width:28px;height:28px">
-          <circle cx="20" cy="20" r="14" fill="url(#gf)" />
-          <defs><linearGradient id="gf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6bff"/><stop offset="1" stop-color="#6b46ff"/></linearGradient></defs>
-        </svg>
-        <span>Omera</span>
-      </div>
+<div class="logo">
+  <img src="/assets/Logo%20Omera%20(grand).png" alt="Omera" class="logo-img">
+</div>
       <div>© <span id="year"></span> Omera — Tous droits réservés</div>
     </div>
   </footer>
