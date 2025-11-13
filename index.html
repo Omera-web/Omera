@@ -493,26 +493,69 @@ footer .logo-img {
     margin-top: 6px;
   }
 }
-.carousel-card {
+/* ---- Témoignages ---- */
+
+.testimonial-card {
+  background: linear-gradient(180deg, rgba(14,19,34,.85), rgba(22,28,45,.75));
+  border: 1px solid rgba(124,92,255,0.25);
   position: relative;
-  overflow: hidden;
-  min-height: 120px;
 }
 
-.carousel {
+.testimonial-wrapper {
+  position: relative;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.carousel-item {
+.testimonial-carousel {
+  position: relative;
+  width: 100%;
+  min-height: 70px;
+  text-align: center;
+  padding: 10px 6px;
+}
+
+.testimonial {
   opacity: 0;
   position: absolute;
-  transition: opacity .6s ease-out;
+  width: 100%;
+  left: 0;
+  top: 0;
+  transition: opacity .5s ease;
+  color: var(--muted);
+  font-style: italic;
 }
 
-.carousel-item.active {
+.testimonial.active {
   opacity: 1;
   position: relative;
+}
+
+.testi-btn {
+  background: rgba(124,92,255,.12);
+  border: 1px solid rgba(124,92,255,.35);
+  border-radius: 10px;
+  width: 32px;
+  height: 32px;
+  color: #dcd7ff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.testi-btn:hover {
+  background: rgba(124,92,255,.22);
+  transform: translateY(-2px);
+}
+
+.testi-btn.left {
+  margin-right: 8px;
+}
+
+.testi-btn.right {
+  margin-left: 8px;
 }
 
   </style>
@@ -618,16 +661,21 @@ footer .logo-img {
       </div>
 
       <!-- 🟣 4ᵉ CARTE : AVIS CLIENTS (CARROUSEL) -->
-      <div class="card carousel-card" data-reveal style="transition-delay:.18s">
-        <h3>Avis clients</h3>
-        <div class="carousel">
-          <div class="carousel-item">“Omera a transformé notre gestion interne. Gain de temps énorme.” — Thomas R.</div>
-          <div class="carousel-item">“Un outil clair et vraiment adapté à notre façon de travailler.” — Julie M.</div>
-          <div class="carousel-item">“Accompagnement très pro du début à la fin.” — Marc L.</div>
-          <div class="carousel-item">“Nous avons remplacé nos Excel par un SaaS intuitif. Parfait.” — Amina B.</div>
-          <div class="carousel-item">“Flexibles, rapides et à l’écoute. Je recommande.” — Kevin P.</div>
-        </div>
-      </div>
+<div class="card testimonial-card" data-reveal style="transition-delay:.18s">
+  <h3 style="text-align:center; margin-bottom:12px;">Avis clients</h3>
+
+  <div class="testimonial-wrapper">
+    <button class="testi-btn left" aria-label="Avis précédent">‹</button>
+    <div class="testimonial-carousel">
+      <div class="testimonial active">“Outil clair, moderne, et parfaitement adapté à notre usage.”</div>
+      <div class="testimonial">“Un vrai gain de temps opérationnel au quotidien.”</div>
+      <div class="testimonial">“Processus simple, résultats immédiatement utiles.”</div>
+      <div class="testimonial">“Livré rapidement, sans compromis sur la qualité.”</div>
+      <div class="testimonial">“Accompagnement très structuré, très professionnel.”</div>
+    </div>
+    <button class="testi-btn right" aria-label="Avis suivant">›</button>
+  </div>
+</div>
 
     </div>
   </div>
@@ -1314,17 +1362,31 @@ document.querySelectorAll('[data-go-home-contact]').forEach(btn => {
     }, 300);
   });
 });
-// Carrousel avis clients
-const items = document.querySelectorAll('.carousel-item');
-let index = 0;
+// --- Témoignages ---
+const testimonials = document.querySelectorAll('.testimonial');
+let tIndex = 0;
 
-function showNext() {
-  items.forEach((el, i) => el.classList.toggle('active', i === index));
-  index = (index + 1) % items.length;
+function showTestimonial(i) {
+  testimonials.forEach((t, j) => {
+    t.classList.toggle('active', j === i);
+  });
 }
 
-showNext();
-setInterval(showNext, 4000);
+function nextTestimonial() {
+  tIndex = (tIndex + 1) % testimonials.length;
+  showTestimonial(tIndex);
+}
+
+function prevTestimonial() {
+  tIndex = (tIndex - 1 + testimonials.length) % testimonials.length;
+  showTestimonial(tIndex);
+}
+
+document.querySelector('.testi-btn.right')?.addEventListener('click', nextTestimonial);
+document.querySelector('.testi-btn.left')?.addEventListener('click', prevTestimonial);
+
+setInterval(nextTestimonial, 4500); // auto slide
+
 
   </script>
 </body>
