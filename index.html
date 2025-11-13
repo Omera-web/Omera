@@ -493,6 +493,27 @@ footer .logo-img {
     margin-top: 6px;
   }
 }
+.carousel-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 120px;
+}
+
+.carousel {
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-item {
+  opacity: 0;
+  position: absolute;
+  transition: opacity .6s ease-out;
+}
+
+.carousel-item.active {
+  opacity: 1;
+  position: relative;
+}
 
   </style>
 </head>
@@ -578,19 +599,36 @@ footer .logo-img {
 <section id="why">
   <div class="container">
     <h2 class="section-title" data-reveal>Pourquoi nous choisir</h2>
+
     <div class="grid cols-2" style="margin-top:16px">
+
       <div class="card" data-reveal>
         <h3>Développement rapide</h3>
         <p class="muted">Nous exploitons le no-code pour livrer vite, sans sacrifier la qualité ni la stabilité.</p>
       </div>
+
       <div class="card" data-reveal style="transition-delay:.06s">
         <h3>Approche collaborative</h3>
         <p class="muted">Chaque solution est pensée avec vous pour choisir la meilleure direction, en toute clarté.</p>
       </div>
+
       <div class="card" data-reveal style="transition-delay:.12s">
         <h3>Transparence & pédagogie</h3>
         <p class="muted">Chaque étape est expliquée simplement pour que vous compreniez et maîtrisiez votre outil.</p>
       </div>
+
+      <!-- 🟣 4ᵉ CARTE : AVIS CLIENTS (CARROUSEL) -->
+      <div class="card carousel-card" data-reveal style="transition-delay:.18s">
+        <h3>Avis clients</h3>
+        <div class="carousel">
+          <div class="carousel-item">“Omera a transformé notre gestion interne. Gain de temps énorme.” — Thomas R.</div>
+          <div class="carousel-item">“Un outil clair et vraiment adapté à notre façon de travailler.” — Julie M.</div>
+          <div class="carousel-item">“Accompagnement très pro du début à la fin.” — Marc L.</div>
+          <div class="carousel-item">“Nous avons remplacé nos Excel par un SaaS intuitif. Parfait.” — Amina B.</div>
+          <div class="carousel-item">“Flexibles, rapides et à l’écoute. Je recommande.” — Kevin P.</div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -1276,6 +1314,17 @@ document.querySelectorAll('[data-go-home-contact]').forEach(btn => {
     }, 300);
   });
 });
+// Carrousel avis clients
+const items = document.querySelectorAll('.carousel-item');
+let index = 0;
+
+function showNext() {
+  items.forEach((el, i) => el.classList.toggle('active', i === index));
+  index = (index + 1) % items.length;
+}
+
+showNext();
+setInterval(showNext, 4000);
 
   </script>
 </body>
