@@ -48,7 +48,7 @@
       --bg-dark:#0b0f19; --bg-elev:#0e1322; --card:#12182a;
       --text:#e8e9f1; --muted:#a7abbe; --primary:#7c5cff; --accent:#9f7aff;
       --ring:rgba(124,92,255,.35); --radius:16px; --shadow-lg:0 10px 30px rgba(0,0,0,.45); --shadow-sm:0 4px 16px rgba(0,0,0,.25);
-      --header-h:70px; --header-h-mobile:64px; --bg-image:none;
+      --header-h:78px; --header-h-mobile:70px; --bg-image:none;
       --space: clamp(16px, 2.8vw, 24px);
     }
     *{box-sizing:border-box} html,body{height:100%} html{scroll-behavior:smooth}
@@ -81,8 +81,8 @@
       background:linear-gradient(180deg, rgba(11,15,25,.86), rgba(11,15,25,.55));
       border-bottom:1px solid rgba(255,255,255,.06); height:var(--header-h)
     }
-    .nav{display:flex; align-items:center; justify-content:space-between; height:100%}
-    .nav-inner{display:flex; align-items:center; gap:16px; padding:0 10px}
+    .nav{display:flex; align-items:center; justify-content:space-between; height:100%; gap:24px}
+    .nav-inner{display:flex; align-items:center; gap:16px; padding:0 12px 0 4px; flex-shrink:0}
     .logo{display:inline-flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.3px}
     .logo-img {
   height: 34px;
@@ -97,20 +97,35 @@ footer .logo-img {
   width: auto;
 }
 
-    .menu{display:flex; align-items:center}
-    .nav a{color:var(--text); opacity:.9; margin:0 8px; font-weight:500}
-    .nav-auth-slot{font-size:14px;font-weight:500;color:var(--text);margin-left:8px;white-space:nowrap}
-    .nav-auth-slot a{color:var(--text);opacity:.9;text-decoration:none;margin:0 4px}
-    .nav-auth-slot a:hover{text-decoration:underline}
+    .menu{
+      display:flex; align-items:center; flex-wrap:wrap; justify-content:flex-end;
+      gap:12px 26px; row-gap:14px; column-gap:26px;
+    }
+    .nav .menu > a:not(.cta){
+      color:var(--text); opacity:.92; font-weight:500;
+      padding:10px 8px; margin:0;
+      text-decoration:none; white-space:nowrap;
+    }
+    .nav .menu > a:not(.cta):hover{opacity:1; text-decoration:underline}
+    .nav .menu > a.nav-preview-free{opacity:.92}
+    .nav-auth-slot{
+      font-size:14px; font-weight:500; color:var(--text);
+      margin:0 0 0 12px; padding:8px 0 8px 22px;
+      border-left:1px solid rgba(255,255,255,.12);
+      white-space:nowrap;
+    }
+    .nav-auth-slot a{color:var(--text); opacity:.92; text-decoration:none; margin:0 2px}
+    .nav-auth-slot a:hover{text-decoration:underline; opacity:1}
     .cta{
-  padding:8px 14px; /* plus fin */
-  font-size:14px;   /* texte légèrement plus petit */
-  background:linear-gradient(135deg, var(--primary), var(--accent));
-  border-radius:999px;
-  box-shadow:0 2px 8px rgba(124,92,255,.25); /* ombre plus douce */
-  border:1px solid rgba(255,255,255,.1);
-  font-weight:500;  /* texte un peu moins épais */
-}
+      padding:10px 20px;
+      font-size:14px;
+      background:linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius:999px;
+      box-shadow:0 2px 8px rgba(124,92,255,.25);
+      border:1px solid rgba(255,255,255,.1);
+      font-weight:500;
+      margin:0;
+    }
 
     /* bouton burger */
 .burger{
@@ -584,7 +599,7 @@ footer .logo-img {
         <a href="#service/saas">Services</a>
         <a href="#why">Pourquoi nous</a>
         <a href="#process">Approche</a>
-        <a href="/preview" id="navLinkPreviewFree" style="color:var(--text);opacity:.9;margin:0 8px;font-weight:500">✦ Préview gratuite</a>
+        <a href="/preview" class="nav-preview-free" id="navLinkPreviewFree">✦ Préview gratuite</a>
         <a class="cta" href="#contact">Nous contacter</a>
         <span id="navAuth" class="nav-auth-slot"></span>
       </nav>
