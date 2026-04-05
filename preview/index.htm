@@ -249,12 +249,29 @@
     .color-opt.selected { border-color: #fff; box-shadow: 0 0 0 3px var(--primary); }
     .color-opt-custom {
       width: 36px; height: 36px; border-radius: 50%;
-      border: 2px dashed rgba(255,255,255,.3); cursor: pointer;
+      border: 2px dashed rgba(255,255,255,.3);
       display: grid; place-items: center; font-size: 18px; color: var(--muted);
       transition: border-color .2s;
+      position: relative;
     }
     .color-opt-custom:hover { border-color: var(--primary); }
-    .color-opt-custom input[type="color"] { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+    .color-opt-custom .color-opt-custom-trigger {
+      cursor: pointer;
+      user-select: none;
+    }
+    /* Input hors de la zone cliquable : pas d’overlay plein cadre (évite ouverture intempestive / blocage page) */
+    .color-opt-custom input[type="color"] {
+      position: fixed;
+      left: -9999px;
+      top: 0;
+      width: 40px;
+      height: 40px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
 
     /* type cards */
     .type-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -693,8 +710,8 @@
               </div>
               <div class="type-card" onclick="selectType('nsp')" id="type-nsp">
                 <div class="type-card-icon">🤔</div>
-                <h3>Je ne sais pas encore</h3>
-                <p>Vous avez un besoin, on vous guide.</p>
+                <h3>Je ne connais pas la différence</h3>
+                <p>Je ne sais pas faire la différence tout seul — guidez-moi.</p>
               </div>
             </div>
             <div class="btn-row mt24">
@@ -754,8 +771,8 @@
                   <div class="color-opt" style="background:#e8e9f1" onclick="toggleColor(this,'#e8e9f1')" title="Blanc"></div>
                   <div class="color-opt" style="background:#1a1a2e" onclick="toggleColor(this,'#1a1a2e')" title="Sombre"></div>
                   <div class="color-opt-custom" title="Couleur personnalisée">
-                    <span>+</span>
-                    <input type="color" id="customColor" onchange="addCustomColor(this.value)" />
+                    <span class="color-opt-custom-trigger" onclick="event.stopPropagation(); document.getElementById('customColor').click()">+</span>
+                    <input type="color" id="customColor" tabindex="-1" onchange="addCustomColor(this.value)" />
                   </div>
                 </div>
                 <p class="small mt8" style="color:var(--muted)">Sélectionnez une ou plusieurs couleurs</p>
