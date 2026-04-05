@@ -558,6 +558,11 @@ footer .logo-img {
   margin-left: 8px;
 }
 
+    @keyframes previewPulse {
+  0%,100%{box-shadow:0 4px 18px rgba(124,92,255,.4)}
+  50%{box-shadow:0 4px 28px rgba(124,92,255,.75)}
+}
+
   </style>
 </head>
 <body>
@@ -570,10 +575,11 @@ footer .logo-img {
   <img src="/assets/Logo Omera (grand).png" class="logo-img" alt="Omera">
 </a>
       </div>
-      <nav class="menu" aria-label="Navigation principale">
+<nav class="menu" aria-label="Navigation principale">
         <a href="#service/saas">Services</a>
         <a href="#why">Pourquoi nous</a>
         <a href="#process">Approche</a>
+        <a href="/preview" style="color:var(--text);opacity:.9;margin:0 8px;font-weight:500">✦ Préview gratuite</a>
         <a class="cta" href="#contact">Nous contacter</a>
       </nav>
       <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="drawer"><span></span></button>
@@ -582,6 +588,7 @@ footer .logo-img {
       <a href="#service/saas">Services</a>
       <a href="#why">Pourquoi nous</a>
       <a href="#process">Approche</a>
+      <a href="/preview">✦ Préview gratuite</a>
       <a class="cta" href="#contact">Nous contacter</a>
     </nav>
   </header>
@@ -597,7 +604,10 @@ footer .logo-img {
             <div class="badges" data-reveal style="transition-delay:.14s">
              <span class="badge">Intuitif</span><span class="badge">À votre image</span><span class="badge">Flexible</span>
             </div>
-            <div data-reveal style="transition-delay:.2s"><a class="btn" href="#contact">Parler de votre projet</a></div>
+<div data-reveal style="transition-delay:.2s;display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+              <a class="btn" href="#contact">Parler de votre projet</a>
+              <a class="btn" href="/preview" style="background:linear-gradient(135deg,#7c5cff,#9f7aff);box-shadow:0 4px 18px rgba(124,92,255,.5);animation:previewPulse 2.5s ease infinite">✦ Préview gratuite</a>
+            </div>
           </div>
         </div>
       </section>
