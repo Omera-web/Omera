@@ -16,6 +16,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     /* ─── BASE (identique à index.html) ─── */
     :root {
@@ -970,6 +971,12 @@
 
 
   <script>
+  const { createClient } = supabase;
+  const sb = createClient(
+    'https://xjwwvhyapyrbutahdlqu.supabase.co',
+    'sb_publishable_XJjEmLM9rsDzw-dkkwqsCA_jXBFjxWZ'
+  );
+
   /* ══════════════════════════════════════════════
      STATE
   ══════════════════════════════════════════════ */
@@ -978,6 +985,7 @@
     email: '',
     prenom: '',
     nom: '',
+    userId: null,
     type: '',
     colors: [],
     style: [],
@@ -1046,11 +1054,12 @@
     el.textContent = '';
   }
 
-  function submitStep1() {
+  async function submitStep1() {
     hideMsg('msg1');
     const prenom = document.getElementById('prenom').value.trim();
     const nom = document.getElementById('nom').value.trim();
     const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
     const pwd = document.getElementById('pwd').value;
     const pwd2 = document.getElementById('pwd2').value;
 
@@ -1063,20 +1072,40 @@
     state.prenom = prenom;
     state.nom = nom;
 
-    // ─── ICI : appel API création compte + envoi OTP ───
-    // Pour l'instant : simulation
+    const { data: signUpData, error: signUpErr } = await sb.auth.signUp({ email, password: pwd });
+    if (signUpErr) return showMsg('msg1', signUpErr.message);
+
+    const uid = signUpData.user?.id;
+    if (uid) {
+      state.userId = uid;
+      const { error: upsertErr } = await sb.from('users').upsert(
+        { id: uid, prenom, nom, phone: phone || null },
+        { onConflict: 'id' }
+      );
+      if (upsertErr) return showMsg('msg1', upsertErr.message);
+    }
+
     document.getElementById('emailDisplay').textContent = email;
     goToStep(2);
   }
 
-  function submitLogin() {
+  async function submitLogin() {
+    hideMsg('msgLogin');
     const email = document.getElementById('loginEmail').value.trim();
     const pwd = document.getElementById('loginPwd').value;
     if (!email || !pwd) return showMsg('msgLogin', 'Renseignez votre email et mot de passe.');
+
+    const { data: signInData, error: signInErr } = await sb.auth.signInWithPassword({ email, password: pwd });
+    if (signInErr) return showMsg('msgLogin', signInErr.message);
+
     state.email = email;
-    // ─── ICI : appel API login ───
+    state.userId = signInData.user.id;
+
+    const { error: profileErr } = await sb.from('users').select('*').eq('id', signInData.user.id).maybeSingle();
+    if (profileErr) return showMsg('msgLogin', profileErr.message);
+
     document.getElementById('emailDisplay').textContent = email;
-    goToStep(2);
+    goToStep(3);
   }
 
   /* ══════════════════════════════════════════════
@@ -1100,21 +1129,27 @@
     return [0,1,2,3,4,5].map(i => document.getElementById('otp'+i).value).join('');
   }
 
-  function validateOtp() {
+  async function validateOtp() {
     hideMsg('msg2');
-    const code = getOtpValue();
-    if (code.length < 6) return showMsg('msg2', 'Entrez le code à 6 chiffres complet.');
+    const token = getOtpValue();
+    if (token.length < 6) return showMsg('msg2', 'Entrez le code complet à 6 chiffres.');
 
-    // ─── ICI : appel API validation OTP ───
-    // Simulation : on accepte tout code de 6 chiffres
-    if (code.length === 6) {
-      showMsg('msg2', 'Email validé !', 'success');
-      setTimeout(() => goToStep(3), 700);
-    }
+    const { data, error } = await sb.auth.verifyOtp({
+      email: state.email,
+      token,
+      type: 'signup'
+    });
+
+    if (error) return showMsg('msg2', 'Code invalide ou expiré. Renvoyez-en un nouveau.');
+
+    state.userId = data.user?.id;
+    showMsg('msg2', 'Email validé ✅', 'success');
+    setTimeout(() => goToStep(3), 700);
   }
 
-  function resendOtp() {
-    // ─── ICI : appel API renvoi OTP ───
+  async function resendOtp() {
+    const { error: resendErr } = await sb.auth.resend({ type: 'signup', email: state.email });
+    if (resendErr) return showMsg('msg2', resendErr.message);
     showMsg('msg2', 'Code renvoyé à ' + state.email, 'success');
   }
 
@@ -1191,12 +1226,33 @@
     list.children[i]?.remove();
   }
 
-  function submitProject() {
+  async function submitProject() {
     hideMsg('msg3');
     const qa1 = document.getElementById('qa1').value.trim();
     if (!qa1) return showMsg('msg3', 'Décrivez au moins l\'objectif principal de votre projet.');
 
-    // ─── ICI : envoi des données à l'API ───
+    const nom_projet = document.getElementById('projName').value.trim();
+    const secteur = document.getElementById('secteur').value;
+    const nb_users = document.getElementById('nbUsers').value;
+    const qa2 = document.getElementById('qa2').value.trim();
+    const qa3 = document.getElementById('qa3').value.trim();
+    const qa4 = document.getElementById('qa4').value.trim();
+
+    const { error: previewErr } = await sb.from('previews').insert({
+      type_projet: state.type,
+      nom_projet,
+      secteur,
+      couleurs: state.colors,
+      style: state.style,
+      nb_users,
+      qa1,
+      qa2,
+      qa3,
+      qa4,
+      user_id: state.userId,
+    });
+    if (previewErr) return showMsg('msg3', previewErr.message);
+
     startLoading();
   }
 
