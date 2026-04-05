@@ -114,6 +114,9 @@ footer .logo-img {
       border-left:1px solid rgba(255,255,255,.12);
       white-space:nowrap;
     }
+    .nav-user-line{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px 10px;max-width:min(520px,85vw);justify-content:flex-end}
+    .nav-user-line a{color:var(--text);opacity:.92;text-decoration:none}
+    .nav-user-line a:hover{text-decoration:underline;opacity:1}
     .nav-auth-slot a{color:var(--text); opacity:.92; text-decoration:none; margin:0 2px}
     .nav-auth-slot a:hover{text-decoration:underline; opacity:1}
     .cta{
@@ -1361,6 +1364,18 @@ document.addEventListener('click', (e) => {
           throw new Error(msg);
         }
 
+        try {
+          if (window.omeraSb && payload.message) {
+            const { data: { session } } = await window.omeraSb.auth.getSession();
+            if (session?.user?.id) {
+              const key = 'omera_contact_log_' + session.user.id;
+              const prev = JSON.parse(localStorage.getItem(key) || '[]');
+              prev.unshift({ at: new Date().toISOString(), excerpt: payload.message.slice(0, 400) });
+              localStorage.setItem(key, JSON.stringify(prev.slice(0, 30)));
+            }
+          }
+        } catch (_) { /* ignore */ }
+
         formNote.textContent = 'Message envoyé ✅';
         formNote.classList.remove('error'); formNote.classList.add('success');
         contactForm.reset();
@@ -1425,23 +1440,43 @@ setInterval(nextTestimonial, 4500); // auto slide
   </script>
 
   <script>
+  function escapeHtmlNav(s) {
+    return String(s ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
   async function initOmeraNavAuth() {
     const { createClient } = supabase;
     const sb = createClient(
       'https://xjwwvhyapyrbutahdlqu.supabase.co',
       'sb_publishable_XJjEmLM9rsDzw-dkkwqsCA_jXBFjxWZ'
     );
+    window.omeraSb = sb;
+
     function setNavAuth(html) {
       const a = document.getElementById('navAuth');
       const dr = document.getElementById('navAuthDrawer');
       if (a) a.innerHTML = html;
       if (dr) dr.innerHTML = html;
     }
+    function bindLogout() {
+      document.querySelectorAll('a[data-nav-logout]').forEach((el) => {
+        el.addEventListener('click', async (e) => {
+          e.preventDefault();
+          await sb.auth.signOut();
+          location.reload();
+        });
+      });
+    }
+
     const navFree = document.getElementById('navLinkPreviewFree');
     const navFreeDr = document.getElementById('navLinkPreviewFreeDrawer');
     const { data: { session } } = await sb.auth.getSession();
     if (!session || !session.user) {
-      setNavAuth('<a href="/preview">Se connecter</a>');
+      setNavAuth('<a href="/compte">Se connecter</a>');
       if (navFree) navFree.hidden = false;
       if (navFreeDr) navFreeDr.hidden = false;
       return;
@@ -1450,7 +1485,11 @@ setInterval(nextTestimonial, 4500); // auto slide
     if (navFreeDr) navFreeDr.hidden = true;
     const { data: u } = await sb.from('users').select('prenom, nom, email, phone').eq('id', session.user.id).maybeSingle();
     const prenom = (u && u.prenom) ? u.prenom : 'vous';
-    setNavAuth('Bonjour ' + prenom + ' · <a href="/preview">Ma préview</a>');
+    const safe = escapeHtmlNav(prenom);
+    setNavAuth(
+      '<span class="nav-user-line">Bonjour ' + safe + ' · <a href="/preview">Ma préview</a> · <a href="/compte">Mon compte</a> · <a href="#" data-nav-logout>Déconnexion</a></span>'
+    );
+    bindLogout();
 
     const nameEl = document.getElementById('contactFieldName');
     const emailEl = document.getElementById('contactFieldEmail');
