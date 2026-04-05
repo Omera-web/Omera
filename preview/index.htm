@@ -250,24 +250,40 @@
     .color-opt-custom {
       width: 36px; height: 36px; border-radius: 50%;
       border: 2px dashed rgba(255,255,255,.3);
-      display: grid; place-items: center; font-size: 18px; color: var(--muted);
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
+      place-items: center;
       transition: border-color .2s;
       position: relative;
     }
     .color-opt-custom:hover { border-color: var(--primary); }
-    .color-opt-custom .color-opt-custom-trigger {
+    .color-opt-custom > .color-opt-custom-hit,
+    .color-opt-custom > input[type="color"] {
+      grid-area: 1 / 1;
+    }
+    .color-opt-custom-hit {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      margin: 0;
+      font-size: 18px;
+      color: var(--muted);
       cursor: pointer;
       user-select: none;
+      position: relative;
+      z-index: 1;
     }
-    /* Input hors de la zone cliquable : pas d’overlay plein cadre (évite ouverture intempestive / blocage page) */
     .color-opt-custom input[type="color"] {
-      position: fixed;
-      left: -9999px;
-      top: 0;
-      width: 40px;
-      height: 40px;
-      margin: 0;
+      position: absolute;
+      width: 1px;
+      height: 1px;
       padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
       border: 0;
       opacity: 0;
       pointer-events: none;
@@ -479,18 +495,19 @@
       font-weight: 600; letter-spacing: .5px;
     }
 
-    /* CTA final */
-    .cta-final {
+    /* Contact sous la préview */
+    .preview-contact {
       margin-top: 24px;
       background: linear-gradient(135deg, rgba(124,92,255,.15), rgba(159,122,255,.08));
       border: 1px solid rgba(124,92,255,.3);
-      border-radius: 20px; padding: 28px;
-      display: flex; align-items: center; justify-content: space-between; gap: 20px;
-      flex-wrap: wrap;
+      border-radius: 20px;
+      padding: 28px;
     }
-    .cta-final-text h3 { font-family: Poppins, sans-serif; font-size: 18px; margin-bottom: 6px; }
-    .cta-final-text p { color: var(--muted); font-size: 14px; max-width: 52ch; }
-    .cta-final .btn { flex-shrink: 0; }
+    .preview-contact-title { font-family: Poppins, sans-serif; font-size: 18px; margin-bottom: 8px; }
+    .preview-contact-sub { color: var(--muted); font-size: 14px; margin-bottom: 20px; max-width: 52ch; }
+    .preview-contact-form .field-group { margin-top: 0; }
+    .preview-contact-success { text-align: center; padding: 8px 0; }
+    .preview-contact-success p { color: var(--success); font-size: 15px; font-weight: 600; }
 
     /* ─── MESSAGES ─── */
     .msg { font-size: 13px; padding: 10px 14px; border-radius: 10px; margin-top: 8px; display: none; }
@@ -761,7 +778,7 @@
 
               <!-- Couleurs -->
               <div>
-                <label>Couleurs souhaitées</label>
+                <label>Avez-vous des couleurs en tête ?</label>
                 <div class="color-row" id="colorRow">
                   <div class="color-opt" style="background:#7c5cff" onclick="toggleColor(this,'#7c5cff')" title="Violet"></div>
                   <div class="color-opt" style="background:#0ea5e9" onclick="toggleColor(this,'#0ea5e9')" title="Bleu"></div>
@@ -771,11 +788,10 @@
                   <div class="color-opt" style="background:#e8e9f1" onclick="toggleColor(this,'#e8e9f1')" title="Blanc"></div>
                   <div class="color-opt" style="background:#1a1a2e" onclick="toggleColor(this,'#1a1a2e')" title="Sombre"></div>
                   <div class="color-opt-custom" title="Couleur personnalisée">
-                    <span class="color-opt-custom-trigger" onclick="event.stopPropagation(); document.getElementById('customColor').click()">+</span>
-                    <input type="color" id="customColor" tabindex="-1" onchange="addCustomColor(this.value)" />
+                    <label for="customColor" class="color-opt-custom-hit">+</label>
+                    <input type="color" id="customColor" onchange="addCustomColor(this.value)" />
                   </div>
                 </div>
-                <p class="small mt8" style="color:var(--muted)">Sélectionnez une ou plusieurs couleurs</p>
               </div>
             </div>
             <div class="btn-row mt24">
@@ -957,22 +973,34 @@
           </div>
         </div>
 
-        <!-- CTA final -->
-        <div class="cta-final">
-          <div class="cta-final-text">
-            <h3>Cette préview vous parle ?</h3>
-            <p>Concrétisons votre projet ensemble. On vous répond sous 24h avec un devis détaillé et des pistes concrètes.</p>
+        <div class="preview-contact" id="previewContactBlock">
+          <div id="previewContactFormWrap">
+            <h3 class="preview-contact-title">Vous aimez ce que vous voyez ?</h3>
+            <p class="preview-contact-sub">Parlez-nous de votre projet, on vous recontacte sous 24h.</p>
+            <form id="previewContactForm" class="preview-contact-form">
+              <div class="field-group">
+                <div>
+                  <label for="contactName">Nom</label>
+                  <input type="text" id="contactName" name="nom" autocomplete="name" required />
+                </div>
+                <div>
+                  <label for="contactEmail">Email</label>
+                  <input type="email" id="contactEmail" name="email" autocomplete="email" required />
+                </div>
+                <div>
+                  <label for="contactMessage">Message</label>
+                  <textarea id="contactMessage" name="message" rows="4" placeholder="Votre message"></textarea>
+                </div>
+              </div>
+              <p class="msg" id="contactFormMsg"></p>
+              <div class="btn-row mt16">
+                <button type="submit" class="btn lg">Être recontacté →</button>
+              </div>
+            </form>
           </div>
-          <button class="btn lg" onclick="sendConversionEmail()">
-            Lancer mon projet avec Omera →
-          </button>
-        </div>
-
-        <!-- confirmation envoi -->
-        <div class="glass-card mt16 hidden center" id="conversionConfirm" style="padding:28px">
-          <p style="font-size:28px;margin-bottom:12px">✅</p>
-          <p style="font-weight:600;margin-bottom:6px">Message envoyé !</p>
-          <p style="color:var(--muted);font-size:14px">Paul vous recontacte sous 24h. En attendant, <a href="/" style="color:var(--accent)">revenez sur le site</a>.</p>
+          <div id="previewContactSuccess" class="preview-contact-success hidden">
+            <p>Message envoyé ! Paul vous recontacte sous 24h.</p>
+          </div>
         </div>
 
       </div>
@@ -1044,6 +1072,55 @@
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (n === 4) syncContactFormFields();
+  }
+
+  function applyPreviewRowToForm(row) {
+    if (!row) return;
+    state.type = row.type_projet || '';
+    state.colors = Array.isArray(row.couleurs) ? [...row.couleurs] : [];
+    state.style = Array.isArray(row.style) ? [...row.style] : [];
+    const proj = document.getElementById('projName');
+    if (proj) proj.value = row.nom_projet || '';
+    const secteurEl = document.getElementById('secteur');
+    if (secteurEl) secteurEl.value = row.secteur || '';
+    const nbUsersEl = document.getElementById('nbUsers');
+    if (nbUsersEl) nbUsersEl.value = row.nb_users || '';
+    ['qa1', 'qa2', 'qa3', 'qa4'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = row[id] || '';
+    });
+    document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+    if (state.type) {
+      const tc = document.getElementById('type-' + state.type);
+      if (tc) tc.classList.add('selected');
+    }
+    document.querySelectorAll('#colorRow .color-opt').forEach(el => el.classList.remove('selected'));
+    state.colors.forEach(hex => {
+      const opt = document.querySelector('#colorRow .color-opt[onclick*="' + hex + '"]');
+      if (opt) opt.classList.add('selected');
+    });
+    document.querySelectorAll('#styleOpts .check-opt').forEach(el => {
+      const t = el.textContent.trim();
+      el.classList.toggle('selected', state.style.some(s => s === t));
+    });
+  }
+
+  function syncContactFormFields() {
+    const cn = document.getElementById('contactName');
+    const ce = document.getElementById('contactEmail');
+    const wrap = document.getElementById('previewContactFormWrap');
+    const succ = document.getElementById('previewContactSuccess');
+    if (wrap && succ) {
+      wrap.classList.remove('hidden');
+      succ.classList.add('hidden');
+    }
+    const cm = document.getElementById('contactMessage');
+    if (cm) cm.value = '';
+    hideMsg('contactFormMsg');
+    if (cn) cn.value = [state.prenom, state.nom].filter(Boolean).join(' ').trim();
+    if (ce) ce.value = state.email || '';
   }
 
   /* ══════════════════════════════════════════════
@@ -1107,8 +1184,12 @@
     state.email = email;
     state.userId = signInData.user.id;
 
-    const { error: profileErr } = await sb.from('users').select('*').eq('id', signInData.user.id).maybeSingle();
+    const { data: profile, error: profileErr } = await sb.from('users').select('*').eq('id', signInData.user.id).maybeSingle();
     if (profileErr) return showMsg('msgLogin', profileErr.message);
+    if (profile) {
+      state.prenom = profile.prenom || '';
+      state.nom = profile.nom || '';
+    }
 
     document.getElementById('emailDisplay').textContent = email;
     goToStep(3);
@@ -1246,6 +1327,17 @@
     const qa1 = document.getElementById('qa1').value.trim();
     if (!qa1) return showMsg('msg3', 'Décrivez au moins l\'objectif principal de votre projet.');
 
+    if (state.userId) {
+      const { data: existingRows } = await sb.from('previews').select('*').eq('user_id', state.userId).limit(1);
+      const existing = existingRows && existingRows[0];
+      if (existing) {
+        applyPreviewRowToForm(existing);
+        buildPreview();
+        goToStep(4);
+        return;
+      }
+    }
+
     const nom_projet = document.getElementById('projName').value.trim();
     const secteur = document.getElementById('secteur').value;
     const nb_users = document.getElementById('nbUsers').value;
@@ -1366,6 +1458,7 @@
     // Afficher la première page
     switchPreviewTab(0);
     document.getElementById('browserUrl').textContent = 'omera.fr/preview/' + nom.toLowerCase().replace(/\s+/g,'-');
+    syncContactFormFields();
   }
 
   function switchPreviewTab(idx) {
@@ -1389,7 +1482,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,sans-serif;background:${dark};color:${text};line-height:1.6;min-height:100vh}
-a{color:${color};text-decoration:none}
+a{color:${color};text-decoration:none;pointer-events:none;cursor:default}
 .header{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(11,15,25,.9)}
 .logo{font-weight:800;font-size:18px;color:${text}}
 .logo span{color:${color}}
@@ -1483,7 +1576,7 @@ footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1
     <label style="font-size:13px;color:${muted};display:block;margin-bottom:6px">Mot de passe</label>
     <input type="password" placeholder="••••••••" style="width:100%;background:rgba(11,15,25,.8);border:1px solid rgba(255,255,255,.1);color:${text};border-radius:10px;padding:12px 14px;font-size:14px;margin-bottom:20px">
     <button style="width:100%;background:${color};color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer">Se connecter →</button>
-    <p style="text-align:center;margin-top:16px;font-size:13px;color:${muted}">Pas encore de compte ? <a href="#" style="color:${color}">S'inscrire</a></p>
+    <p style="text-align:center;margin-top:16px;font-size:13px;color:${muted}">Pas encore de compte ? <a href="#" style="color:${color};pointer-events:none;cursor:default">S'inscrire</a></p>
   </div>
 </div>` + footer_;
       }
@@ -1533,19 +1626,60 @@ footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1
   }
 
   /* ══════════════════════════════════════════════
-     CTA FINAL
+     CONTACT PRÉVIEW
   ══════════════════════════════════════════════ */
-  function sendConversionEmail() {
-    // ─── ICI : appel API envoi email à Paul ───
-    // Simulation
-    document.querySelector('.cta-final').classList.add('hidden');
-    document.getElementById('conversionConfirm').classList.remove('hidden');
+  document.getElementById('previewContactForm')?.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const nom = document.getElementById('contactName').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    const message = document.getElementById('contactMessage').value.trim();
+    hideMsg('contactFormMsg');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nom, email, message }),
+      });
+      if (!res.ok) throw new Error('Envoi impossible');
+      document.getElementById('previewContactFormWrap').classList.add('hidden');
+      document.getElementById('previewContactSuccess').classList.remove('hidden');
+    } catch (err) {
+      showMsg('contactFormMsg', err.message || 'Envoi impossible', 'error');
+    }
+  });
+
+  async function initSessionRestore() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session?.user) return;
+    state.userId = session.user.id;
+    state.email = session.user.email || '';
+    const { data: prof } = await sb.from('users').select('prenom, nom, email').eq('id', session.user.id).maybeSingle();
+    if (prof) {
+      state.prenom = prof.prenom || '';
+      state.nom = prof.nom || '';
+      if (prof.email) state.email = prof.email;
+    }
+    const { data: prevRows } = await sb.from('previews').select('*').eq('user_id', session.user.id).limit(1);
+    const prev = prevRows && prevRows[0];
+    if (prev) {
+      applyPreviewRowToForm(prev);
+      buildPreview();
+      goToStep(4);
+    } else {
+      goToStep(3);
+    }
   }
 
   /* ══════════════════════════════════════════════
      UTILS
   ══════════════════════════════════════════════ */
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { initSessionRestore(); });
+  } else {
+    initSessionRestore();
+  }
 
   // Drag & drop zones
   ['logoZone','filesZone'].forEach(id => {

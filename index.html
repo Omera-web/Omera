@@ -41,6 +41,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     :root{
       --bg-dark:#0b0f19; --bg-elev:#0e1322; --card:#12182a;
@@ -97,6 +99,9 @@ footer .logo-img {
 
     .menu{display:flex; align-items:center}
     .nav a{color:var(--text); opacity:.9; margin:0 8px; font-weight:500}
+    .nav-auth-slot{font-size:14px;font-weight:500;color:var(--text);margin-left:8px;white-space:nowrap}
+    .nav-auth-slot a{color:var(--text);opacity:.9;text-decoration:none;margin:0 4px}
+    .nav-auth-slot a:hover{text-decoration:underline}
     .cta{
   padding:8px 14px; /* plus fin */
   font-size:14px;   /* texte légèrement plus petit */
@@ -581,6 +586,7 @@ footer .logo-img {
         <a href="#process">Approche</a>
         <a href="/preview" style="color:var(--text);opacity:.9;margin:0 8px;font-weight:500">✦ Préview gratuite</a>
         <a class="cta" href="#contact">Nous contacter</a>
+        <span id="navAuth" class="nav-auth-slot"></span>
       </nav>
       <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="drawer"><span></span></button>
     </div>
@@ -590,6 +596,7 @@ footer .logo-img {
       <a href="#process">Approche</a>
       <a href="/preview">✦ Préview gratuite</a>
       <a class="cta" href="#contact">Nous contacter</a>
+      <div id="navAuthDrawer" class="nav-auth-slot" style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)"></div>
     </nav>
   </header>
 
@@ -1397,6 +1404,35 @@ document.querySelector('.testi-btn.left')?.addEventListener('click', prevTestimo
 setInterval(nextTestimonial, 4500); // auto slide
 
 
+  </script>
+
+  <script>
+  async function initOmeraNavAuth() {
+    const { createClient } = supabase;
+    const sb = createClient(
+      'https://xjwwvhyapyrbutahdlqu.supabase.co',
+      'sb_publishable_XJjEmLM9rsDzw-dkkwqsCA_jXBFjxWZ'
+    );
+    function setNavAuth(html) {
+      const a = document.getElementById('navAuth');
+      const dr = document.getElementById('navAuthDrawer');
+      if (a) a.innerHTML = html;
+      if (dr) dr.innerHTML = html;
+    }
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session || !session.user) {
+      setNavAuth('<a href="/preview">Se connecter</a>');
+      return;
+    }
+    const { data: u } = await sb.from('users').select('prenom').eq('id', session.user.id).maybeSingle();
+    const prenom = (u && u.prenom) ? u.prenom : 'vous';
+    setNavAuth('Bonjour ' + prenom + ' · <a href="/preview">Ma préview</a>');
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initOmeraNavAuth);
+  } else {
+    initOmeraNavAuth();
+  }
   </script>
 </body>
 </html>
