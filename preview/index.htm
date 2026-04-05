@@ -1059,7 +1059,6 @@
     const prenom = document.getElementById('prenom').value.trim();
     const nom = document.getElementById('nom').value.trim();
     const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
     const pwd = document.getElementById('pwd').value;
     const pwd2 = document.getElementById('pwd2').value;
 
@@ -1072,18 +1071,8 @@
     state.prenom = prenom;
     state.nom = nom;
 
-    const { data: signUpData, error: signUpErr } = await sb.auth.signUp({ email, password: pwd });
+    const { error: signUpErr } = await sb.auth.signUp({ email, password: pwd });
     if (signUpErr) return showMsg('msg1', signUpErr.message);
-
-    const uid = signUpData.user?.id;
-    if (uid) {
-      state.userId = uid;
-      const { error: upsertErr } = await sb.from('users').upsert(
-        { id: uid, prenom, nom, phone: phone || null },
-        { onConflict: 'id' }
-      );
-      if (upsertErr) return showMsg('msg1', upsertErr.message);
-    }
 
     document.getElementById('emailDisplay').textContent = email;
     goToStep(2);
@@ -1143,6 +1132,15 @@
     if (error) return showMsg('msg2', 'Code invalide ou expiré. Renvoyez-en un nouveau.');
 
     state.userId = data.user?.id;
+    if (state.userId) {
+      await sb.from('users').upsert({
+        id: state.userId,
+        prenom: state.prenom,
+        nom: state.nom,
+        email: state.email,
+        phone: document.getElementById('phone').value.trim()
+      });
+    }
     showMsg('msg2', 'Email validé ✅', 'success');
     setTimeout(() => goToStep(3), 700);
   }
