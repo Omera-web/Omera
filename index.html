@@ -114,9 +114,6 @@ footer .logo-img {
       border-left:1px solid rgba(255,255,255,.12);
       white-space:nowrap;
     }
-    .nav-user-line{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px 10px;max-width:min(520px,85vw);justify-content:flex-end}
-    .nav-user-line a{color:var(--text);opacity:.92;text-decoration:none}
-    .nav-user-line a:hover{text-decoration:underline;opacity:1}
     .nav-auth-slot a{color:var(--text); opacity:.92; text-decoration:none; margin:0 2px}
     .nav-auth-slot a:hover{text-decoration:underline; opacity:1}
     .cta{
@@ -1467,7 +1464,7 @@ setInterval(nextTestimonial, 4500); // auto slide
         el.addEventListener('click', async (e) => {
           e.preventDefault();
           await sb.auth.signOut();
-          location.reload();
+          window.location.href = '/';
         });
       });
     }
@@ -1476,7 +1473,7 @@ setInterval(nextTestimonial, 4500); // auto slide
     const navFreeDr = document.getElementById('navLinkPreviewFreeDrawer');
     const { data: { session } } = await sb.auth.getSession();
     if (!session || !session.user) {
-      setNavAuth('<a href="/compte">Se connecter</a>');
+      setNavAuth('<a href="/preview">Se connecter</a>');
       if (navFree) navFree.hidden = false;
       if (navFreeDr) navFreeDr.hidden = false;
       return;
@@ -1487,7 +1484,7 @@ setInterval(nextTestimonial, 4500); // auto slide
     const prenom = (u && u.prenom) ? u.prenom : 'vous';
     const safe = escapeHtmlNav(prenom);
     setNavAuth(
-      '<span class="nav-user-line">Bonjour ' + safe + ' · <a href="/preview">Ma préview</a> · <a href="/compte">Mon compte</a> · <a href="#" data-nav-logout>Déconnexion</a></span>'
+      'Bonjour ' + safe + ' · <a href="/preview">Ma préview</a> · <a href="#" data-nav-logout>Déconnexion</a>'
     );
     bindLogout();
 
