@@ -116,6 +116,85 @@ footer .logo-img {
     }
     .nav-auth-slot a{color:var(--text); opacity:.92; text-decoration:none; margin:0 2px}
     .nav-auth-slot a:hover{text-decoration:underline; opacity:1}
+    .nav-auth-slot .nav-auth-login-btn{
+      background:none;border:none;color:var(--text);opacity:.92;font:inherit;font-weight:500;
+      cursor:pointer;padding:10px 8px;margin:0;text-decoration:none;white-space:nowrap;
+    }
+    .nav-auth-slot .nav-auth-login-btn:hover{opacity:1;text-decoration:underline}
+    .nav-user-wrap{position:relative;display:inline-flex;align-items:center;vertical-align:middle}
+    .nav-user-trigger{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+      border-radius:999px;padding:8px 14px;font:inherit;font-size:14px;font-weight:500;
+      color:var(--text);cursor:pointer;white-space:nowrap;transition:background .2s,border-color .2s;
+    }
+    .nav-user-trigger:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.14)}
+    .nav-user-chevron{display:inline-flex;transition:transform .2s ease;opacity:.85}
+    .nav-user-trigger[aria-expanded="true"] .nav-user-chevron{transform:rotate(180deg)}
+    .nav-user-dropdown{
+      position:absolute;top:calc(100% + 8px);right:0;min-width:220px;z-index:120;
+      background:linear-gradient(180deg, rgba(14,19,34,.98), rgba(14,19,34,.92));
+      border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:8px 0;
+      box-shadow:var(--shadow-lg);
+    }
+    .nav-user-dropdown a,.nav-user-dropdown button{
+      display:block;width:100%;text-align:left;padding:11px 16px;font-size:14px;
+      border:none;background:none;color:var(--text);cursor:pointer;font:inherit;
+      text-decoration:none;opacity:.95;
+    }
+    .nav-user-dropdown a:hover,.nav-user-dropdown button:hover{background:rgba(255,255,255,.06);opacity:1}
+    .drawer .nav-user-wrap{width:100%}
+    .drawer .nav-user-dropdown{position:static;margin-top:10px;width:100%}
+    .omera-auth-overlay{
+      position:fixed;inset:0;z-index:240;display:flex;align-items:center;justify-content:center;
+      padding:20px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);
+    }
+    .omera-auth-overlay[hidden]{display:none!important}
+    .glass-card-nav{
+      background:linear-gradient(180deg, rgba(14,19,34,.95), rgba(14,19,34,.80));
+      border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:clamp(20px,3vw,32px);
+      box-shadow:var(--shadow-lg);max-width:420px;width:100%;position:relative;
+    }
+    .glass-card-nav.omera-auth-modal-wide{max-width:520px}
+    .omera-auth-modal-close{
+      position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:10px;
+      border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:var(--text);
+      font-size:22px;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0;
+    }
+    .omera-auth-modal-close:hover{background:rgba(255,255,255,.1)}
+    .omera-auth-modal-title{font-family:Poppins,Inter,sans-serif;font-size:1.25rem;margin:0 0 20px;padding-right:40px}
+    .omera-auth-form .field-group{margin-bottom:14px}
+    .omera-auth-form label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
+    .omera-auth-form input[type="email"],.omera-auth-form input[type="password"]{
+      width:100%;background:rgba(11,15,25,.8);border:1px solid rgba(255,255,255,.1);
+      color:var(--text);border-radius:12px;padding:13px 16px;font:inherit;font-size:15px;
+      box-sizing:border-box;
+    }
+    .omera-auth-form input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--ring)}
+    .omera-auth-err{color:#f87171;font-size:14px;margin:0 0 12px}
+    .omera-auth-submit{
+      width:100%;margin-top:8px;padding:12px 20px;border-radius:12px;border:none;cursor:pointer;
+      font:inherit;font-weight:600;color:#fff;
+      background:linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow:0 2px 12px rgba(124,92,255,.35);
+    }
+    .omera-auth-submit:hover{opacity:.95}
+    .omera-auth-submit:disabled{opacity:.55;cursor:not-allowed}
+    .omera-auth-footer{margin:18px 0 0;text-align:center;font-size:14px}
+    .omera-auth-footer a{color:#5eead4;opacity:.95}
+    .omera-auth-readonly-fields .field-group{margin-bottom:14px}
+    .omera-auth-readonly-fields input[readonly]{
+      width:100%;background:rgba(11,15,25,.5);border:1px solid rgba(255,255,255,.08);
+      color:var(--muted);border-radius:12px;padding:12px 14px;font:inherit;font-size:15px;
+      cursor:default;
+    }
+    .omera-messages-list{max-height:min(52vh,420px);overflow:auto;display:grid;gap:12px}
+    .omera-msg-card{
+      background:rgba(11,15,25,.55);border:1px solid rgba(255,255,255,.08);
+      border-radius:12px;padding:12px 14px;font-size:14px;
+    }
+    .omera-msg-card .omera-msg-meta{color:var(--muted);font-size:12px;margin-bottom:6px}
+    .omera-msg-card .omera-msg-body{color:var(--text);white-space:pre-wrap;word-break:break-word}
     .cta{
       padding:10px 20px;
       font-size:14px;
@@ -1436,6 +1515,57 @@ setInterval(nextTestimonial, 4500); // auto slide
 
   </script>
 
+  <div id="omeraLoginModal" class="omera-auth-overlay" hidden aria-hidden="true">
+    <div class="glass-card-nav" role="dialog" aria-modal="true" aria-labelledby="omeraLoginTitle">
+      <button type="button" class="omera-auth-modal-close" data-close-login aria-label="Fermer">×</button>
+      <h2 id="omeraLoginTitle" class="omera-auth-modal-title">Connexion</h2>
+      <form id="omeraLoginForm" class="omera-auth-form" autocomplete="on">
+        <div class="field-group">
+          <label for="omeraLoginEmail">Email</label>
+          <input type="email" id="omeraLoginEmail" name="email" autocomplete="email" required />
+        </div>
+        <div class="field-group">
+          <label for="omeraLoginPassword">Mot de passe</label>
+          <input type="password" id="omeraLoginPassword" name="password" autocomplete="current-password" required />
+        </div>
+        <p id="omeraLoginErr" class="omera-auth-err" hidden></p>
+        <button type="submit" class="omera-auth-submit" id="omeraLoginSubmit">Se connecter</button>
+      </form>
+      <p class="omera-auth-footer">
+        <a href="/preview">Pas encore de compte ? Créer un compte sur la préview gratuite</a>
+      </p>
+    </div>
+  </div>
+
+  <div id="omeraInfoModal" class="omera-auth-overlay" hidden aria-hidden="true">
+    <div class="glass-card-nav" role="dialog" aria-modal="true" aria-labelledby="omeraInfoTitle">
+      <button type="button" class="omera-auth-modal-close" data-close-info aria-label="Fermer">×</button>
+      <h2 id="omeraInfoTitle" class="omera-auth-modal-title">Mes informations</h2>
+      <div class="omera-auth-readonly-fields">
+        <div class="field-group">
+          <label for="omeraInfoPrenom">Prénom</label>
+          <input type="text" id="omeraInfoPrenom" readonly />
+        </div>
+        <div class="field-group">
+          <label for="omeraInfoNom">Nom</label>
+          <input type="text" id="omeraInfoNom" readonly />
+        </div>
+        <div class="field-group">
+          <label for="omeraInfoEmail">Email</label>
+          <input type="email" id="omeraInfoEmail" readonly />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="omeraMessagesModal" class="omera-auth-overlay" hidden aria-hidden="true">
+    <div class="glass-card-nav omera-auth-modal-wide" role="dialog" aria-modal="true" aria-labelledby="omeraMessagesTitle">
+      <button type="button" class="omera-auth-modal-close" data-close-messages aria-label="Fermer">×</button>
+      <h2 id="omeraMessagesTitle" class="omera-auth-modal-title">Messages envoyés</h2>
+      <div id="omeraMessagesList" class="omera-messages-list"></div>
+    </div>
+  </div>
+
   <script>
   function escapeHtmlNav(s) {
     return String(s ?? '')
@@ -1443,6 +1573,10 @@ setInterval(nextTestimonial, 4500); // auto slide
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
+  }
+
+  function escapeHtmlNavBody(s) {
+    return escapeHtmlNav(s).replace(/\n/g, '<br>');
   }
 
   async function initOmeraNavAuth() {
@@ -1453,52 +1587,275 @@ setInterval(nextTestimonial, 4500); // auto slide
     );
     window.omeraSb = sb;
 
+    const loginModal = document.getElementById('omeraLoginModal');
+    const loginForm = document.getElementById('omeraLoginForm');
+    const loginErr = document.getElementById('omeraLoginErr');
+    const loginSubmit = document.getElementById('omeraLoginSubmit');
+    const infoModal = document.getElementById('omeraInfoModal');
+    const messagesModal = document.getElementById('omeraMessagesModal');
+    const messagesList = document.getElementById('omeraMessagesList');
+
+    let cachedUser = null;
+
     function setNavAuth(html) {
       const a = document.getElementById('navAuth');
       const dr = document.getElementById('navAuthDrawer');
       if (a) a.innerHTML = html;
       if (dr) dr.innerHTML = html;
     }
-    function bindLogout() {
-      document.querySelectorAll('a[data-nav-logout]').forEach((el) => {
-        el.addEventListener('click', async (e) => {
-          e.preventDefault();
-          await sb.auth.signOut();
-          window.location.href = '/';
+
+    function closeAllUserDropdowns() {
+      document.querySelectorAll('.nav-user-trigger').forEach((tr) => {
+        const wrap = tr.closest('.nav-user-wrap');
+        const dd = wrap && wrap.querySelector('.nav-user-dropdown');
+        tr.setAttribute('aria-expanded', 'false');
+        if (dd) dd.hidden = true;
+      });
+    }
+
+    function bindUserMenu() {
+      document.querySelectorAll('.nav-user-trigger').forEach((trigger) => {
+        trigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const wrap = trigger.closest('.nav-user-wrap');
+          const dd = wrap && wrap.querySelector('.nav-user-dropdown');
+          if (!dd) return;
+          const wasOpen = !dd.hidden;
+          closeAllUserDropdowns();
+          if (!wasOpen) {
+            dd.hidden = false;
+            trigger.setAttribute('aria-expanded', 'true');
+          }
         });
       });
     }
 
-    const navFree = document.getElementById('navLinkPreviewFree');
-    const navFreeDr = document.getElementById('navLinkPreviewFreeDrawer');
-    const { data: { session } } = await sb.auth.getSession();
-    if (!session || !session.user) {
-      setNavAuth('<a href="/preview">Se connecter</a>');
-      if (navFree) navFree.hidden = false;
-      if (navFreeDr) navFreeDr.hidden = false;
-      return;
+    function openLoginModal() {
+      if (loginErr) { loginErr.hidden = true; loginErr.textContent = ''; }
+      loginModal.hidden = false;
+      loginModal.setAttribute('aria-hidden', 'false');
+      document.getElementById('omeraLoginEmail')?.focus();
     }
-    if (navFree) navFree.hidden = true;
-    if (navFreeDr) navFreeDr.hidden = true;
-    const { data: u } = await sb.from('users').select('prenom, nom, email, phone').eq('id', session.user.id).maybeSingle();
-    const prenom = (u && u.prenom) ? u.prenom : 'vous';
-    const safe = escapeHtmlNav(prenom);
-    setNavAuth(
-      'Bonjour ' + safe + ' · <a href="/preview">Ma préview</a> · <a href="#" data-nav-logout>Déconnexion</a>'
-    );
-    bindLogout();
 
-    const nameEl = document.getElementById('contactFieldName');
-    const emailEl = document.getElementById('contactFieldEmail');
-    const phoneEl = document.getElementById('contactFieldPhone');
-    if (u) {
-      const fullName = [u.prenom, u.nom].filter(Boolean).join(' ').trim();
-      if (nameEl && fullName) nameEl.value = fullName;
-      if (emailEl) emailEl.value = (u.email || session.user.email || '').trim();
-      if (phoneEl && u.phone) phoneEl.value = String(u.phone).trim();
-    } else {
-      if (emailEl) emailEl.value = (session.user.email || '').trim();
+    function closeLoginModal() {
+      loginModal.hidden = true;
+      loginModal.setAttribute('aria-hidden', 'true');
     }
+
+    function openInfoModal() {
+      const u = cachedUser;
+      const p = document.getElementById('omeraInfoPrenom');
+      const n = document.getElementById('omeraInfoNom');
+      const em = document.getElementById('omeraInfoEmail');
+      if (p) p.value = (u && u.prenom) ? u.prenom : '';
+      if (n) n.value = (u && u.nom) ? u.nom : '';
+      if (em) em.value = (u && u.email) ? u.email : '';
+      infoModal.hidden = false;
+      infoModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeInfoModal() {
+      infoModal.hidden = true;
+      infoModal.setAttribute('aria-hidden', 'true');
+    }
+
+    function closeMessagesModal() {
+      messagesModal.hidden = true;
+      messagesModal.setAttribute('aria-hidden', 'true');
+    }
+
+    function formatDate(d) {
+      if (!d) return '';
+      try {
+        const x = new Date(d);
+        if (Number.isNaN(x.getTime())) return '';
+        return x.toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
+      } catch (_) { return ''; }
+    }
+
+    async function openMessagesModal() {
+      messagesList.innerHTML = '<p class="muted" style="margin:0">Chargement…</p>';
+      messagesModal.hidden = false;
+      messagesModal.setAttribute('aria-hidden', 'false');
+
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session?.user) {
+        messagesList.innerHTML = '<p class="muted">Non connecté.</p>';
+        return;
+      }
+      const uid = session.user.id;
+      const email = (session.user.email || '').trim();
+
+      const rows = [];
+
+      const { data: previews, error: pe } = await sb.from('previews').select('*').eq('user_id', uid);
+      if (!pe && previews && previews.length) {
+        previews.forEach((p) => {
+          const title = p.nom_projet || 'Demande de préview';
+          const body = [p.qa1, p.qa2, p.qa3, p.qa4].filter(Boolean).join('\n\n') || '(Pas de message texte)';
+          const dt = p.created_at || p.updated_at;
+          rows.push({ type: 'Préview', title, body, date: dt });
+        });
+      }
+
+      const { data: contacts, error: ce } = await sb.from('contacts').select('*').eq('email', email);
+      if (!ce && contacts && contacts.length) {
+        contacts.forEach((c) => {
+          const body = c.message || c.body || c.content || JSON.stringify(c);
+          const dt = c.created_at || c.sent_at;
+          rows.push({ type: 'Contact', title: c.subject || 'Message', body, date: dt });
+        });
+      }
+
+      if (!rows.length) {
+        messagesList.innerHTML = '<p class="muted" style="margin:0">Aucun message enregistré pour le moment.</p>';
+        return;
+      }
+
+      rows.sort((a, b) => {
+        const ta = a.date ? new Date(a.date).getTime() : 0;
+        const tb = b.date ? new Date(b.date).getTime() : 0;
+        return tb - ta;
+      });
+
+      messagesList.innerHTML = rows.map((r) => {
+        const meta = [r.type, r.title, formatDate(r.date)].filter(Boolean).join(' · ');
+        return (
+          '<div class="omera-msg-card">' +
+          '<div class="omera-msg-meta">' + escapeHtmlNav(meta) + '</div>' +
+          '<div class="omera-msg-body">' + escapeHtmlNavBody(r.body) + '</div>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    async function refreshNavAuth() {
+      const { data: { session } } = await sb.auth.getSession();
+      const nameEl = document.getElementById('contactFieldName');
+      const emailEl = document.getElementById('contactFieldEmail');
+      const phoneEl = document.getElementById('contactFieldPhone');
+
+      if (!session || !session.user) {
+        cachedUser = null;
+        setNavAuth('<button type="button" class="nav-auth-login-btn" data-open-login>Se connecter</button>');
+        if (nameEl) nameEl.value = '';
+        if (emailEl) emailEl.value = '';
+        if (phoneEl) phoneEl.value = '';
+        return;
+      }
+
+      const { data: u } = await sb.from('users').select('prenom, nom, email, phone').eq('id', session.user.id).maybeSingle();
+      cachedUser = u || { prenom: '', nom: '', email: session.user.email || '', phone: '' };
+      if (!cachedUser.email) cachedUser.email = session.user.email || '';
+
+      const prenom = (cachedUser.prenom) ? cachedUser.prenom : 'vous';
+      const safe = escapeHtmlNav(prenom);
+      const chev = '<svg class="nav-user-chevron" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+      setNavAuth(
+        '<div class="nav-user-wrap">' +
+        '<button type="button" class="nav-user-trigger" aria-expanded="false" aria-haspopup="true">' +
+        '<span>' + safe + '</span>' + chev +
+        '</button>' +
+        '<div class="nav-user-dropdown" hidden role="menu">' +
+        '<a href="/preview" role="menuitem">Ma préview</a>' +
+        '<button type="button" role="menuitem" data-nav-action="info">Mes informations</button>' +
+        '<button type="button" role="menuitem" data-nav-action="messages">Messages envoyés</button>' +
+        '<button type="button" role="menuitem" data-nav-action="logout">Se déconnecter</button>' +
+        '</div></div>'
+      );
+
+      bindUserMenu();
+
+      if (u) {
+        const fullName = [u.prenom, u.nom].filter(Boolean).join(' ').trim();
+        if (nameEl && fullName) nameEl.value = fullName;
+        if (emailEl) emailEl.value = (u.email || session.user.email || '').trim();
+        if (phoneEl && u.phone) phoneEl.value = String(u.phone).trim();
+      } else {
+        if (emailEl) emailEl.value = (session.user.email || '').trim();
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('[data-open-login]')) {
+        e.preventDefault();
+        openLoginModal();
+      }
+      const act = e.target.closest('[data-nav-action]');
+      if (act) {
+        const action = act.getAttribute('data-nav-action');
+        closeAllUserDropdowns();
+        if (action === 'info') {
+          e.preventDefault();
+          openInfoModal();
+        } else if (action === 'messages') {
+          e.preventDefault();
+          openMessagesModal();
+        } else if (action === 'logout') {
+          e.preventDefault();
+          (async () => {
+            await sb.auth.signOut();
+            window.location.href = '/';
+          })();
+        }
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.nav-user-wrap')) return;
+      closeAllUserDropdowns();
+    });
+
+    loginModal?.addEventListener('click', (e) => {
+      if (e.target === loginModal) closeLoginModal();
+    });
+    infoModal?.addEventListener('click', (e) => {
+      if (e.target === infoModal) closeInfoModal();
+    });
+    messagesModal?.addEventListener('click', (e) => {
+      if (e.target === messagesModal) closeMessagesModal();
+    });
+
+    document.querySelectorAll('[data-close-login]').forEach((el) => {
+      el.addEventListener('click', () => closeLoginModal());
+    });
+    document.querySelectorAll('[data-close-info]').forEach((el) => {
+      el.addEventListener('click', () => closeInfoModal());
+    });
+    document.querySelectorAll('[data-close-messages]').forEach((el) => {
+      el.addEventListener('click', () => closeMessagesModal());
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      closeLoginModal();
+      closeInfoModal();
+      closeMessagesModal();
+      closeAllUserDropdowns();
+    });
+
+    loginForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!loginErr || !loginSubmit) return;
+      loginErr.hidden = true;
+      loginErr.textContent = '';
+      const email = document.getElementById('omeraLoginEmail')?.value?.trim() || '';
+      const password = document.getElementById('omeraLoginPassword')?.value || '';
+      loginSubmit.disabled = true;
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+      loginSubmit.disabled = false;
+      if (error) {
+        loginErr.textContent = error.message || 'Connexion impossible';
+        loginErr.hidden = false;
+        return;
+      }
+      closeLoginModal();
+      document.getElementById('omeraLoginPassword').value = '';
+      await refreshNavAuth();
+    });
+
+    await refreshNavAuth();
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initOmeraNavAuth);
