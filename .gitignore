@@ -1,0 +1,6 @@
+# Secrets (clés API, etc.)
+.env
+.env.*
+!.env.example
+
+node_modules/

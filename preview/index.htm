@@ -1366,6 +1366,35 @@
   /* ══════════════════════════════════════════════
      LOADING + GÉNÉRATION
   ══════════════════════════════════════════════ */
+  async function notifyPreviewOwnerEmail() {
+    const brief = {
+      type_projet: state.type,
+      nom_projet: document.getElementById('projName').value.trim(),
+      secteur: document.getElementById('secteur').value,
+      couleurs: state.colors,
+      style: state.style,
+      nb_users: document.getElementById('nbUsers').value,
+      qa1: document.getElementById('qa1').value.trim(),
+      qa2: document.getElementById('qa2').value.trim(),
+      qa3: document.getElementById('qa3').value.trim(),
+      qa4: document.getElementById('qa4').value.trim(),
+      prenom: state.prenom,
+      nom: state.nom,
+      email: state.email,
+    };
+    const html = state.pages[0]?.html;
+    if (!html) return;
+    try {
+      await fetch('/api/preview-notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ brief, html }),
+      });
+    } catch (e) {
+      console.warn('[preview-notify]', e);
+    }
+  }
+
   function startLoading() {
     goToStep('loading');
 
@@ -1402,10 +1431,39 @@
         document.getElementById('progressFill').style.width = '100%';
         document.getElementById('progressLabel').textContent = 'Préview prête !';
 
-        // ─── ICI : dans la version réelle, on attend la réponse API ───
-        // Pour l'instant : génération d'une démo visuelle basée sur les inputs
-        setTimeout(() => {
-          buildPreview();
+        setTimeout(async () => {
+          let accueilHtml = null;
+          try {
+            const res = await fetch('/api/preview-home', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                type_projet: state.type,
+                nom_projet: document.getElementById('projName').value.trim(),
+                secteur: document.getElementById('secteur').value,
+                couleurs: state.colors,
+                style: state.style,
+                nb_users: document.getElementById('nbUsers').value,
+                qa1: document.getElementById('qa1').value.trim(),
+                qa2: document.getElementById('qa2').value.trim(),
+                qa3: document.getElementById('qa3').value.trim(),
+                qa4: document.getElementById('qa4').value.trim(),
+                prenom: state.prenom,
+                nom: state.nom,
+                email: state.email,
+              }),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (res.ok && data.html && typeof data.html === 'string') {
+              accueilHtml = data.html;
+            } else {
+              console.warn('[preview-home]', data?.error || res.status);
+            }
+          } catch (err) {
+            console.warn('[preview-home] fetch', err);
+          }
+          buildPreview(accueilHtml);
+          await notifyPreviewOwnerEmail();
           goToStep(4);
         }, 800);
       }
@@ -1416,11 +1474,9 @@
   /* ══════════════════════════════════════════════
      PRÉVIEW — GÉNÉRATION DEMO (remplacé par API)
   ══════════════════════════════════════════════ */
-  function buildPreview() {
+  function buildPreview(accueilHtmlOverride) {
     const nom = document.getElementById('projName').value || 'VotreProjet';
-    const type = state.type === 'saas' ? 'Application' : 'Site web';
     const primaryColor = state.colors[0] || '#7c5cff';
-    const style = state.style[0] || 'Moderne';
     const qa1 = document.getElementById('qa1').value || 'Votre projet digital sur mesure';
     const secteur = document.getElementById('secteur').value || 'Votre secteur';
 
@@ -1439,10 +1495,15 @@
           { label: 'Contact', slug: 'contact' },
         ];
 
-    state.pages = pagesConfig.map(p => ({
-      ...p,
-      html: generatePageHtml(p.slug, nom, primaryColor, qa1, secteur)
-    }));
+    state.pages = pagesConfig.map(p => {
+      if (p.slug === 'accueil' && accueilHtmlOverride) {
+        return { ...p, html: accueilHtmlOverride };
+      }
+      return {
+        ...p,
+        html: generatePageHtml(p.slug, nom, primaryColor, qa1, secteur),
+      };
+    });
 
     // Construire les onglets
     const tabsEl = document.getElementById('previewTabs');

@@ -584,7 +584,7 @@ footer .logo-img {
         <a href="#service/saas">Services</a>
         <a href="#why">Pourquoi nous</a>
         <a href="#process">Approche</a>
-        <a href="/preview" style="color:var(--text);opacity:.9;margin:0 8px;font-weight:500">✦ Préview gratuite</a>
+        <a href="/preview" id="navLinkPreviewFree" style="color:var(--text);opacity:.9;margin:0 8px;font-weight:500">✦ Préview gratuite</a>
         <a class="cta" href="#contact">Nous contacter</a>
         <span id="navAuth" class="nav-auth-slot"></span>
       </nav>
@@ -594,7 +594,7 @@ footer .logo-img {
       <a href="#service/saas">Services</a>
       <a href="#why">Pourquoi nous</a>
       <a href="#process">Approche</a>
-      <a href="/preview">✦ Préview gratuite</a>
+      <a href="/preview" id="navLinkPreviewFreeDrawer">✦ Préview gratuite</a>
       <a class="cta" href="#contact">Nous contacter</a>
       <div id="navAuthDrawer" class="nav-auth-slot" style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)"></div>
     </nav>
@@ -733,10 +733,10 @@ footer .logo-img {
       <div class="card" data-reveal style="margin-top:14px">
         <form id="contactForm" name="contact" novalidate>
           <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-          <input required type="text" name="name" placeholder="Votre nom" aria-label="Votre nom" />
-          <input required type="email" name="email" placeholder="Votre email" aria-label="Votre email" />
-          <input type="tel" name="phone" placeholder="Téléphone (optionnel)" aria-label="Téléphone" />
-          <textarea required name="message" placeholder="Parlez-nous de votre projet…" aria-label="Message"></textarea>
+          <input required type="text" name="name" id="contactFieldName" placeholder="Votre nom" aria-label="Votre nom" autocomplete="name" />
+          <input required type="email" name="email" id="contactFieldEmail" placeholder="Votre email" aria-label="Votre email" autocomplete="email" />
+          <input type="tel" name="phone" id="contactFieldPhone" placeholder="Téléphone (optionnel)" aria-label="Téléphone" autocomplete="tel" />
+          <textarea required name="message" id="contactFieldMessage" placeholder="Parlez-nous de votre projet…" aria-label="Message"></textarea>
 
           <button class="btn" type="submit">Envoyer</button>
           <p id="formNote" class="muted" style="margin:8px 0 0"></p>
@@ -1419,14 +1419,32 @@ setInterval(nextTestimonial, 4500); // auto slide
       if (a) a.innerHTML = html;
       if (dr) dr.innerHTML = html;
     }
+    const navFree = document.getElementById('navLinkPreviewFree');
+    const navFreeDr = document.getElementById('navLinkPreviewFreeDrawer');
     const { data: { session } } = await sb.auth.getSession();
     if (!session || !session.user) {
       setNavAuth('<a href="/preview">Se connecter</a>');
+      if (navFree) navFree.hidden = false;
+      if (navFreeDr) navFreeDr.hidden = false;
       return;
     }
-    const { data: u } = await sb.from('users').select('prenom').eq('id', session.user.id).maybeSingle();
+    if (navFree) navFree.hidden = true;
+    if (navFreeDr) navFreeDr.hidden = true;
+    const { data: u } = await sb.from('users').select('prenom, nom, email, phone').eq('id', session.user.id).maybeSingle();
     const prenom = (u && u.prenom) ? u.prenom : 'vous';
     setNavAuth('Bonjour ' + prenom + ' · <a href="/preview">Ma préview</a>');
+
+    const nameEl = document.getElementById('contactFieldName');
+    const emailEl = document.getElementById('contactFieldEmail');
+    const phoneEl = document.getElementById('contactFieldPhone');
+    if (u) {
+      const fullName = [u.prenom, u.nom].filter(Boolean).join(' ').trim();
+      if (nameEl && fullName) nameEl.value = fullName;
+      if (emailEl) emailEl.value = (u.email || session.user.email || '').trim();
+      if (phoneEl && u.phone) phoneEl.value = String(u.phone).trim();
+    } else {
+      if (emailEl) emailEl.value = (session.user.email || '').trim();
+    }
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initOmeraNavAuth);
