@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Préview gratuite — Omera</title>
+  <meta name="description" content="Obtenez une préview visuelle gratuite de votre futur site ou SaaS en quelques minutes." />
+  <meta name="robots" content="noindex" />
+
+  <link rel="icon" href="/assets/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <meta name="theme-color" content="#0b0f19">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── BASE (identique à index.html) ─── */
+    :root {
+      --bg-dark: #0b0f19;
+      --bg-elev: #0e1322;
+      --card: #12182a;
+      --text: #e8e9f1;
+      --muted: #a7abbe;
+      --primary: #7c5cff;
+      --accent: #9f7aff;
+      --ring: rgba(124,92,255,.35);
+      --radius: 16px;
+      --shadow-lg: 0 10px 30px rgba(0,0,0,.45);
+      --shadow-sm: 0 4px 16px rgba(0,0,0,.25);
+      --header-h: 70px;
+      --header-h-mobile: 64px;
+      --success: #10b981;
+      --error: #f43f5e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      padding-top: var(--header-h);
+      min-height: 100vh;
+    }
+    @media (max-width: 768px) { body { padding-top: var(--header-h-mobile); } }
+
+    /* ─── BACKGROUND ─── */
+    .site-bg {
+      position: fixed; inset: 0; z-index: -2;
+      background:
+        radial-gradient(1200px 600px at 75% -10%, rgba(124,92,255,.35), transparent 60%),
+        radial-gradient(900px 600px at -10% 20%, rgba(159,122,255,.25), transparent 55%),
+        radial-gradient(600px 600px at 90% 70%, rgba(94,234,212,.15), transparent 65%),
+        linear-gradient(180deg, rgba(11,15,25,.85), rgba(11,15,25,.95));
+    }
+    .noise {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 0 0 0 .06 .09 .12 .15"/></feComponentTransfer></filter><rect width="100" height="100" filter="url(%23n)" opacity="0.25"/></svg>');
+      mix-blend-mode: soft-light; opacity: .25;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      backdrop-filter: saturate(1.2) blur(12px);
+      background: linear-gradient(180deg, rgba(11,15,25,.86), rgba(11,15,25,.55));
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      height: var(--header-h);
+    }
+    @media (max-width: 768px) { header { height: var(--header-h-mobile); } }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 100%; width: min(1120px, 92vw); margin: 0 auto; padding: 0 10px;
+    }
+    .logo { display: inline-flex; align-items: center; gap: 12px; font-weight: 800; text-decoration: none; color: var(--text); }
+    .logo-img { height: 34px; width: auto; filter: drop-shadow(0 6px 12px rgba(124,92,255,.45)); }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--muted); font-size: 14px; font-weight: 500;
+      text-decoration: none; transition: color .2s;
+      border: 1px solid rgba(255,255,255,.1);
+      padding: 8px 14px; border-radius: 999px;
+      background: rgba(255,255,255,.04);
+    }
+    .back-link:hover { color: var(--text); border-color: rgba(124,92,255,.4); }
+
+    /* ─── CONTAINER ─── */
+    .container { width: min(760px, 92vw); margin: 0 auto; }
+    .container-wide { width: min(1120px, 92vw); margin: 0 auto; }
+
+    /* ─── TUNNEL WRAPPER ─── */
+    .tunnel { padding: clamp(32px, 5vw, 56px) 0 80px; }
+
+    /* ─── PROGRESS BAR ÉTAPES ─── */
+    .steps-bar {
+      display: flex; align-items: center; gap: 0;
+      margin-bottom: clamp(28px, 4vw, 48px);
+    }
+    .step-item {
+      display: flex; align-items: center; gap: 10px;
+      flex: 1; position: relative;
+    }
+    .step-item:last-child { flex: 0; }
+    .step-dot {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: grid; place-items: center;
+      font-size: 13px; font-weight: 700;
+      border: 2px solid rgba(255,255,255,.12);
+      background: var(--bg-elev);
+      color: var(--muted);
+      transition: all .4s ease;
+      flex-shrink: 0; position: relative; z-index: 1;
+    }
+    .step-dot.active {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      box-shadow: 0 0 20px rgba(124,92,255,.5);
+    }
+    .step-dot.done {
+      border-color: var(--success);
+      background: var(--success);
+      color: #fff;
+    }
+    .step-dot.done::after { content: "✓"; font-size: 14px; }
+    .step-dot.done .step-num { display: none; }
+    .step-label {
+      font-size: 12px; font-weight: 500; color: var(--muted);
+      white-space: nowrap; transition: color .4s;
+    }
+    .step-item.active .step-label { color: var(--text); }
+    .step-line {
+      flex: 1; height: 2px;
+      background: rgba(255,255,255,.08);
+      margin: 0 8px; border-radius: 99px;
+      transition: background .4s;
+      position: relative; overflow: hidden;
+    }
+    .step-line.done { background: var(--success); }
+    .step-line.active::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      animation: lineFlow 1.5s ease infinite alternate;
+    }
+    @keyframes lineFlow { from { opacity: .4; } to { opacity: 1; } }
+    @media (max-width: 600px) { .step-label { display: none; } .step-dot { width: 30px; height: 30px; font-size: 12px; } }
+
+    /* ─── CARTES ÉTAPES ─── */
+    .step-panel { display: none; animation: panelIn .4s ease forwards; }
+    .step-panel.active { display: block; }
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel-title {
+      font-family: Poppins, Inter, sans-serif;
+      font-size: clamp(22px, 5vw, 32px);
+      font-weight: 700; margin-bottom: 6px;
+    }
+    .panel-sub { color: var(--muted); font-size: 15px; margin-bottom: 28px; }
+
+    /* ─── CARTE GLASS ─── */
+    .glass-card {
+      background: linear-gradient(180deg, rgba(14,19,34,.95), rgba(14,19,34,.80));
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 20px; padding: clamp(20px, 3vw, 32px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* ─── INPUTS ─── */
+    .field-group { display: grid; gap: 14px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 560px) { .field-row { grid-template-columns: 1fr; } }
+
+    label { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 6px; letter-spacing: .3px; }
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="password"],
+    textarea,
+    select {
+      width: 100%;
+      background: rgba(11,15,25,.8);
+      border: 1px solid rgba(255,255,255,.1);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 13px 16px;
+      font: inherit; font-size: 15px;
+      transition: border-color .2s, box-shadow .2s;
+      appearance: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+    input::placeholder, textarea::placeholder { color: rgba(167,171,190,.5); }
+    textarea { resize: vertical; min-height: 110px; }
+    select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a7abbe' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; }
+    select option { background: #0e1322; }
+
+    /* champ password avec œil */
+    .password-wrap { position: relative; }
+    .password-wrap input { padding-right: 48px; }
+    .eye-btn {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: var(--muted);
+      padding: 4px; transition: color .2s;
+    }
+    .eye-btn:hover { color: var(--text); }
+
+    /* upload zone */
+    .upload-zone {
+      border: 2px dashed rgba(124,92,255,.3);
+      border-radius: 14px; padding: 28px 20px;
+      text-align: center; cursor: pointer;
+      transition: border-color .2s, background .2s;
+      position: relative;
+    }
+    .upload-zone:hover, .upload-zone.drag { border-color: var(--primary); background: rgba(124,92,255,.06); }
+    .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .upload-icon { font-size: 28px; margin-bottom: 8px; }
+    .upload-zone p { color: var(--muted); font-size: 14px; margin: 0; }
+    .upload-zone strong { color: var(--text); }
+    .file-list { list-style: none; margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .file-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(124,92,255,.15); border: 1px solid rgba(124,92,255,.3);
+      border-radius: 999px; padding: 4px 12px; font-size: 12px; color: #dcd7ff;
+    }
+    .file-chip button { background: none; border: none; cursor: pointer; color: inherit; font-size: 14px; line-height: 1; padding: 0; }
+
+    /* color picker custom */
+    .color-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+    .color-opt {
+      width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+      border: 2px solid transparent; transition: all .2s;
+      position: relative;
+    }
+    .color-opt.selected { border-color: #fff; box-shadow: 0 0 0 3px var(--primary); }
+    .color-opt-custom {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 2px dashed rgba(255,255,255,.3); cursor: pointer;
+      display: grid; place-items: center; font-size: 18px; color: var(--muted);
+      transition: border-color .2s;
+    }
+    .color-opt-custom:hover { border-color: var(--primary); }
+    .color-opt-custom input[type="color"] { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+
+    /* type cards */
+    .type-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    @media (max-width: 520px) { .type-cards { grid-template-columns: 1fr; } }
+    .type-card {
+      border: 2px solid rgba(255,255,255,.08);
+      border-radius: 14px; padding: 18px 16px;
+      cursor: pointer; transition: all .25s; text-align: center;
+      background: rgba(14,19,34,.6);
+    }
+    .type-card:hover { border-color: rgba(124,92,255,.4); background: rgba(124,92,255,.07); }
+    .type-card.selected { border-color: var(--primary); background: rgba(124,92,255,.15); box-shadow: 0 0 0 3px var(--ring); }
+    .type-card-icon { font-size: 28px; margin-bottom: 8px; }
+    .type-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+    .type-card p { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+    /* question guidée chat-style */
+    .qa-thread { display: flex; flex-direction: column; gap: 16px; }
+    .qa-bubble-bot {
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .qa-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: grid; place-items: center; font-size: 14px;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .qa-bubble {
+      background: rgba(124,92,255,.12);
+      border: 1px solid rgba(124,92,255,.2);
+      border-radius: 14px 14px 14px 4px;
+      padding: 12px 16px; font-size: 14px; color: var(--text); max-width: 90%;
+    }
+    .qa-answer {
+      margin-left: 44px;
+    }
+    .qa-answer textarea {
+      border-radius: 14px; font-size: 14px; min-height: 80px;
+    }
+
+    /* checklist options */
+    .check-opts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .check-opt {
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px; padding: 8px 16px;
+      font-size: 13px; cursor: pointer; transition: all .2s;
+      color: var(--muted); background: rgba(14,19,34,.6);
+      user-select: none;
+    }
+    .check-opt:hover { border-color: rgba(124,92,255,.4); color: var(--text); }
+    .check-opt.selected { border-color: var(--primary); background: rgba(124,92,255,.15); color: #dcd7ff; }
+
+    /* ─── BOUTONS ─── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 14px 24px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white; border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 4px 18px rgba(124,92,255,.4);
+      cursor: pointer; font: 600 15px/1 inherit;
+      transition: all .25s; text-decoration: none;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(124,92,255,.55); }
+    .btn:active { transform: translateY(0); }
+    .btn.secondary {
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.12);
+      box-shadow: none; color: var(--text);
+    }
+    .btn.secondary:hover { background: rgba(255,255,255,.1); box-shadow: none; }
+    .btn.full { width: 100%; }
+    .btn.lg { padding: 16px 32px; font-size: 16px; border-radius: 14px; }
+
+    .btn-row { display: flex; gap: 10px; margin-top: 24px; }
+    .btn-row .btn:first-child { flex: 1; }
+
+    /* ─── VALIDATION MAIL ─── */
+    .otp-row { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
+    .otp-input {
+      width: 52px; height: 60px; text-align: center;
+      font-size: 24px; font-weight: 700;
+      border: 2px solid rgba(255,255,255,.12);
+      border-radius: 12px; background: rgba(11,15,25,.8);
+      color: var(--text); transition: all .2s;
+    }
+    .otp-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--ring); outline: none; }
+    @media (max-width: 400px) { .otp-input { width: 40px; height: 50px; font-size: 20px; } }
+
+    .mail-sent-card {
+      text-align: center; padding: 32px 20px;
+    }
+    .mail-icon { font-size: 52px; margin-bottom: 16px; }
+    .mail-sent-card h2 { font-family: Poppins, sans-serif; font-size: 22px; margin-bottom: 8px; }
+    .mail-sent-card p { color: var(--muted); font-size: 14px; max-width: 42ch; margin: 0 auto 24px; }
+    .resend-link { color: var(--accent); font-size: 13px; cursor: pointer; background: none; border: none; text-decoration: underline; }
+
+    /* ─── LOADING ─── */
+    .loading-screen { text-align: center; padding: 48px 20px; display: none; }
+    .loading-screen.active { display: block; }
+    .loading-orb {
+      width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 32px;
+      background: conic-gradient(var(--primary), var(--accent), transparent 70%);
+      animation: spin 1.2s linear infinite;
+      position: relative;
+    }
+    .loading-orb::after {
+      content: ""; position: absolute; inset: 6px;
+      border-radius: 50%; background: var(--bg-dark);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-title { font-family: Poppins, sans-serif; font-size: 22px; margin-bottom: 12px; }
+    .loading-sub { color: var(--muted); font-size: 14px; margin-bottom: 32px; }
+
+    .progress-bar-wrap {
+      background: rgba(255,255,255,.07); border-radius: 999px;
+      height: 8px; overflow: hidden; margin-bottom: 12px;
+    }
+    .progress-bar-fill {
+      height: 100%; border-radius: 999px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: width .6s ease;
+    }
+    .progress-label { font-size: 13px; color: var(--muted); }
+
+    .loading-steps { margin-top: 32px; display: flex; flex-direction: column; gap: 10px; }
+    .loading-step {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(14,19,34,.8); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 12px; padding: 12px 16px; font-size: 14px;
+      color: var(--muted); transition: all .4s;
+    }
+    .loading-step.done { color: var(--success); border-color: rgba(16,185,129,.2); background: rgba(16,185,129,.06); }
+    .loading-step.active { color: var(--text); border-color: rgba(124,92,255,.3); background: rgba(124,92,255,.08); }
+    .loading-step-icon { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; font-size: 12px; background: rgba(255,255,255,.06); }
+    .loading-step.done .loading-step-icon { background: var(--success); }
+    .loading-step.active .loading-step-icon { background: var(--primary); animation: pulse 1s ease infinite; }
+    @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(124,92,255,.5)} 50%{box-shadow:0 0 0 6px rgba(124,92,255,0)} }
+
+    /* ─── PREVIEW ─── */
+    .preview-wrapper { display: none; }
+    .preview-wrapper.active { display: block; }
+
+    .preview-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; gap: 12px; flex-wrap: wrap;
+    }
+    .preview-header h2 { font-family: Poppins, sans-serif; font-size: 20px; }
+    .preview-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.25);
+      border-radius: 999px; padding: 6px 14px; font-size: 12px; font-weight: 600; color: var(--success);
+    }
+
+    /* browser chrome mockup */
+    .browser-chrome {
+      background: rgba(14,19,34,.9);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 16px; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .browser-topbar {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.07);
+      background: rgba(11,15,25,.7);
+    }
+    .browser-dots { display: flex; gap: 6px; }
+    .browser-dots span { width: 11px; height: 11px; border-radius: 50%; }
+    .browser-dots span:nth-child(1) { background: #ff5f57; }
+    .browser-dots span:nth-child(2) { background: #febc2e; }
+    .browser-dots span:nth-child(3) { background: #28c840; }
+    .browser-url {
+      flex: 1; background: rgba(255,255,255,.06); border-radius: 8px;
+      padding: 6px 12px; font-size: 12px; color: var(--muted);
+      border: 1px solid rgba(255,255,255,.08); display: flex; align-items: center; gap: 6px;
+    }
+    .browser-url::before { content: "🔒"; font-size: 11px; }
+
+    /* tabs dans la preview */
+    .preview-tabs {
+      display: flex; gap: 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(11,15,25,.5);
+      overflow-x: auto;
+    }
+    .preview-tab {
+      padding: 10px 18px; font-size: 13px; font-weight: 500;
+      color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent;
+      transition: all .2s; white-space: nowrap; border: none; background: none;
+    }
+    .preview-tab:hover { color: var(--text); }
+    .preview-tab.active { color: #dcd7ff; border-bottom-color: var(--primary); }
+
+    /* iframe de la preview */
+    .preview-frame-wrap { position: relative; }
+    .preview-frame {
+      width: 100%; border: none; display: block;
+      height: 520px; transition: height .3s;
+    }
+    @media (max-width: 600px) { .preview-frame { height: 380px; } }
+
+    /* watermark */
+    .preview-watermark {
+      position: absolute; bottom: 12px; right: 14px;
+      font-size: 11px; color: rgba(167,171,190,.4); pointer-events: none;
+      font-weight: 600; letter-spacing: .5px;
+    }
+
+    /* CTA final */
+    .cta-final {
+      margin-top: 24px;
+      background: linear-gradient(135deg, rgba(124,92,255,.15), rgba(159,122,255,.08));
+      border: 1px solid rgba(124,92,255,.3);
+      border-radius: 20px; padding: 28px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      flex-wrap: wrap;
+    }
+    .cta-final-text h3 { font-family: Poppins, sans-serif; font-size: 18px; margin-bottom: 6px; }
+    .cta-final-text p { color: var(--muted); font-size: 14px; max-width: 52ch; }
+    .cta-final .btn { flex-shrink: 0; }
+
+    /* ─── MESSAGES ─── */
+    .msg { font-size: 13px; padding: 10px 14px; border-radius: 10px; margin-top: 8px; display: none; }
+    .msg.error { background: rgba(244,63,94,.1); border: 1px solid rgba(244,63,94,.25); color: #fda4af; display: block; }
+    .msg.success { background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.25); color: #6ee7b7; display: block; }
+
+    /* ─── FOOTER minimal ─── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,.06);
+      padding: 24px 0; text-align: center;
+      color: var(--muted); font-size: 13px;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    /* ─── UTILS ─── */
+    .hidden { display: none !important; }
+    .divider { height: 1px; background: rgba(255,255,255,.07); margin: 20px 0; }
+    .small { font-size: 12px; }
+    .center { text-align: center; }
+    .mt8 { margin-top: 8px; }
+    .mt16 { margin-top: 16px; }
+    .mt24 { margin-top: 24px; }
+  </style>
+</head>
+<body>
+  <div class="site-bg"></div>
+  <div class="noise"></div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="nav">
+      <a class="logo" href="/" aria-label="Retour accueil Omera">
+        <img src="/assets/Logo Omera (grand).png" class="logo-img" alt="Omera">
+      </a>
+      <a class="back-link" href="/">
+        ← Retour au site
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="tunnel container">
+
+      <!-- PROGRESS BAR -->
+      <div class="steps-bar" id="stepsBar">
+        <div class="step-item active" id="stepItem1">
+          <div class="step-dot active" id="stepDot1"><span class="step-num">1</span></div>
+          <span class="step-label">Mon compte</span>
+        </div>
+        <div class="step-line" id="stepLine1"></div>
+        <div class="step-item" id="stepItem2">
+          <div class="step-dot" id="stepDot2"><span class="step-num">2</span></div>
+          <span class="step-label">Validation</span>
+        </div>
+        <div class="step-line" id="stepLine2"></div>
+        <div class="step-item" id="stepItem3">
+          <div class="step-dot" id="stepDot3"><span class="step-num">3</span></div>
+          <span class="step-label">Mon projet</span>
+        </div>
+        <div class="step-line" id="stepLine3"></div>
+        <div class="step-item" id="stepItem4">
+          <div class="step-dot" id="stepDot4"><span class="step-num">4</span></div>
+          <span class="step-label">Ma préview</span>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════
+           ÉTAPE 1 — CRÉER UN COMPTE
+      ════════════════════════════════════════ -->
+      <div class="step-panel active" id="panel1">
+        <p class="panel-title">Créer votre compte</p>
+        <p class="panel-sub">Gratuit, sans carte bancaire. Votre préview vous attend en 3 minutes.</p>
+
+        <div class="glass-card">
+          <div class="field-group">
+            <div class="field-row">
+              <div>
+                <label for="prenom">Prénom</label>
+                <input type="text" id="prenom" placeholder="Marie" autocomplete="given-name" />
+              </div>
+              <div>
+                <label for="nom">Nom</label>
+                <input type="text" id="nom" placeholder="Dupont" autocomplete="family-name" />
+              </div>
+            </div>
+
+            <div>
+              <label for="email">Email professionnel</label>
+              <input type="email" id="email" placeholder="marie@entreprise.fr" autocomplete="email" />
+            </div>
+
+            <div>
+              <label for="phone">Téléphone <span style="color:var(--muted);font-weight:400">(optionnel)</span></label>
+              <input type="tel" id="phone" placeholder="+33 6 12 34 56 78" autocomplete="tel" />
+            </div>
+
+            <div>
+              <label for="pwd">Mot de passe</label>
+              <div class="password-wrap">
+                <input type="password" id="pwd" placeholder="8 caractères minimum" autocomplete="new-password" />
+                <button class="eye-btn" type="button" onclick="togglePwd('pwd', this)" aria-label="Afficher le mot de passe">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label for="pwd2">Confirmer le mot de passe</label>
+              <div class="password-wrap">
+                <input type="password" id="pwd2" placeholder="Répétez le mot de passe" autocomplete="new-password" />
+                <button class="eye-btn" type="button" onclick="togglePwd('pwd2', this)" aria-label="Afficher le mot de passe">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <p class="msg" id="msg1"></p>
+
+          <div class="btn-row mt24">
+            <button class="btn" onclick="submitStep1()">
+              Créer mon compte &amp; recevoir le code
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <div class="divider"></div>
+          <p class="center small" style="color:var(--muted)">
+            Vous avez déjà un compte ?
+            <button class="resend-link" onclick="showLogin()">Se connecter</button>
+          </p>
+        </div>
+
+        <!-- Formulaire connexion (caché par défaut) -->
+        <div class="glass-card mt16 hidden" id="loginForm">
+          <p style="font-weight:600;margin-bottom:16px;">Se connecter</p>
+          <div class="field-group">
+            <div>
+              <label for="loginEmail">Email</label>
+              <input type="email" id="loginEmail" placeholder="marie@entreprise.fr" />
+            </div>
+            <div>
+              <label for="loginPwd">Mot de passe</label>
+              <div class="password-wrap">
+                <input type="password" id="loginPwd" placeholder="••••••••" />
+                <button class="eye-btn" type="button" onclick="togglePwd('loginPwd', this)" aria-label="Voir">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <p class="msg" id="msgLogin"></p>
+          <div class="btn-row mt16">
+            <button class="btn" onclick="submitLogin()">Se connecter →</button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ════════════════════════════════════════
+           ÉTAPE 2 — VALIDATION EMAIL
+      ════════════════════════════════════════ -->
+      <div class="step-panel" id="panel2">
+        <div class="glass-card">
+          <div class="mail-sent-card">
+            <div class="mail-icon">📬</div>
+            <h2>Vérifiez votre boîte mail</h2>
+            <p>On a envoyé un code à 6 chiffres à <strong id="emailDisplay">votre adresse</strong>. Il expire dans 10 minutes.</p>
+
+            <div class="otp-row">
+              <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" id="otp0" oninput="otpMove(this,1)" onkeydown="otpBack(event,0)" />
+              <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" id="otp1" oninput="otpMove(this,2)" onkeydown="otpBack(event,1)" />
+              <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" id="otp2" oninput="otpMove(this,3)" onkeydown="otpBack(event,2)" />
+              <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" id="otp3" oninput="otpMove(this,4)" onkeydown="otpBack(event,3)" />
+              <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" id="otp4" oninput="otpMove(this,5)" onkeydown="otpBack(event,4)" />
+              <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" id="otp5" oninput="otpFinish(this)" onkeydown="otpBack(event,5)" />
+            </div>
+
+            <p class="msg" id="msg2"></p>
+
+            <button class="btn lg" onclick="validateOtp()" style="margin:0 auto">
+              Valider mon compte →
+            </button>
+
+            <p class="mt16" style="color:var(--muted);font-size:13px;">
+              Pas reçu ?
+              <button class="resend-link" onclick="resendOtp()">Renvoyer le code</button>
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ════════════════════════════════════════
+           ÉTAPE 3 — QUESTIONS PROJET
+      ════════════════════════════════════════ -->
+      <div class="step-panel" id="panel3">
+        <p class="panel-title">Parlez-nous de votre projet</p>
+        <p class="panel-sub">Plus vous êtes précis, plus la préview sera fidèle à votre vision.</p>
+
+        <div class="glass-card">
+
+          <!-- 3a : Type de projet -->
+          <div id="q3a">
+            <p style="font-weight:600;margin-bottom:14px;">Qu'est-ce que vous souhaitez créer ?</p>
+            <div class="type-cards">
+              <div class="type-card" onclick="selectType('site')" id="type-site">
+                <div class="type-card-icon">🌐</div>
+                <h3>Site web</h3>
+                <p>Vitrine, portfolio, landing page, blog…</p>
+              </div>
+              <div class="type-card" onclick="selectType('saas')" id="type-saas">
+                <div class="type-card-icon">⚙️</div>
+                <h3>Application SaaS</h3>
+                <p>Outil interne, dashboard, portail, automatisation…</p>
+              </div>
+              <div class="type-card" onclick="selectType('nsp')" id="type-nsp">
+                <div class="type-card-icon">🤔</div>
+                <h3>Je ne sais pas encore</h3>
+                <p>Vous avez un besoin, on vous guide.</p>
+              </div>
+            </div>
+            <div class="btn-row mt24">
+              <button class="btn" onclick="nextQsection('q3a','q3b')">Continuer →</button>
+            </div>
+          </div>
+
+          <!-- 3b : Identité -->
+          <div id="q3b" class="hidden">
+            <div class="divider"></div>
+            <p style="font-weight:600;margin-bottom:14px;">L'identité de votre projet</p>
+            <div class="field-group">
+              <div>
+                <label for="projName">Nom du projet / de l'entreprise</label>
+                <input type="text" id="projName" placeholder="Ex : FlowTrack, Agence Martin…" />
+              </div>
+              <div>
+                <label for="secteur">Secteur d'activité</label>
+                <select id="secteur">
+                  <option value="">Choisissez un secteur…</option>
+                  <option>Immobilier</option>
+                  <option>Commerce / Retail</option>
+                  <option>Santé / Médical</option>
+                  <option>Finance / Comptabilité</option>
+                  <option>RH / Recrutement</option>
+                  <option>Logistique / Transport</option>
+                  <option>Restauration / Hôtellerie</option>
+                  <option>Formation / Education</option>
+                  <option>Consulting / Services B2B</option>
+                  <option>Tech / SaaS</option>
+                  <option>Artisanat / Créatifs</option>
+                  <option>Autre</option>
+                </select>
+              </div>
+
+              <!-- Logo upload -->
+              <div>
+                <label>Logo <span style="color:var(--muted);font-weight:400">(si vous en avez un)</span></label>
+                <div class="upload-zone" id="logoZone">
+                  <input type="file" id="logoFile" accept="image/*" onchange="handleLogoUpload(this)" />
+                  <div class="upload-icon">🖼️</div>
+                  <p><strong>Déposez votre logo</strong> ou cliquez pour choisir</p>
+                  <p style="margin-top:4px;font-size:12px;">PNG, SVG, JPG — max 5 Mo</p>
+                </div>
+                <ul class="file-list" id="logoList"></ul>
+              </div>
+
+              <!-- Couleurs -->
+              <div>
+                <label>Couleurs souhaitées</label>
+                <div class="color-row" id="colorRow">
+                  <div class="color-opt" style="background:#7c5cff" onclick="toggleColor(this,'#7c5cff')" title="Violet"></div>
+                  <div class="color-opt" style="background:#0ea5e9" onclick="toggleColor(this,'#0ea5e9')" title="Bleu"></div>
+                  <div class="color-opt" style="background:#10b981" onclick="toggleColor(this,'#10b981')" title="Vert"></div>
+                  <div class="color-opt" style="background:#f59e0b" onclick="toggleColor(this,'#f59e0b')" title="Ambre"></div>
+                  <div class="color-opt" style="background:#f43f5e" onclick="toggleColor(this,'#f43f5e')" title="Rose"></div>
+                  <div class="color-opt" style="background:#e8e9f1" onclick="toggleColor(this,'#e8e9f1')" title="Blanc"></div>
+                  <div class="color-opt" style="background:#1a1a2e" onclick="toggleColor(this,'#1a1a2e')" title="Sombre"></div>
+                  <div class="color-opt-custom" title="Couleur personnalisée">
+                    <span>+</span>
+                    <input type="color" id="customColor" onchange="addCustomColor(this.value)" />
+                  </div>
+                </div>
+                <p class="small mt8" style="color:var(--muted)">Sélectionnez une ou plusieurs couleurs</p>
+              </div>
+            </div>
+            <div class="btn-row mt24">
+              <button class="btn" onclick="nextQsection('q3b','q3c')">Continuer →</button>
+              <button class="btn secondary" onclick="prevQsection('q3b','q3a')">← Retour</button>
+            </div>
+          </div>
+
+          <!-- 3c : Description guidée -->
+          <div id="q3c" class="hidden">
+            <div class="divider"></div>
+            <p style="font-weight:600;margin-bottom:20px;">Décrivez votre projet <span style="color:var(--muted);font-weight:400">— on vous guide</span></p>
+
+            <div class="qa-thread">
+
+              <div class="qa-bubble-bot">
+                <div class="qa-avatar">✦</div>
+                <div class="qa-bubble">Quel est <strong>l'objectif principal</strong> de votre projet ? Qu'est-ce que vos utilisateurs pourront faire dessus ?</div>
+              </div>
+              <div class="qa-answer">
+                <textarea id="qa1" placeholder="Ex : Permettre à mes clients de prendre rendez-vous en ligne et consulter leur historique…"></textarea>
+              </div>
+
+              <div class="qa-bubble-bot">
+                <div class="qa-avatar">✦</div>
+                <div class="qa-bubble">Qui sont <strong>vos utilisateurs</strong> ? (clients, équipe interne, grand public, professionnels…)</div>
+              </div>
+              <div class="qa-answer">
+                <textarea id="qa2" placeholder="Ex : Mes clients particuliers, entre 30 et 60 ans, peu à l'aise avec la tech…"></textarea>
+              </div>
+
+              <div class="qa-bubble-bot">
+                <div class="qa-avatar">✦</div>
+                <div class="qa-bubble">Quelles sont les <strong>pages ou fonctionnalités clés</strong> que vous imaginez ? (3 à 5 suffisent)</div>
+              </div>
+              <div class="qa-answer">
+                <textarea id="qa3" placeholder="Ex : Accueil, Réservation, Mon compte, Historique, Contact…"></textarea>
+              </div>
+
+              <div class="qa-bubble-bot">
+                <div class="qa-avatar">✦</div>
+                <div class="qa-bubble">Avez-vous des <strong>références visuelles</strong> qui vous plaisent ? (sites, apps, ambiances…)</div>
+              </div>
+              <div class="qa-answer">
+                <textarea id="qa4" placeholder="Ex : J'aime le style minimaliste de Notion, les couleurs sombres de Linear…"></textarea>
+              </div>
+            </div>
+
+            <!-- Upload fichiers -->
+            <div class="mt24">
+              <label>Fichiers de travail <span style="color:var(--muted);font-weight:400">(Excel, PDF, captures… optionnel)</span></label>
+              <div class="upload-zone" id="filesZone">
+                <input type="file" id="projFiles" multiple accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.csv,.txt,.xls,.xlsx" onchange="handleFilesUpload(this)" />
+                <div class="upload-icon">📎</div>
+                <p><strong>Déposez vos fichiers</strong> ou cliquez ici</p>
+                <p style="margin-top:4px;font-size:12px;">Excel, PDF, images — max 10 Mo par fichier</p>
+              </div>
+              <ul class="file-list" id="filesList"></ul>
+            </div>
+
+            <!-- Style ambiance -->
+            <div class="mt24">
+              <label>Ambiance générale souhaitée</label>
+              <div class="check-opts" id="styleOpts">
+                <span class="check-opt" onclick="toggleOpt(this)">Moderne &amp; épuré</span>
+                <span class="check-opt" onclick="toggleOpt(this)">Sombre &amp; premium</span>
+                <span class="check-opt" onclick="toggleOpt(this)">Coloré &amp; dynamique</span>
+                <span class="check-opt" onclick="toggleOpt(this)">Classique &amp; professionnel</span>
+                <span class="check-opt" onclick="toggleOpt(this)">Minimaliste</span>
+                <span class="check-opt" onclick="toggleOpt(this)">Ludique &amp; créatif</span>
+              </div>
+            </div>
+
+            <!-- Nombre utilisateurs -->
+            <div class="mt24">
+              <label for="nbUsers">Nombre d'utilisateurs estimé</label>
+              <select id="nbUsers">
+                <option value="">Sélectionnez…</option>
+                <option>Moi seul (usage interne)</option>
+                <option>Moins de 10 personnes</option>
+                <option>10 à 50 personnes</option>
+                <option>50 à 200 personnes</option>
+                <option>Plus de 200 personnes</option>
+              </select>
+            </div>
+
+            <p class="msg" id="msg3"></p>
+
+            <div class="btn-row mt24">
+              <button class="btn lg" onclick="submitProject()">
+                ✦ Générer ma préview gratuite
+              </button>
+              <button class="btn secondary" onclick="prevQsection('q3c','q3b')">← Retour</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ════════════════════════════════════════
+           LOADING
+      ════════════════════════════════════════ -->
+      <div class="step-panel" id="panelLoading">
+        <div class="glass-card">
+          <div class="loading-screen active">
+            <div class="loading-orb"></div>
+            <p class="loading-title">Création de votre préview…</p>
+            <p class="loading-sub">Notre IA analyse votre projet et génère une interface sur mesure.</p>
+
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+            </div>
+            <p class="progress-label" id="progressLabel">Démarrage…</p>
+
+            <div class="loading-steps">
+              <div class="loading-step" id="ls1">
+                <div class="loading-step-icon">→</div>
+                Analyse de votre brief projet
+              </div>
+              <div class="loading-step" id="ls2">
+                <div class="loading-step-icon">→</div>
+                Conception de l'architecture des pages
+              </div>
+              <div class="loading-step" id="ls3">
+                <div class="loading-step-icon">→</div>
+                Génération de l'interface visuelle
+              </div>
+              <div class="loading-step" id="ls4">
+                <div class="loading-step-icon">→</div>
+                Application de vos couleurs et identité
+              </div>
+              <div class="loading-step" id="ls5">
+                <div class="loading-step-icon">→</div>
+                Finalisation et vérification
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ════════════════════════════════════════
+           ÉTAPE 4 — PREVIEW
+      ════════════════════════════════════════ -->
+      <div class="step-panel" id="panel4">
+
+        <div class="preview-header">
+          <div>
+            <h2>Votre préview est prête 🎉</h2>
+            <p class="panel-sub" style="margin-bottom:0">Naviguez entre les pages générées. Aucun téléchargement n'est possible.</p>
+          </div>
+          <span class="preview-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Préview générée
+          </span>
+        </div>
+
+        <div class="browser-chrome">
+          <div class="browser-topbar">
+            <div class="browser-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="browser-url" id="browserUrl">omera.fr/votre-preview</div>
+          </div>
+
+          <div class="preview-tabs" id="previewTabs">
+            <!-- injecté par JS -->
+          </div>
+
+          <div class="preview-frame-wrap">
+            <iframe
+              id="previewFrame"
+              class="preview-frame"
+              sandbox="allow-scripts allow-same-origin"
+              title="Préview de votre projet"
+              srcdoc=""
+            ></iframe>
+            <div class="preview-watermark">Préview Omera — non téléchargeable</div>
+          </div>
+        </div>
+
+        <!-- CTA final -->
+        <div class="cta-final">
+          <div class="cta-final-text">
+            <h3>Cette préview vous parle ?</h3>
+            <p>Concrétisons votre projet ensemble. On vous répond sous 24h avec un devis détaillé et des pistes concrètes.</p>
+          </div>
+          <button class="btn lg" onclick="sendConversionEmail()">
+            Lancer mon projet avec Omera →
+          </button>
+        </div>
+
+        <!-- confirmation envoi -->
+        <div class="glass-card mt16 hidden center" id="conversionConfirm" style="padding:28px">
+          <p style="font-size:28px;margin-bottom:12px">✅</p>
+          <p style="font-weight:600;margin-bottom:6px">Message envoyé !</p>
+          <p style="color:var(--muted);font-size:14px">Paul vous recontacte sous 24h. En attendant, <a href="/" style="color:var(--accent)">revenez sur le site</a>.</p>
+        </div>
+
+      </div>
+
+    </div><!-- /tunnel -->
+  </main>
+
+  <footer>
+    <div class="container-wide">
+      <p>© <span id="year"></span> Omera — <a href="/">omera.fr</a></p>
+    </div>
+  </footer>
+
+
+  <script>
+  /* ══════════════════════════════════════════════
+     STATE
+  ══════════════════════════════════════════════ */
+  const state = {
+    step: 1,
+    email: '',
+    prenom: '',
+    nom: '',
+    type: '',
+    colors: [],
+    style: [],
+    otp: '000000', // ← sera remplacé par vrai OTP backend
+    pages: [],      // pages générées
+    currentPage: 0,
+  };
+
+  /* ══════════════════════════════════════════════
+     NAVIGATION ÉTAPES
+  ══════════════════════════════════════════════ */
+  function goToStep(n) {
+    // panels
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    const target = n === 'loading' ? document.getElementById('panelLoading') : document.getElementById('panel'+n);
+    if (target) target.classList.add('active');
+
+    if (n === 'loading') return;
+
+    state.step = n;
+
+    // dots
+    for (let i = 1; i <= 4; i++) {
+      const dot = document.getElementById('stepDot'+i);
+      const item = document.getElementById('stepItem'+i);
+      const line = document.getElementById('stepLine'+i);
+      dot.className = 'step-dot';
+      item.className = 'step-item';
+      if (line) line.className = 'step-line';
+
+      if (i < n) {
+        dot.classList.add('done');
+        if (line) line.classList.add('done');
+      } else if (i === n) {
+        dot.classList.add('active');
+        item.classList.add('active');
+        if (line) line.classList.add('active');
+      }
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ══════════════════════════════════════════════
+     ÉTAPE 1 — COMPTE
+  ══════════════════════════════════════════════ */
+  function showLogin() {
+    document.getElementById('loginForm').classList.toggle('hidden');
+  }
+
+  function togglePwd(id, btn) {
+    const inp = document.getElementById(id);
+    const show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password';
+    btn.style.color = show ? 'var(--accent)' : 'var(--muted)';
+  }
+
+  function showMsg(id, text, type = 'error') {
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.className = 'msg ' + type;
+  }
+  function hideMsg(id) {
+    const el = document.getElementById(id);
+    el.className = 'msg';
+    el.textContent = '';
+  }
+
+  function submitStep1() {
+    hideMsg('msg1');
+    const prenom = document.getElementById('prenom').value.trim();
+    const nom = document.getElementById('nom').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const pwd = document.getElementById('pwd').value;
+    const pwd2 = document.getElementById('pwd2').value;
+
+    if (!prenom || !nom) return showMsg('msg1', 'Merci de renseigner votre prénom et nom.');
+    if (!email || !email.includes('@')) return showMsg('msg1', 'Adresse email invalide.');
+    if (pwd.length < 8) return showMsg('msg1', 'Le mot de passe doit contenir au moins 8 caractères.');
+    if (pwd !== pwd2) return showMsg('msg1', 'Les mots de passe ne correspondent pas.');
+
+    state.email = email;
+    state.prenom = prenom;
+    state.nom = nom;
+
+    // ─── ICI : appel API création compte + envoi OTP ───
+    // Pour l'instant : simulation
+    document.getElementById('emailDisplay').textContent = email;
+    goToStep(2);
+  }
+
+  function submitLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pwd = document.getElementById('loginPwd').value;
+    if (!email || !pwd) return showMsg('msgLogin', 'Renseignez votre email et mot de passe.');
+    state.email = email;
+    // ─── ICI : appel API login ───
+    document.getElementById('emailDisplay').textContent = email;
+    goToStep(2);
+  }
+
+  /* ══════════════════════════════════════════════
+     ÉTAPE 2 — OTP
+  ══════════════════════════════════════════════ */
+  function otpMove(el, next) {
+    if (el.value.length === 1 && next <= 5) {
+      document.getElementById('otp'+next).focus();
+    }
+  }
+  function otpBack(e, idx) {
+    if (e.key === 'Backspace' && !e.target.value && idx > 0) {
+      document.getElementById('otp'+(idx-1)).focus();
+    }
+  }
+  function otpFinish(el) {
+    if (el.value.length === 1) el.blur();
+  }
+
+  function getOtpValue() {
+    return [0,1,2,3,4,5].map(i => document.getElementById('otp'+i).value).join('');
+  }
+
+  function validateOtp() {
+    hideMsg('msg2');
+    const code = getOtpValue();
+    if (code.length < 6) return showMsg('msg2', 'Entrez le code à 6 chiffres complet.');
+
+    // ─── ICI : appel API validation OTP ───
+    // Simulation : on accepte tout code de 6 chiffres
+    if (code.length === 6) {
+      showMsg('msg2', 'Email validé !', 'success');
+      setTimeout(() => goToStep(3), 700);
+    }
+  }
+
+  function resendOtp() {
+    // ─── ICI : appel API renvoi OTP ───
+    showMsg('msg2', 'Code renvoyé à ' + state.email, 'success');
+  }
+
+  /* ══════════════════════════════════════════════
+     ÉTAPE 3 — QUESTIONS
+  ══════════════════════════════════════════════ */
+  function selectType(t) {
+    state.type = t;
+    document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById('type-'+t).classList.add('selected');
+  }
+
+  function nextQsection(hide, show) {
+    if (hide === 'q3a' && !state.type) return alert('Sélectionnez un type de projet pour continuer.');
+    document.getElementById(hide).classList.add('hidden');
+    document.getElementById(show).classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function prevQsection(hide, show) {
+    document.getElementById(hide).classList.add('hidden');
+    document.getElementById(show).classList.remove('hidden');
+  }
+
+  function toggleColor(el, hex) {
+    el.classList.toggle('selected');
+    if (el.classList.contains('selected')) {
+      state.colors.push(hex);
+    } else {
+      state.colors = state.colors.filter(c => c !== hex);
+    }
+  }
+
+  function addCustomColor(hex) {
+    state.colors.push(hex);
+  }
+
+  function toggleOpt(el) {
+    el.classList.toggle('selected');
+    const val = el.textContent;
+    if (el.classList.contains('selected')) {
+      state.style.push(val);
+    } else {
+      state.style = state.style.filter(s => s !== val);
+    }
+  }
+
+  function handleLogoUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const list = document.getElementById('logoList');
+    list.innerHTML = `<li class="file-chip">🖼️ ${file.name} <button onclick="clearLogo()">×</button></li>`;
+  }
+
+  function clearLogo() {
+    document.getElementById('logoList').innerHTML = '';
+    document.getElementById('logoFile').value = '';
+  }
+
+  function handleFilesUpload(input) {
+    const list = document.getElementById('filesList');
+    list.innerHTML = '';
+    Array.from(input.files).forEach((f, i) => {
+      const li = document.createElement('li');
+      li.className = 'file-chip';
+      li.innerHTML = `📎 ${f.name} <button onclick="removeFile(${i})">×</button>`;
+      list.appendChild(li);
+    });
+  }
+
+  function removeFile(i) {
+    // Simple UI reset — backend géré séparément
+    const list = document.getElementById('filesList');
+    list.children[i]?.remove();
+  }
+
+  function submitProject() {
+    hideMsg('msg3');
+    const qa1 = document.getElementById('qa1').value.trim();
+    if (!qa1) return showMsg('msg3', 'Décrivez au moins l\'objectif principal de votre projet.');
+
+    // ─── ICI : envoi des données à l'API ───
+    startLoading();
+  }
+
+  /* ══════════════════════════════════════════════
+     LOADING + GÉNÉRATION
+  ══════════════════════════════════════════════ */
+  function startLoading() {
+    goToStep('loading');
+
+    const steps = ['ls1','ls2','ls3','ls4','ls5'];
+    const labels = [
+      'Analyse du brief…',
+      'Architecture des pages…',
+      'Génération de l\'interface…',
+      'Application des couleurs…',
+      'Finalisation…'
+    ];
+    const pcts = [10, 30, 55, 80, 95];
+
+    let current = 0;
+
+    function tick() {
+      if (current > 0) {
+        const prev = document.getElementById(steps[current-1]);
+        prev.classList.remove('active');
+        prev.classList.add('done');
+        prev.querySelector('.loading-step-icon').textContent = '✓';
+      }
+      if (current < steps.length) {
+        document.getElementById(steps[current]).classList.add('active');
+        document.getElementById('progressFill').style.width = pcts[current] + '%';
+        document.getElementById('progressLabel').textContent = labels[current];
+        current++;
+        setTimeout(tick, 1400);
+      } else {
+        // Dernière étape terminée
+        document.getElementById('ls5').classList.remove('active');
+        document.getElementById('ls5').classList.add('done');
+        document.getElementById('ls5').querySelector('.loading-step-icon').textContent = '✓';
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('progressLabel').textContent = 'Préview prête !';
+
+        // ─── ICI : dans la version réelle, on attend la réponse API ───
+        // Pour l'instant : génération d'une démo visuelle basée sur les inputs
+        setTimeout(() => {
+          buildPreview();
+          goToStep(4);
+        }, 800);
+      }
+    }
+    tick();
+  }
+
+  /* ══════════════════════════════════════════════
+     PRÉVIEW — GÉNÉRATION DEMO (remplacé par API)
+  ══════════════════════════════════════════════ */
+  function buildPreview() {
+    const nom = document.getElementById('projName').value || 'VotreProjet';
+    const type = state.type === 'saas' ? 'Application' : 'Site web';
+    const primaryColor = state.colors[0] || '#7c5cff';
+    const style = state.style[0] || 'Moderne';
+    const qa1 = document.getElementById('qa1').value || 'Votre projet digital sur mesure';
+    const secteur = document.getElementById('secteur').value || 'Votre secteur';
+
+    // Pages à générer selon le type
+    const pagesConfig = state.type === 'saas'
+      ? [
+          { label: 'Accueil', slug: 'accueil' },
+          { label: 'Dashboard', slug: 'dashboard' },
+          { label: 'Fonctionnalités', slug: 'features' },
+          { label: 'Connexion', slug: 'login' },
+        ]
+      : [
+          { label: 'Accueil', slug: 'accueil' },
+          { label: 'Services', slug: 'services' },
+          { label: 'À propos', slug: 'apropos' },
+          { label: 'Contact', slug: 'contact' },
+        ];
+
+    state.pages = pagesConfig.map(p => ({
+      ...p,
+      html: generatePageHtml(p.slug, nom, primaryColor, qa1, secteur)
+    }));
+
+    // Construire les onglets
+    const tabsEl = document.getElementById('previewTabs');
+    tabsEl.innerHTML = '';
+    state.pages.forEach((p, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'preview-tab' + (i === 0 ? ' active' : '');
+      btn.textContent = p.label;
+      btn.onclick = () => switchPreviewTab(i);
+      tabsEl.appendChild(btn);
+    });
+
+    // Afficher la première page
+    switchPreviewTab(0);
+    document.getElementById('browserUrl').textContent = 'omera.fr/preview/' + nom.toLowerCase().replace(/\s+/g,'-');
+  }
+
+  function switchPreviewTab(idx) {
+    state.currentPage = idx;
+    const tabs = document.querySelectorAll('.preview-tab');
+    tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+    const frame = document.getElementById('previewFrame');
+    frame.srcdoc = state.pages[idx].html;
+  }
+
+  /* ── Générateur de HTML pour la preview ── */
+  function generatePageHtml(slug, nom, color, desc, secteur) {
+    const dark = '#0b0f19';
+    const card = '#12182a';
+    const text = '#e8e9f1';
+    const muted = '#a7abbe';
+    const lighter = lightenColor(color, 30);
+
+    const base = `
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:${dark};color:${text};line-height:1.6;min-height:100vh}
+a{color:${color};text-decoration:none}
+.header{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(11,15,25,.9)}
+.logo{font-weight:800;font-size:18px;color:${text}}
+.logo span{color:${color}}
+nav a{margin-left:24px;color:${muted};font-size:14px;font-weight:500}
+nav a:hover{color:${text}}
+.cta-nav{background:${color};color:#fff;padding:8px 18px;border-radius:999px;font-size:13px;font-weight:600}
+.hero{text-align:center;padding:80px 40px 60px;max-width:800px;margin:0 auto}
+.hero h1{font-size:clamp(28px,6vw,52px);font-weight:800;line-height:1.15;margin-bottom:16px}
+.hero h1 span{color:${color}}
+.hero p{color:${muted};font-size:17px;max-width:60ch;margin:0 auto 32px}
+.btn-hero{background:${color};color:#fff;border:none;padding:14px 32px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;display:inline-block;box-shadow:0 8px 28px ${color}55}
+.btn-sec{background:rgba(255,255,255,.07);color:${text};border:1px solid rgba(255,255,255,.12);padding:14px 24px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;display:inline-block;margin-left:12px}
+.btns{margin-top:8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;padding:0 40px 60px;max-width:1100px;margin:0 auto}
+.card{background:${card};border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px}
+.card-icon{width:44px;height:44px;border-radius:12px;background:${color}22;border:1px solid ${color}44;display:grid;place-items:center;font-size:20px;margin-bottom:14px}
+.card h3{font-size:16px;font-weight:700;margin-bottom:8px}
+.card p{color:${muted};font-size:14px}
+.badge{display:inline-block;background:${color}22;color:${color};border:1px solid ${color}44;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:600;margin-bottom:24px}
+.section{padding:60px 40px;max-width:1100px;margin:0 auto}
+.section h2{font-size:28px;font-weight:800;margin-bottom:8px}
+.section .sub{color:${muted};margin-bottom:32px}
+.tag{display:inline-block;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:4px 10px;font-size:12px;color:${muted};margin-right:6px;margin-bottom:6px}
+footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1px solid rgba(255,255,255,.06)}
+</style></head><body>`;
+
+    const header = `<div class="header"><div class="logo">${nom.split(' ')[0]}<span>.</span></div><nav><a href="#">Accueil</a><a href="#">Services</a><a href="#">À propos</a><a class="cta-nav" href="#">Contact</a></nav></div>`;
+    const footer_ = `<footer>© 2025 ${nom} · Tous droits réservés · <a href="#">Mentions légales</a></footer></body></html>`;
+
+    if (slug === 'accueil') {
+      return base + header + `
+<div class="hero">
+  <span class="badge">✦ ${secteur}</span>
+  <h1>Bienvenue chez <span>${nom}</span></h1>
+  <p>${desc.length > 120 ? desc.slice(0,120)+'…' : desc}</p>
+  <div class="btns"><a class="btn-hero" href="#">Commencer →</a><a class="btn-sec" href="#">En savoir plus</a></div>
+</div>
+<div class="cards">
+  <div class="card"><div class="card-icon">🚀</div><h3>Rapide &amp; efficace</h3><p>Une solution pensée pour votre quotidien, simple à prendre en main.</p></div>
+  <div class="card"><div class="card-icon">🔒</div><h3>Sécurisé</h3><p>Vos données sont protégées et accessibles uniquement par votre équipe.</p></div>
+  <div class="card"><div class="card-icon">📊</div><h3>Pilotez tout</h3><p>Suivez vos indicateurs en temps réel depuis un tableau de bord clair.</p></div>
+  <div class="card"><div class="card-icon">🤝</div><h3>Support inclus</h3><p>Une équipe disponible pour vous accompagner à chaque étape.</p></div>
+</div>` + footer_;
+    }
+
+    if (slug === 'dashboard') {
+      return base + header + `
+<div class="section">
+  <span class="badge">✦ Dashboard</span>
+  <h2>Votre espace de travail</h2>
+  <p class="sub">Suivez vos indicateurs en temps réel.</p>
+  <div class="cards" style="padding:0;margin-bottom:24px">
+    <div class="card" style="border-color:${color}33"><p style="font-size:12px;color:${muted}">Total utilisateurs</p><p style="font-size:32px;font-weight:800;color:${color};margin-top:8px">1 284</p></div>
+    <div class="card"><p style="font-size:12px;color:${muted}">Actions ce mois</p><p style="font-size:32px;font-weight:800;margin-top:8px">4 712</p></div>
+    <div class="card"><p style="font-size:12px;color:${muted}">Taux de succès</p><p style="font-size:32px;font-weight:800;color:#10b981;margin-top:8px">98.4%</p></div>
+  </div>
+  <div class="card" style="padding:20px">
+    <h3 style="margin-bottom:16px">Activité récente</h3>
+    ${[1,2,3,4].map(i => `<div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06)"><div style="width:36px;height:36px;border-radius:50%;background:${color}22;display:grid;place-items:center;font-size:14px">👤</div><div><p style="font-size:14px">Utilisateur ${i} a effectué une action</p><p style="font-size:12px;color:${muted}">Il y a ${i*3} heures</p></div></div>`).join('')}
+  </div>
+</div>` + footer_;
+    }
+
+    if (slug === 'features' || slug === 'services') {
+      const label = slug === 'features' ? 'Fonctionnalités' : 'Services';
+      return base + header + `
+<div class="section">
+  <span class="badge">✦ ${label}</span>
+  <h2>Ce qu'on vous propose</h2>
+  <p class="sub">Des solutions concrètes pour vos besoins réels.</p>
+  <div class="cards" style="padding:0">
+    <div class="card"><div class="card-icon">⚡</div><h3>Automatisation</h3><p>Réduisez les tâches répétitives et gagnez du temps au quotidien.</p></div>
+    <div class="card"><div class="card-icon">📈</div><h3>Reporting</h3><p>Des tableaux de bord clairs pour piloter votre activité facilement.</p></div>
+    <div class="card"><div class="card-icon">🔗</div><h3>Intégrations</h3><p>Connectez vos outils existants (CRM, ERP, Drive…) sans friction.</p></div>
+    <div class="card"><div class="card-icon">👥</div><h3>Multi-utilisateurs</h3><p>Gérez les accès et les rôles de chaque membre de votre équipe.</p></div>
+    <div class="card"><div class="card-icon">📱</div><h3>Mobile friendly</h3><p>Accédez à votre outil depuis n'importe quel appareil.</p></div>
+    <div class="card"><div class="card-icon">🛠️</div><h3>Sur mesure</h3><p>Chaque fonctionnalité est pensée pour votre workflow spécifique.</p></div>
+  </div>
+</div>` + footer_;
+    }
+
+    if (slug === 'login' || slug === 'apropos') {
+      if (slug === 'login') {
+        return base + header + `
+<div style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 70px);padding:40px">
+  <div style="width:100%;max-width:400px;background:${card};border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:36px">
+    <h2 style="margin-bottom:6px">Connexion</h2>
+    <p style="color:${muted};font-size:14px;margin-bottom:24px">Accédez à votre espace ${nom}</p>
+    <label style="font-size:13px;color:${muted};display:block;margin-bottom:6px">Email</label>
+    <input type="email" placeholder="vous@exemple.fr" style="width:100%;background:rgba(11,15,25,.8);border:1px solid rgba(255,255,255,.1);color:${text};border-radius:10px;padding:12px 14px;font-size:14px;margin-bottom:14px">
+    <label style="font-size:13px;color:${muted};display:block;margin-bottom:6px">Mot de passe</label>
+    <input type="password" placeholder="••••••••" style="width:100%;background:rgba(11,15,25,.8);border:1px solid rgba(255,255,255,.1);color:${text};border-radius:10px;padding:12px 14px;font-size:14px;margin-bottom:20px">
+    <button style="width:100%;background:${color};color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer">Se connecter →</button>
+    <p style="text-align:center;margin-top:16px;font-size:13px;color:${muted}">Pas encore de compte ? <a href="#" style="color:${color}">S'inscrire</a></p>
+  </div>
+</div>` + footer_;
+      }
+      // apropos
+      return base + header + `
+<div class="section">
+  <span class="badge">✦ À propos</span>
+  <h2>Qui sommes-nous ?</h2>
+  <p class="sub">Notre mission, notre équipe, notre vision.</p>
+  <div style="display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:center">
+    <div>
+      <p style="font-size:16px;margin-bottom:16px">${desc.length > 200 ? desc.slice(0,200)+'…' : desc}</p>
+      <p style="color:${muted};font-size:14px;margin-bottom:24px">Secteur : <strong style="color:${text}">${secteur}</strong></p>
+      <div>${['Expertise', 'Réactivité', 'Transparence', 'Innovation'].map(v=>`<span class="tag">${v}</span>`).join('')}</div>
+    </div>
+    <div class="card" style="text-align:center;padding:32px">
+      <div style="width:72px;height:72px;border-radius:50%;background:${color}22;border:2px solid ${color};display:grid;place-items:center;font-size:28px;margin:0 auto 16px">🏢</div>
+      <p style="font-weight:700;font-size:18px;margin-bottom:4px">${nom}</p>
+      <p style="color:${muted};font-size:14px">${secteur}</p>
+    </div>
+  </div>
+</div>` + footer_;
+    }
+
+    if (slug === 'contact') {
+      return base + header + `
+<div class="section" style="max-width:700px">
+  <span class="badge">✦ Contact</span>
+  <h2>Parlons de votre projet</h2>
+  <p class="sub">Réponse sous 24h avec des pistes concrètes.</p>
+  <div class="card">
+    <div style="display:grid;gap:14px">
+      <div><label style="font-size:13px;color:${muted};display:block;margin-bottom:6px">Nom</label><input type="text" placeholder="Votre nom" style="width:100%;background:rgba(11,15,25,.8);border:1px solid rgba(255,255,255,.1);color:${text};border-radius:10px;padding:12px 14px;font-size:14px"></div>
+      <div><label style="font-size:13px;color:${muted};display:block;margin-bottom:6px">Email</label><input type="email" placeholder="vous@exemple.fr" style="width:100%;background:rgba(11,15,25,.8);border:1px solid rgba(255,255,255,.1);color:${text};border-radius:10px;padding:12px 14px;font-size:14px"></div>
+      <div><label style="font-size:13px;color:${muted};display:block;margin-bottom:6px">Message</label><textarea placeholder="Décrivez votre projet…" style="width:100%;background:rgba(11,15,25,.8);border:1px solid rgba(255,255,255,.1);color:${text};border-radius:10px;padding:12px 14px;font-size:14px;min-height:120px;resize:vertical"></textarea></div>
+      <button style="background:${color};color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer">Envoyer →</button>
+    </div>
+  </div>
+</div>` + footer_;
+    }
+
+    return base + header + `<div class="section"><h2>${nom}</h2><p class="sub">${desc}</p></div>` + footer_;
+  }
+
+  function lightenColor(hex, pct) {
+    return hex; // placeholder
+  }
+
+  /* ══════════════════════════════════════════════
+     CTA FINAL
+  ══════════════════════════════════════════════ */
+  function sendConversionEmail() {
+    // ─── ICI : appel API envoi email à Paul ───
+    // Simulation
+    document.querySelector('.cta-final').classList.add('hidden');
+    document.getElementById('conversionConfirm').classList.remove('hidden');
+  }
+
+  /* ══════════════════════════════════════════════
+     UTILS
+  ══════════════════════════════════════════════ */
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Drag & drop zones
+  ['logoZone','filesZone'].forEach(id => {
+    const zone = document.getElementById(id);
+    if (!zone) return;
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag'); });
+  });
+  </script>
+</body>
+</html>
