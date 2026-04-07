@@ -4,6 +4,11 @@
  * L’e-mail « nouvelle préview » est envoyé par api/preview-notify.js après chaque génération (y compris repli statique).
  */
 
+const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
+
+const SYSTEM_PROMPT = `Tu es un expert en design web moderne. Tu génères des pages HTML complètes avec CSS inline uniquement. Tes créations sont visuellement impressionnantes, uniques et parfaitement adaptées au secteur et aux besoins du client.
+Réponds UNIQUEMENT avec le code HTML complet, sans markdown, sans explication.`;
+
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     return res.status(200).json({
@@ -29,10 +34,8 @@ export default async function handler(req, res) {
     body = JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
   }
 
-  const model =
-    process.env.ANTHROPIC_MODEL || 'claude-3-5-haiku-20241022';
-
-  const userPrompt = buildPrompt(body);
+  const model = process.env.ANTHROPIC_MODEL || DEFAULT_MODEL;
+  const userPrompt = buildUserPrompt(body);
 
   try {
     const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
@@ -44,7 +47,8 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model,
-        max_tokens: 8192,
+        max_tokens: 4000,
+        system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: userPrompt }],
       }),
     });
@@ -77,22 +81,51 @@ export default async function handler(req, res) {
   }
 }
 
-function buildPrompt(body) {
-  return `Tu es un expert en design d'interfaces web. Génère UNE SEULE page d'accueil en HTML COMPLET (document valide) pour une prévisualisation de projet, entièrement en français.
+function clean(s) {
+  return String(s ?? '').trim();
+}
 
-Contraintes strictes :
-- Un seul fichier HTML avec des balises <style> dans le <head> (CSS inline uniquement, aucun fichier externe, aucun JavaScript).
-- Ambiance sombre premium (fond proche de #0b0f19, texte clair, bon contraste).
-- Couleur d'accent : utilise la couleur principale fournie dans les données (couleurs[0] ou équivalent) pour boutons et highlights.
-- Tous les liens <a> doivent avoir href="#" et le bloc CSS doit inclure : a{pointer-events:none;cursor:default}
-- Aucun script, aucune iframe, aucun chargement externe (pas de Google Fonts en URL ; utilise system-ui ou stack système dans le CSS).
-- Sections pertinentes (héro, valeur, peut-être témoignage fictif ou CTA) adaptées au secteur et aux réponses utilisateur.
-- Design responsive (media queries si nécessaire).
+function buildUserPrompt(body) {
+  const prenom = clean(body.prenom);
+  const nomProjet = clean(body.nom_projet);
+  const type = clean(body.type_projet);
+  const secteur = clean(body.secteur);
+  const couleursArr = Array.isArray(body.couleurs) ? body.couleurs.filter(Boolean) : [];
+  const couleurs =
+    couleursArr.length > 0
+      ? couleursArr.join(', ')
+      : '(non précisé — choisis des couleurs adaptées au secteur)';
+  const styleArr = Array.isArray(body.style) ? body.style.filter(Boolean) : [];
+  const style =
+    styleArr.length > 0
+      ? styleArr.join(', ')
+      : '(non précisé — choisis ce qui correspond au secteur)';
+  const nb_users = clean(body.nb_users);
+  const qa1 = clean(body.qa1);
+  const qa2 = clean(body.qa2);
+  const qa3 = clean(body.qa3);
+  const qa4 = clean(body.qa4);
 
-Données du projet à exploiter pour le contenu et le ton (personnalisation réelle) :
-${JSON.stringify(body, null, 2)}
+  return `Crée une page d'accueil HTML complète et moderne pour ce projet :
 
-Réponds UNIQUEMENT avec le code HTML complet du document, sans texte avant ou après. Si tu utilises un bloc markdown, entoure uniquement le HTML dans \`\`\`html ... \`\`\`.`;
+Prénom du client : ${prenom}
+Nom du projet : ${nomProjet}
+Type de projet : ${type}
+Secteur : ${secteur}
+Couleurs souhaitées : ${couleurs}
+Ambiance / style : ${style}
+Nombre d'utilisateurs : ${nb_users}
+
+Questions du client :
+- Objectif principal : ${qa1}
+- Utilisateurs cibles : ${qa2}
+- Pages ou fonctionnalités voulues : ${qa3}
+- Références visuelles appréciées : ${qa4}
+
+Génère une page d'accueil qui répond précisément à ces besoins.
+Adapte le design, les couleurs, le contenu et le style au secteur et aux réponses.
+Tous les liens doivent avoir href='#' et pointer-events:none.
+CSS entièrement dans un bloc <style>. Aucun JS. Aucun fichier externe.`;
 }
 
 function extractHtmlFromResponse(text) {
