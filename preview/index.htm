@@ -1657,6 +1657,26 @@
         const data = await res.json().catch(() => ({}));
         if (res.ok && data.html && typeof data.html === 'string') {
           accueilHtml = data.html;
+          if (accueilHtml && state.userId) {
+            try {
+              const { data: row } = await sb
+                .from('previews')
+                .select('id')
+                .eq('user_id', state.userId)
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .maybeSingle();
+              if (row?.id) {
+                const { error: upErr } = await sb
+                  .from('previews')
+                  .update({ html_accueil: accueilHtml })
+                  .eq('id', row.id);
+                if (upErr) console.warn('[previews] html_accueil', upErr);
+              }
+            } catch (e) {
+              console.warn('[previews] html_accueil', e);
+            }
+          }
         } else {
           console.warn('[preview-home]', data?.error || res.status);
         }
@@ -1937,7 +1957,9 @@ footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1
     const prev = prevRows && prevRows[0];
     if (prev) {
       applyPreviewRowToForm(prev);
-      buildPreview();
+      const savedAccueil =
+        typeof prev.html_accueil === 'string' && prev.html_accueil.trim() ? prev.html_accueil : null;
+      buildPreview(savedAccueil);
       goToStep(4);
     } else {
       goToStep(3);
