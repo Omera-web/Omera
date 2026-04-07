@@ -115,6 +115,11 @@ function buildUserPrompt(body) {
 
   return `Analyse si c'est un SaaS ou site vitrine selon la description.
 
+La page doit être conçue pour s'afficher dans une fenêtre de 980px de large 
+et environ 600px de hauteur visible. Tout le contenu principal doit être 
+visible sans scroll. Utilise des tailles de police raisonnables 
+(body 14-15px max) pour que tout rentre bien.
+
 Données : Prénom=${prenom}, Nom=${nom}, Secteur=${secteur}, 
 Couleurs=${couleurs}, Style=${style}, Objectif=${qa1}, 
 Utilisateurs=${qa2}, Fonctionnalités=${qa3}, Références=${qa4}

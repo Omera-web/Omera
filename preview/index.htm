@@ -512,10 +512,11 @@
       display: flex; flex-direction: column;
     }
     .preview-frame {
-      width: 100%; border: none; display: block; flex: 1;
-      min-height: 420px; transition: min-height .3s;
+      width: 100%;
+      height: clamp(500px, 65vh, 800px);
+      border: none;
+      display: block;
     }
-    @media (max-width: 600px) { .preview-frame { min-height: 320px; } }
 
     /* watermark */
     .preview-watermark {
@@ -1011,19 +1012,24 @@
           <div id="previewContactFormWrap">
             <h3 class="preview-contact-title">Vous aimez ce que vous voyez ?</h3>
             <p class="preview-contact-sub">Parlez-nous de votre projet, on vous recontacte sous 24h.</p>
-            <form id="previewContactForm" class="preview-contact-form">
+            <form id="previewContactForm" class="preview-contact-form" novalidate>
+              <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
               <div class="field-group">
                 <div>
                   <label for="contactName">Nom</label>
-                  <input type="text" id="contactName" name="nom" autocomplete="name" required />
+                  <input type="text" id="contactName" name="name" autocomplete="name" required placeholder="Votre nom" />
                 </div>
                 <div>
                   <label for="contactEmail">Email</label>
-                  <input type="email" id="contactEmail" name="email" autocomplete="email" required />
+                  <input type="email" id="contactEmail" name="email" autocomplete="email" required placeholder="Votre email" />
+                </div>
+                <div>
+                  <label for="contactPhone">Téléphone <span style="color:var(--muted);font-weight:400">(optionnel)</span></label>
+                  <input type="tel" id="contactPhone" name="phone" autocomplete="tel" placeholder="Téléphone (optionnel)" />
                 </div>
                 <div>
                   <label for="contactMessage">Message</label>
-                  <textarea id="contactMessage" name="message" rows="4" placeholder="Votre message"></textarea>
+                  <textarea id="contactMessage" name="message" rows="4" required placeholder="Parlez-nous de votre projet…"></textarea>
                 </div>
               </div>
               <p class="msg" id="contactFormMsg"></p>
@@ -1890,20 +1896,22 @@ footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1
   ══════════════════════════════════════════════ */
   document.getElementById('previewContactForm')?.addEventListener('submit', async function (e) {
     e.preventDefault();
-    const name = (document.getElementById('contactName').value || '').trim();
-    const email = (document.getElementById('contactEmail').value || '').trim();
-    const message = (document.getElementById('contactMessage').value || '').trim();
+    const contactForm = document.getElementById('previewContactForm');
+    const data = new FormData(contactForm);
+    if (data.get('_gotcha')) return;
     hideMsg('contactFormMsg');
+    const attachments = [];
     const payload = {
-      name: name || '',
-      email: email || '',
-      phone: '',
-      message: message || '',
-      attachments: [],
+      name: data.get('name')?.toString().trim(),
+      email: data.get('email')?.toString().trim(),
+      phone: data.get('phone')?.toString().trim(),
+      message: data.get('message')?.toString().trim(),
+      attachments,
     };
+    const apiUrl = new URL('/api/contact', window.location.origin).toString();
     try {
       console.log('[preview contact] payload envoyé:', payload);
-      const res = await fetch('/api/contact', {
+      const res = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
