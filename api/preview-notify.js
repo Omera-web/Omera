@@ -52,27 +52,50 @@ export default async function handler(req, res) {
 
   const subject = `Nouvelle préview générée — ${nomProjet}`;
 
+  const prenom = String(brief?.prenom ?? '').trim() || '—';
+  const nomFamille = String(brief?.nom ?? '').trim() || '—';
+  const emailUser = String(brief?.email ?? '').trim() || '—';
+  const phone = String(brief?.phone ?? '').trim() || '—';
+  const previewUrl = String(brief?.preview_url ?? '').trim() || '—';
+  const typeProjet = brief?.type_projet != null && brief.type_projet !== '' ? String(brief.type_projet) : '—';
+  const secteur = brief?.secteur != null && brief.secteur !== '' ? String(brief.secteur) : '—';
+  const couleurs =
+    Array.isArray(brief?.couleurs) && brief.couleurs.length
+      ? brief.couleurs.join(', ')
+      : '—';
+  const styles =
+    Array.isArray(brief?.style) && brief.style.length ? brief.style.join(', ') : '—';
+  const nbUsers = brief?.nb_users != null && brief.nb_users !== '' ? String(brief.nb_users) : '—';
+  const qaLine = (v) =>
+    v != null && String(v).trim() !== '' ? String(v).trim() : '—';
+
   const lines = [
     'Une préview vient d’être générée sur le tunnel /preview.',
     '',
-    '— Récapitulatif (brief) —',
-    `Projet : ${nomProjet}`,
-    `Type : ${brief?.type_projet ?? '—'}`,
-    `Secteur : ${brief?.secteur ?? '—'}`,
-    `Email utilisateur : ${brief?.email ?? '—'}`,
-    `Nom : ${[brief?.prenom, brief?.nom].filter(Boolean).join(' ').trim() || '—'}`,
-    `Utilisateurs estimés : ${brief?.nb_users ?? '—'}`,
-    `Couleurs : ${Array.isArray(brief?.couleurs) ? brief.couleurs.join(', ') : '—'}`,
-    `Styles : ${Array.isArray(brief?.style) ? brief.style.join(', ') : '—'}`,
+    '— Identité & contact —',
+    `Prénom : ${prenom}`,
+    `Nom : ${nomFamille}`,
+    `Email utilisateur : ${emailUser}`,
+    `Téléphone : ${phone}`,
     '',
-    '— Objectifs & réponses —',
-    brief?.qa1 ? `Q1 : ${brief.qa1}` : null,
-    brief?.qa2 ? `Q2 : ${brief.qa2}` : null,
-    brief?.qa3 ? `Q3 : ${brief.qa3}` : null,
-    brief?.qa4 ? `Q4 : ${brief.qa4}` : null,
+    '— Projet —',
+    `Nom du projet : ${nomProjet}`,
+    `Type de projet : ${typeProjet}`,
+    `Secteur : ${secteur}`,
+    `Couleurs choisies : ${couleurs}`,
+    `Style choisi : ${styles}`,
+    `Nombre d'utilisateurs : ${nbUsers}`,
+    '',
+    '— Réponses (Q1 à Q4) —',
+    `Q1 (objectif) : ${qaLine(brief?.qa1)}`,
+    `Q2 (utilisateurs cibles) : ${qaLine(brief?.qa2)}`,
+    `Q3 (fonctionnalités / pages) : ${qaLine(brief?.qa3)}`,
+    `Q4 (références visuelles) : ${qaLine(brief?.qa4)}`,
+    '',
+    `Lien préview : ${previewUrl}`,
     '',
     'Le code source complet de la page d’accueil (même rendu que pour l’utilisateur) est en pièce jointe.',
-  ].filter(Boolean);
+  ];
 
   const plain = lines.join('\n');
   const htmlBuf = Buffer.from(htmlStr, 'utf8');

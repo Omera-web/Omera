@@ -1013,7 +1013,6 @@
             <h3 class="preview-contact-title">Vous aimez ce que vous voyez ?</h3>
             <p class="preview-contact-sub">Parlez-nous de votre projet, on vous recontacte sous 24h.</p>
             <form id="previewContactForm" class="preview-contact-form" novalidate>
-              <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
               <div class="field-group">
                 <div>
                   <label for="contactName">Nom</label>
@@ -1022,10 +1021,6 @@
                 <div>
                   <label for="contactEmail">Email</label>
                   <input type="email" id="contactEmail" name="email" autocomplete="email" required placeholder="Votre email" />
-                </div>
-                <div>
-                  <label for="contactPhone">Téléphone <span style="color:var(--muted);font-weight:400">(optionnel)</span></label>
-                  <input type="tel" id="contactPhone" name="phone" autocomplete="tel" placeholder="Téléphone (optionnel)" />
                 </div>
                 <div>
                   <label for="contactMessage">Message</label>
@@ -1039,7 +1034,7 @@
             </form>
           </div>
           <div id="previewContactSuccess" class="preview-contact-success hidden">
-            <p>Message envoyé ! Paul vous recontacte sous 24h.</p>
+            <p>Message envoyé ! Vous serez recontacté par l'équipe Omera sous 48h.</p>
           </div>
         </div>
 
@@ -1535,6 +1530,13 @@
      LOADING + GÉNÉRATION
   ══════════════════════════════════════════════ */
   async function notifyPreviewOwnerEmail() {
+    let phone = '';
+    if (state.userId) {
+      const { data: u } = await sb.from('users').select('phone').eq('id', state.userId).maybeSingle();
+      if (u && u.phone) phone = String(u.phone).trim();
+    }
+    const previewUrl =
+      typeof window !== 'undefined' ? `${window.location.origin}/preview` : '';
     const brief = {
       type_projet: state.type,
       nom_projet: document.getElementById('projName').value.trim(),
@@ -1549,6 +1551,8 @@
       prenom: state.prenom,
       nom: state.nom,
       email: state.email,
+      phone,
+      preview_url: previewUrl,
     };
     const html = state.pages[0]?.html;
     if (!html) return;
@@ -1898,19 +1902,17 @@ footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1
     e.preventDefault();
     const contactForm = document.getElementById('previewContactForm');
     const data = new FormData(contactForm);
-    if (data.get('_gotcha')) return;
     hideMsg('contactFormMsg');
-    const attachments = [];
     const payload = {
       name: data.get('name')?.toString().trim(),
       email: data.get('email')?.toString().trim(),
-      phone: data.get('phone')?.toString().trim(),
       message: data.get('message')?.toString().trim(),
-      attachments,
+      projet: document.getElementById('projName')?.value?.trim() || '',
+      accountEmail: state.email || '',
     };
-    const apiUrl = new URL('/api/contact', window.location.origin).toString();
+    const apiUrl = new URL('/api/recontact', window.location.origin).toString();
     try {
-      console.log('[preview contact] payload envoyé:', payload);
+      console.log('[preview recontact] payload envoyé:', payload);
       const res = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1922,7 +1924,7 @@ footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1
       } catch (_) {
         responseData = { parseError: true, status: res.status };
       }
-      console.log('[preview contact] réponse API:', res.status, responseData);
+      console.log('[preview recontact] réponse API:', res.status, responseData);
       if (!res.ok) {
         throw new Error((responseData && responseData.error) || 'Envoi impossible');
       }

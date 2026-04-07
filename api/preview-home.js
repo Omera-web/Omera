@@ -1,7 +1,7 @@
 /**
  * Génère uniquement la page d'accueil (HTML) via l'API Anthropic.
  * La clé ANTHROPIC_API_KEY doit rester côté serveur (variables d'environnement).
- * L’e-mail « nouvelle préview » est envoyé par api/preview-notify.js après chaque génération (y compris repli statique).
+ * L’e-mail « nouvelle préview » (tous les champs du brief + PJ HTML) est envoyé par api/preview-notify.js après chaque génération (y compris repli statique).
  */
 
 const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
