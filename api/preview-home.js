@@ -96,7 +96,7 @@ function clean(s) {
 
 function buildUserPrompt(body) {
   const prenom = clean(body.prenom);
-  const nomProjet = clean(body.nom_projet);
+  const nom = clean(body.nom_projet);
   const type = clean(body.type_projet);
   const secteur = clean(body.secteur);
   const couleursArr = Array.isArray(body.couleurs) ? body.couleurs.filter(Boolean) : [];
@@ -115,24 +115,36 @@ function buildUserPrompt(body) {
   const qa3 = clean(body.qa3);
   const qa4 = clean(body.qa4);
 
-  return `Crée une page d'accueil HTML complète et moderne pour ce projet :
+  return `Tu es un expert en design web et en compréhension du besoin client.
+Un prospect t'a décrit son projet. Tu dois créer une page d'accueil HTML 
+qui représente EXACTEMENT ce qu'il a décrit, pas un template générique.
 
-Prénom du client : ${prenom}
-Nom du projet : ${nomProjet}
-Type de projet : ${type}
+Voici ce que le prospect a décrit :
+
+Prénom : ${prenom}
+Nom du projet : ${nom}  
+Type : ${type} - IMPORTANT: si SaaS, génère une interface applicative (dashboard, 
+connexion, tableau de bord). Si site web, génère une landing page marketing.
 Secteur : ${secteur}
-Couleurs souhaitées : ${couleurs}
-Ambiance / style : ${style}
+Couleurs choisies : ${couleurs}
+Style souhaité : ${style}
 Nombre d'utilisateurs : ${nb_users}
 
-Questions du client :
-- Objectif principal : ${qa1}
-- Utilisateurs cibles : ${qa2}
-- Pages ou fonctionnalités voulues : ${qa3}
-- Références visuelles appréciées : ${qa4}
+Description détaillée du projet (LIS ATTENTIVEMENT) :
+Objectif : ${qa1}
+Utilisateurs : ${qa2}  
+Pages / fonctionnalités voulues : ${qa3}
+Références visuelles : ${qa4}
 
-Génère une page d'accueil qui répond précisément à ces besoins.
-Adapte le design, les couleurs, le contenu et le style au secteur et aux réponses.
-Tous les liens doivent avoir href='#' et pointer-events:none.
-CSS entièrement dans un bloc <style>. Aucun JS. Aucun fichier externe.`;
+INSTRUCTIONS STRICTES :
+- Génère la PREMIÈRE PAGE que l'utilisateur final verrait en arrivant sur ce projet
+- Si c'est un SaaS : génère l'interface principale décrite dans qa3, 
+  pas une landing page
+- Utilise le contenu de qa1/qa2/qa3/qa4 pour créer du VRAI contenu pertinent,
+  pas du lorem ipsum ni du contenu générique
+- Adapte la langue au texte du prospect (français si écrit en français, etc.)
+- Design moderne, couleurs ${couleurs} en priorité
+- Tous href='#', pointer-events:none sur les liens
+- CSS dans <style>, aucun JS, aucun fichier externe
+- Réponds UNIQUEMENT avec le HTML, première ligne = <!DOCTYPE html>`;
 }
