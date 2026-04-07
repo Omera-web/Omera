@@ -506,23 +506,6 @@
     }
     .browser-url::before { content: "🔒"; font-size: 11px; }
 
-    /* sélecteur de page sous le browser (pills) */
-    .preview-page-pills {
-      display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
-      margin-top: 14px; margin-bottom: 4px;
-    }
-    .preview-page-pill {
-      padding: 8px 14px; font-size: 12px; font-weight: 600;
-      color: var(--muted); background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.1); border-radius: 999px;
-      cursor: pointer; transition: all .2s;
-    }
-    .preview-page-pill:hover { color: var(--text); border-color: rgba(255,255,255,.18); }
-    .preview-page-pill.active {
-      color: #dcd7ff; border-color: rgba(124,92,255,.45);
-      background: rgba(124,92,255,.12);
-    }
-
     /* iframe de la preview */
     .preview-frame-wrap {
       position: relative; flex: 1; min-height: 0;
@@ -996,7 +979,7 @@
         <div class="preview-header">
           <div>
             <h2>Votre préview est prête 🎉</h2>
-            <p class="panel-sub" style="margin-bottom:0">Naviguez entre les pages générées. Aucun téléchargement n'est possible.</p>
+            <p class="panel-sub" style="margin-bottom:0">Cette interface a été générée automatiquement par notre IA à partir de vos réponses.<br />Tout peut être ajusté selon vos besoins.</p>
           </div>
           <span class="preview-badge">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1023,8 +1006,6 @@
             <div class="preview-watermark">Préview Omera — non téléchargeable</div>
           </div>
         </div>
-
-        <div class="preview-page-pills" id="previewPagePills" role="tablist" aria-label="Pages de la préview"></div>
 
         <div class="preview-contact" id="previewContactBlock">
           <div id="previewContactFormWrap">
@@ -1740,51 +1721,24 @@
       }
       return {
         ...p,
-        html: generatePageHtml(p.slug, nom, primaryColor, qa1, secteur, pagesConfig),
+        html: generatePageHtml(p.slug, nom, primaryColor, qa1, secteur),
       };
     });
 
-    const pillsEl = document.getElementById('previewPagePills');
-    pillsEl.innerHTML = '';
-    state.pages.forEach((p, i) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'preview-page-pill' + (i === 0 ? ' active' : '');
-      btn.textContent = p.label;
-      btn.setAttribute('role', 'tab');
-      btn.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
-      btn.onclick = () => switchPreviewTab(i);
-      pillsEl.appendChild(btn);
-    });
-
-    // Afficher la première page
-    switchPreviewTab(0);
+    state.currentPage = 0;
+    const frame = document.getElementById('previewFrame');
+    if (frame && state.pages[0]) frame.srcdoc = state.pages[0].html;
     document.getElementById('browserUrl').textContent = 'omera.fr/preview/' + nom.toLowerCase().replace(/\s+/g,'-');
     syncContactFormFields();
   }
 
-  function switchPreviewTab(idx) {
-    state.currentPage = idx;
-    const pills = document.querySelectorAll('.preview-page-pill');
-    pills.forEach((t, i) => {
-      t.classList.toggle('active', i === idx);
-      t.setAttribute('aria-selected', i === idx ? 'true' : 'false');
-    });
-    const frame = document.getElementById('previewFrame');
-    frame.srcdoc = state.pages[idx].html;
-  }
-
   /* ── Générateur de HTML pour la preview ── */
-  function generatePageHtml(slug, nom, color, desc, secteur, navPages) {
+  function generatePageHtml(slug, nom, color, desc, secteur) {
     const dark = '#0b0f19';
     const card = '#12182a';
     const text = '#e8e9f1';
     const muted = '#a7abbe';
     const lighter = lightenColor(color, 30);
-    const navList = Array.isArray(navPages) ? navPages : [];
-    const innerNavHtml = navList.length
-      ? `<div class="inner-page-nav" role="navigation" aria-label="Navigation">${navList.map(({ label, slug: s }) => `<span class="inner-nav-tab${s === slug ? ' inner-nav-tab--active' : ''}">${label}</span>`).join('')}</div>`
-      : '';
 
     const base = `
 <!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -1792,15 +1746,9 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,sans-serif;background:${dark};color:${text};line-height:1.6;min-height:100vh}
 a{color:${color};text-decoration:none;pointer-events:none;cursor:default}
-.header{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(11,15,25,.9)}
+.header{display:flex;align-items:center;justify-content:flex-start;padding:18px 40px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(11,15,25,.9)}
 .logo{font-weight:800;font-size:18px;color:${text}}
 .logo span{color:${color}}
-nav a{margin-left:24px;color:${muted};font-size:14px;font-weight:500}
-nav a:hover{color:${text}}
-.cta-nav{background:${color};color:#fff;padding:8px 18px;border-radius:999px;font-size:13px;font-weight:600}
-.inner-page-nav{display:flex;flex-wrap:wrap;gap:8px;padding:12px 40px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(11,15,25,.65);justify-content:center}
-.inner-nav-tab{display:inline-block;padding:8px 16px;border-radius:999px;font-size:13px;font-weight:600;color:${muted};border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04)}
-.inner-nav-tab--active{color:${text};border-color:${color};background:${color}22;box-shadow:0 0 0 1px ${color}44}
 .hero{text-align:center;padding:80px 40px 60px;max-width:800px;margin:0 auto}
 .hero h1{font-size:clamp(28px,6vw,52px);font-weight:800;line-height:1.15;margin-bottom:16px}
 .hero h1 span{color:${color}}
@@ -1819,14 +1767,13 @@ nav a:hover{color:${text}}
 .section .sub{color:${muted};margin-bottom:32px}
 .tag{display:inline-block;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:4px 10px;font-size:12px;color:${muted};margin-right:6px;margin-bottom:6px}
 footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1px solid rgba(255,255,255,.06)}
-@media (max-width:600px){.inner-page-nav{padding:12px 16px;justify-content:flex-start}}
 </style></head><body>`;
 
-    const header = `<div class="header"><div class="logo">${nom.split(' ')[0]}<span>.</span></div><nav><a href="#">Accueil</a><a href="#">Services</a><a href="#">À propos</a><a class="cta-nav" href="#">Contact</a></nav></div>`;
+    const header = `<div class="header"><div class="logo">${nom.split(' ')[0]}<span>.</span></div></div>`;
     const footer_ = `<footer>© 2025 ${nom} · Tous droits réservés · <a href="#">Mentions légales</a></footer></body></html>`;
 
     if (slug === 'accueil') {
-      return base + header + innerNavHtml + `
+      return base + header + `
 <div class="hero">
   <span class="badge">✦ ${secteur}</span>
   <h1>Bienvenue chez <span>${nom}</span></h1>
@@ -1842,7 +1789,7 @@ footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1
     }
 
     if (slug === 'dashboard') {
-      return base + header + innerNavHtml + `
+      return base + header + `
 <div class="section">
   <span class="badge">✦ Dashboard</span>
   <h2>Votre espace de travail</h2>
@@ -1861,7 +1808,7 @@ footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1
 
     if (slug === 'features' || slug === 'services') {
       const label = slug === 'features' ? 'Fonctionnalités' : 'Services';
-      return base + header + innerNavHtml + `
+      return base + header + `
 <div class="section">
   <span class="badge">✦ ${label}</span>
   <h2>Ce qu'on vous propose</h2>
@@ -1879,7 +1826,7 @@ footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1
 
     if (slug === 'login' || slug === 'apropos') {
       if (slug === 'login') {
-        return base + header + innerNavHtml + `
+        return base + header + `
 <div style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 70px);padding:40px">
   <div style="width:100%;max-width:400px;background:${card};border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:36px">
     <h2 style="margin-bottom:6px">Connexion</h2>
@@ -1894,7 +1841,7 @@ footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1
 </div>` + footer_;
       }
       // apropos
-      return base + header + innerNavHtml + `
+      return base + header + `
 <div class="section">
   <span class="badge">✦ À propos</span>
   <h2>Qui sommes-nous ?</h2>
@@ -1915,7 +1862,7 @@ footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1
     }
 
     if (slug === 'contact') {
-      return base + header + innerNavHtml + `
+      return base + header + `
 <div class="section" style="max-width:700px">
   <span class="badge">✦ Contact</span>
   <h2>Parlons de votre projet</h2>
@@ -1931,7 +1878,7 @@ footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1
 </div>` + footer_;
     }
 
-    return base + header + innerNavHtml + `<div class="section"><h2>${nom}</h2><p class="sub">${desc}</p></div>` + footer_;
+    return base + header + `<div class="section"><h2>${nom}</h2><p class="sub">${desc}</p></div>` + footer_;
   }
 
   function lightenColor(hex, pct) {
