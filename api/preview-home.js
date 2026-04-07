@@ -97,7 +97,6 @@ function clean(s) {
 function buildUserPrompt(body) {
   const prenom = clean(body.prenom);
   const nom = clean(body.nom_projet);
-  const type = clean(body.type_projet);
   const secteur = clean(body.secteur);
   const couleursArr = Array.isArray(body.couleurs) ? body.couleurs.filter(Boolean) : [];
   const couleurs =
@@ -115,36 +114,53 @@ function buildUserPrompt(body) {
   const qa3 = clean(body.qa3);
   const qa4 = clean(body.qa4);
 
-  return `Tu es un expert en design web et en compréhension du besoin client.
-Un prospect t'a décrit son projet. Tu dois créer une page d'accueil HTML 
-qui représente EXACTEMENT ce qu'il a décrit, pas un template générique.
+  return `Tu es un expert en design web et en analyse de besoin produit.
+Analyse le besoin du prospect et génère UNE SEULE page HTML — 
+la plus représentative de son projet.
 
-Voici ce que le prospect a décrit :
+ANALYSE DU BESOIN :
+- Lis attentivement la description
+- Détermine toi-même si c'est un SaaS ou un site vitrine
+- Si le prospect décrit des fonctionnalités d'outil (dashboard, automatisation, 
+  gestion de données, workflow, connexion utilisateur) → c'est un SaaS
+  même s'il a coché 'je ne sais pas' ou 'site web'
+- Ne génère QU'UNE seule vue, la plus impactante et représentative
 
+DONNÉES :
 Prénom : ${prenom}
-Nom du projet : ${nom}  
-Type : ${type} - IMPORTANT: si SaaS, génère une interface applicative (dashboard, 
-connexion, tableau de bord). Si site web, génère une landing page marketing.
+Nom du projet : ${nom}
 Secteur : ${secteur}
-Couleurs choisies : ${couleurs}
-Style souhaité : ${style}
-Nombre d'utilisateurs : ${nb_users}
+Couleurs : ${couleurs}
+Style : ${style}
+Utilisateurs estimés : ${nb_users}
 
-Description détaillée du projet (LIS ATTENTIVEMENT) :
+Description :
 Objectif : ${qa1}
-Utilisateurs : ${qa2}  
-Pages / fonctionnalités voulues : ${qa3}
+Utilisateurs cibles : ${qa2}
+Fonctionnalités / pages : ${qa3}
 Références visuelles : ${qa4}
 
-INSTRUCTIONS STRICTES :
-- Génère la PREMIÈRE PAGE que l'utilisateur final verrait en arrivant sur ce projet
-- Si c'est un SaaS : génère l'interface principale décrite dans qa3, 
-  pas une landing page
-- Utilise le contenu de qa1/qa2/qa3/qa4 pour créer du VRAI contenu pertinent,
-  pas du lorem ipsum ni du contenu générique
-- Adapte la langue au texte du prospect (français si écrit en français, etc.)
-- Design moderne, couleurs ${couleurs} en priorité
-- Tous href='#', pointer-events:none sur les liens
+SI SAAS — génère la vue principale après connexion :
+- Header avec logo ${nom} + onglets de navigation nommés selon le métier décrit
+  (ex pour RH: Candidatures / Offres / Analytics / Paramètres)
+  (ex pour finance: Portefeuille / Transactions / Rapports / Alertes)
+  Ces onglets sont VISUELS UNIQUEMENT, non cliquables
+- La vue principale décrite dans qa1/qa3
+- Données fictives réalistes et contextuelles
+- Design applicatif moderne : cards, stats, tableaux, sidebar ou top nav
+- Prénom du prospect utilisé dans l'interface (Bonjour ${prenom})
+
+SI SITE VITRINE — génère la landing page :
+- Hero impactant avec titre accrocheur lié au secteur
+- 3-4 sections pertinentes au besoin
+- CTA clairs et contextuels
+
+RÈGLES :
+- Langue : celle du prospect dans ses réponses
+- Couleurs : ${couleurs} en priorité, sinon adapte au secteur
+- Données : invente des exemples fictifs réalistes
+- Tous les <a> : href='#', pointer-events:none dans le style
 - CSS dans <style>, aucun JS, aucun fichier externe
-- Réponds UNIQUEMENT avec le HTML, première ligne = <!DOCTYPE html>`;
+- Design moderne et professionnel
+- UNIQUEMENT le HTML brut, première ligne = <!DOCTYPE html>`;
 }
