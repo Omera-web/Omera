@@ -4,9 +4,13 @@
  * L’e-mail « nouvelle préview » est envoyé par api/preview-notify.js après chaque génération (y compris repli statique).
  */
 
-const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
+const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
 
-const SYSTEM_PROMPT = `Tu es un expert en design web moderne. Tu génères des pages HTML complètes avec CSS inline uniquement. Tes créations sont visuellement impressionnantes, uniques et parfaitement adaptées au secteur et aux besoins du client.
+const SYSTEM_PROMPT = `IMPORTANT: Réponds UNIQUEMENT avec le code HTML brut. 
+Zéro markdown, zéro backtick, zéro explication. 
+La première ligne de ta réponse doit être <!DOCTYPE html>
+
+Tu es un expert en design web moderne. Tu génères des pages HTML complètes avec CSS inline uniquement. Tes créations sont visuellement impressionnantes, uniques et parfaitement adaptées au secteur et aux besoins du client.
 Réponds UNIQUEMENT avec le code HTML complet, sans markdown, sans explication.`;
 
 export default async function handler(req, res) {
@@ -69,7 +73,12 @@ export default async function handler(req, res) {
       return res.status(502).json({ error: 'Réponse vide du modèle' });
     }
 
-    const html = extractHtmlFromResponse(text);
+    let html = String(text).trim();
+    if (html.startsWith('```html')) html = html.slice(7);
+    if (html.startsWith('```')) html = html.slice(3);
+    if (html.endsWith('```')) html = html.slice(0, -3);
+    html = html.trim();
+
     if (!html || html.length < 80) {
       return res.status(502).json({ error: 'HTML extrait invalide ou trop court' });
     }
@@ -126,11 +135,4 @@ Génère une page d'accueil qui répond précisément à ces besoins.
 Adapte le design, les couleurs, le contenu et le style au secteur et aux réponses.
 Tous les liens doivent avoir href='#' et pointer-events:none.
 CSS entièrement dans un bloc <style>. Aucun JS. Aucun fichier externe.`;
-}
-
-function extractHtmlFromResponse(text) {
-  let s = String(text).trim();
-  const fence = s.match(/```(?:html)?\s*([\s\S]*?)```/);
-  if (fence) s = fence[1].trim();
-  return s;
 }

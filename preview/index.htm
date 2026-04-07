@@ -1573,77 +1573,115 @@
   function startLoading() {
     goToStep('loading');
 
-    const steps = ['ls1','ls2','ls3','ls4','ls5'];
+    const steps = ['ls1', 'ls2', 'ls3', 'ls4', 'ls5'];
     const labels = [
       'Analyse du brief…',
       'Architecture des pages…',
       'Génération de l\'interface…',
       'Application des couleurs…',
-      'Finalisation…'
+      'Finalisation…',
     ];
     const pcts = [10, 30, 55, 80, 95];
 
-    let current = 0;
+    steps.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.remove('active', 'done');
+      const icon = el.querySelector('.loading-step-icon');
+      if (icon) icon.textContent = '→';
+    });
+    document.getElementById('progressFill').style.width = '0%';
 
-    function tick() {
-      if (current > 0) {
-        const prev = document.getElementById(steps[current-1]);
-        prev.classList.remove('active');
-        prev.classList.add('done');
-        prev.querySelector('.loading-step-icon').textContent = '✓';
-      }
-      if (current < steps.length) {
-        document.getElementById(steps[current]).classList.add('active');
-        document.getElementById('progressFill').style.width = pcts[current] + '%';
-        document.getElementById('progressLabel').textContent = labels[current];
-        current++;
-        setTimeout(tick, 1400);
-      } else {
-        // Dernière étape terminée
-        document.getElementById('ls5').classList.remove('active');
-        document.getElementById('ls5').classList.add('done');
-        document.getElementById('ls5').querySelector('.loading-step-icon').textContent = '✓';
-        document.getElementById('progressFill').style.width = '100%';
-        document.getElementById('progressLabel').textContent = 'Préview prête !';
-
-        setTimeout(async () => {
-          let accueilHtml = null;
-          try {
-            const res = await fetch('/api/preview-home', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                type_projet: state.type,
-                nom_projet: document.getElementById('projName').value.trim(),
-                secteur: document.getElementById('secteur').value,
-                couleurs: state.colors,
-                style: state.style,
-                nb_users: document.getElementById('nbUsers').value,
-                qa1: document.getElementById('qa1').value.trim(),
-                qa2: document.getElementById('qa2').value.trim(),
-                qa3: document.getElementById('qa3').value.trim(),
-                qa4: document.getElementById('qa4').value.trim(),
-                prenom: state.prenom,
-                nom: state.nom,
-                email: state.email,
-              }),
-            });
-            const data = await res.json().catch(() => ({}));
-            if (res.ok && data.html && typeof data.html === 'string') {
-              accueilHtml = data.html;
-            } else {
-              console.warn('[preview-home]', data?.error || res.status);
-            }
-          } catch (err) {
-            console.warn('[preview-home] fetch', err);
-          }
-          buildPreview(accueilHtml);
-          await notifyPreviewOwnerEmail();
-          goToStep(4);
-        }, 800);
-      }
+    function setStepActive(i) {
+      document.getElementById(steps[i]).classList.add('active');
+      document.getElementById('progressFill').style.width = pcts[i] + '%';
+      document.getElementById('progressLabel').textContent = labels[i];
     }
-    tick();
+
+    function completeStep(i) {
+      const el = document.getElementById(steps[i]);
+      el.classList.remove('active');
+      el.classList.add('done');
+      el.querySelector('.loading-step-icon').textContent = '✓';
+    }
+
+    setStepActive(0);
+
+    setTimeout(() => {
+      completeStep(0);
+      setStepActive(1);
+    }, 1000);
+
+    setTimeout(() => {
+      completeStep(1);
+      setStepActive(2);
+    }, 1000 + 1500);
+
+    setTimeout(() => {
+      completeStep(2);
+      setStepActive(3);
+    }, 1000 + 1500 + 2000);
+
+    setTimeout(() => {
+      completeStep(3);
+      setStepActive(4);
+      waitForPreviewApi();
+    }, 1000 + 1500 + 2000 + 2000);
+
+    async function waitForPreviewApi() {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 45000);
+      let accueilHtml = null;
+      try {
+        const res = await fetch('/api/preview-home', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal,
+          body: JSON.stringify({
+            type_projet: state.type,
+            nom_projet: document.getElementById('projName').value.trim(),
+            secteur: document.getElementById('secteur').value,
+            couleurs: state.colors,
+            style: state.style,
+            nb_users: document.getElementById('nbUsers').value,
+            qa1: document.getElementById('qa1').value.trim(),
+            qa2: document.getElementById('qa2').value.trim(),
+            qa3: document.getElementById('qa3').value.trim(),
+            qa4: document.getElementById('qa4').value.trim(),
+            prenom: state.prenom,
+            nom: state.nom,
+            email: state.email,
+          }),
+        });
+        clearTimeout(timeoutId);
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.html && typeof data.html === 'string') {
+          accueilHtml = data.html;
+        } else {
+          console.warn('[preview-home]', data?.error || res.status);
+        }
+      } catch (err) {
+        clearTimeout(timeoutId);
+        if (err.name === 'AbortError') {
+          console.warn('[preview-home] délai 45s dépassé — préview statique');
+        } else {
+          console.warn('[preview-home] fetch', err);
+        }
+      }
+
+      const ls5 = document.getElementById('ls5');
+      ls5.classList.remove('active');
+      ls5.classList.add('done');
+      ls5.querySelector('.loading-step-icon').textContent = '✓';
+      document.getElementById('progressFill').style.width = '100%';
+      document.getElementById('progressLabel').textContent = 'Préview prête !';
+
+      setTimeout(async () => {
+        buildPreview(accueilHtml);
+        await notifyPreviewOwnerEmail();
+        goToStep(4);
+      }, 800);
+    }
   }
 
   /* ══════════════════════════════════════════════
