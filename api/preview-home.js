@@ -108,59 +108,30 @@ function buildUserPrompt(body) {
     styleArr.length > 0
       ? styleArr.join(', ')
       : '(non précisé — choisis ce qui correspond au secteur)';
-  const nb_users = clean(body.nb_users);
   const qa1 = clean(body.qa1);
   const qa2 = clean(body.qa2);
   const qa3 = clean(body.qa3);
   const qa4 = clean(body.qa4);
 
-  return `Tu es un expert en design web et en analyse de besoin produit.
-Analyse le besoin du prospect et génère UNE SEULE page HTML — 
-la plus représentative de son projet.
+  return `Analyse si c'est un SaaS ou site vitrine selon la description.
 
-ANALYSE DU BESOIN :
-- Lis attentivement la description
-- Détermine toi-même si c'est un SaaS ou un site vitrine
-- Si le prospect décrit des fonctionnalités d'outil (dashboard, automatisation, 
-  gestion de données, workflow, connexion utilisateur) → c'est un SaaS
-  même s'il a coché 'je ne sais pas' ou 'site web'
-- Ne génère QU'UNE seule vue, la plus impactante et représentative
+Données : Prénom=${prenom}, Nom=${nom}, Secteur=${secteur}, 
+Couleurs=${couleurs}, Style=${style}, Objectif=${qa1}, 
+Utilisateurs=${qa2}, Fonctionnalités=${qa3}, Références=${qa4}
 
-DONNÉES :
-Prénom : ${prenom}
-Nom du projet : ${nom}
-Secteur : ${secteur}
-Couleurs : ${couleurs}
-Style : ${style}
-Utilisateurs estimés : ${nb_users}
+SI SAAS : génère OBLIGATOIREMENT cette structure :
+1. Top navbar fixe avec : logo ${nom} à gauche, 
+   puis 4-5 onglets de navigation NOMMÉS selon le métier 
+   (ex RH: Candidatures/Offres/Analytics/Paramètres),
+   puis avatar 'Bonjour ${prenom}' à droite
+2. Sidebar gauche avec les mêmes onglets en version icône+texte
+3. Zone principale avec la vue décrite dans qa1/qa3, 
+   données fictives réalistes, cards, stats, tableaux
 
-Description :
-Objectif : ${qa1}
-Utilisateurs cibles : ${qa2}
-Fonctionnalités / pages : ${qa3}
-Références visuelles : ${qa4}
+SI SITE : landing page avec hero + 3 sections + CTA
 
-SI SAAS — génère la vue principale après connexion :
-- Header avec logo ${nom} + onglets de navigation nommés selon le métier décrit
-  (ex pour RH: Candidatures / Offres / Analytics / Paramètres)
-  (ex pour finance: Portefeuille / Transactions / Rapports / Alertes)
-  Ces onglets sont VISUELS UNIQUEMENT, non cliquables
-- La vue principale décrite dans qa1/qa3
-- Données fictives réalistes et contextuelles
-- Design applicatif moderne : cards, stats, tableaux, sidebar ou top nav
-- Prénom du prospect utilisé dans l'interface (Bonjour ${prenom})
-
-SI SITE VITRINE — génère la landing page :
-- Hero impactant avec titre accrocheur lié au secteur
-- 3-4 sections pertinentes au besoin
-- CTA clairs et contextuels
-
-RÈGLES :
-- Langue : celle du prospect dans ses réponses
-- Couleurs : ${couleurs} en priorité, sinon adapte au secteur
-- Données : invente des exemples fictifs réalistes
-- Tous les <a> : href='#', pointer-events:none dans le style
-- CSS dans <style>, aucun JS, aucun fichier externe
-- Design moderne et professionnel
-- UNIQUEMENT le HTML brut, première ligne = <!DOCTYPE html>`;
+RÈGLES : href='#' partout, pointer-events:none, 
+CSS dans <style>, pas de JS, pas de fichiers externes,
+langue du prospect, couleurs ${couleurs},
+UNIQUEMENT HTML brut, première ligne = <!DOCTYPE html>`;
 }

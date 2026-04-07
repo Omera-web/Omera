@@ -38,13 +38,33 @@ export default async function handler(req, res) {
       body = JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
     }
 
-    const {
+    body =
+      body && typeof body === 'object'
+        ? {
+            name: '',
+            email: '',
+            phone: '',
+            message: '',
+            attachments: [],
+            ...body,
+          }
+        : {
+            name: '',
+            email: '',
+            phone: '',
+            message: '',
+            attachments: [],
+          };
+
+    let {
       name = '',
       email = '',
       phone = '',
       message = '',
-      attachments: clientAttachments,
-    } = body || {};
+      attachments: clientAttachments = [],
+    } = body;
+
+    if (!Array.isArray(clientAttachments)) clientAttachments = [];
 
     const clean = (s) => String(s || '').toString().trim();
     const _name = clean(name);

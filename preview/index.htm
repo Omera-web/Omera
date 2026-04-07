@@ -1890,17 +1890,34 @@ footer{text-align:center;padding:32px;color:${muted};font-size:13px;border-top:1
   ══════════════════════════════════════════════ */
   document.getElementById('previewContactForm')?.addEventListener('submit', async function (e) {
     e.preventDefault();
-    const nom = document.getElementById('contactName').value.trim();
-    const email = document.getElementById('contactEmail').value.trim();
-    const message = document.getElementById('contactMessage').value.trim();
+    const name = (document.getElementById('contactName').value || '').trim();
+    const email = (document.getElementById('contactEmail').value || '').trim();
+    const message = (document.getElementById('contactMessage').value || '').trim();
     hideMsg('contactFormMsg');
+    const payload = {
+      name: name || '',
+      email: email || '',
+      phone: '',
+      message: message || '',
+      attachments: [],
+    };
     try {
+      console.log('[preview contact] payload envoyé:', payload);
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nom, email, message }),
+        body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error('Envoi impossible');
+      let responseData;
+      try {
+        responseData = await res.json();
+      } catch (_) {
+        responseData = { parseError: true, status: res.status };
+      }
+      console.log('[preview contact] réponse API:', res.status, responseData);
+      if (!res.ok) {
+        throw new Error((responseData && responseData.error) || 'Envoi impossible');
+      }
       document.getElementById('previewContactFormWrap').classList.add('hidden');
       document.getElementById('previewContactSuccess').classList.remove('hidden');
     } catch (err) {
