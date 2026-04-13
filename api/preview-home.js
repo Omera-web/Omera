@@ -1,10 +1,11 @@
 /**
- * Génère uniquement la page d'accueil (HTML) via l'API Anthropic.
- * La clé ANTHROPIC_API_KEY doit rester côté serveur (variables d'environnement).
+ * Génère uniquement la page d'accueil (HTML) via l'API Google Gemini Flash.
+ * La clé GEMINI_API_KEY doit rester côté serveur (variables d'environnement).
  * L’e-mail « nouvelle préview » (tous les champs du brief + PJ HTML) est envoyé par api/preview-notify.js après chaque génération (y compris repli statique).
  */
 
-const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
+const GEMINI_GENERATE_URL =
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
 const SYSTEM_PROMPT = `IMPORTANT: Réponds UNIQUEMENT avec le code HTML brut. 
 Zéro markdown, zéro backtick, zéro explication. 
@@ -18,7 +19,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       ok: true,
       msg: 'Preview home API',
-      anthropic_key_configured: !!process.env.ANTHROPIC_API_KEY,
+      gemini_key_configured: !!process.env.GEMINI_API_KEY,
     });
   }
 
@@ -26,9 +27,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Méthode non autorisée' });
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'ANTHROPIC_API_KEY manquante (voir .env.example)' });
+    return res.status(500).json({ error: 'GEMINI_API_KEY manquante (voir .env.example)' });
   }
 
   let body = req.body;
@@ -38,39 +39,43 @@ export default async function handler(req, res) {
     body = JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
   }
 
-  const model = process.env.ANTHROPIC_MODEL || DEFAULT_MODEL;
   const userPrompt = buildUserPrompt(body);
+  const combinedText = `${SYSTEM_PROMPT}\n\n${userPrompt}`;
 
   try {
-    const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
+    const geminiUrl = `${GEMINI_GENERATE_URL}?key=${encodeURIComponent(apiKey)}`;
+    const geminiRes = await fetch(geminiUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model,
-        max_tokens: 4000,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: userPrompt }],
+        contents: [{ parts: [{ text: combinedText }] }],
+        generationConfig: {
+          maxOutputTokens: 4000,
+          temperature: 0.7,
+        },
       }),
     });
 
-    const anthropicJson = await anthropicRes.json().catch(() => ({}));
+    const geminiJson = await geminiRes.json().catch(() => ({}));
 
-    if (!anthropicRes.ok) {
+    if (!geminiRes.ok) {
       const errMsg =
-        anthropicJson?.error?.message ||
-        anthropicJson?.message ||
-        `Anthropic HTTP ${anthropicRes.status}`;
-      console.error('[preview-home] Anthropic error:', errMsg);
-      return res.status(502).json({ error: errMsg });
+        geminiJson?.error?.message ||
+        geminiJson?.error ||
+        geminiJson?.message ||
+        `Gemini HTTP ${geminiRes.status}`;
+      console.error('[preview-home] Gemini error:', errMsg);
+      return res.status(502).json({ error: String(errMsg) });
     }
 
-    const text = anthropicJson?.content?.[0]?.text;
+    const text = geminiJson?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!text || typeof text !== 'string') {
-      return res.status(502).json({ error: 'Réponse vide du modèle' });
+      const blockReason = geminiJson?.promptFeedback?.blockReason;
+      return res.status(502).json({
+        error: blockReason
+          ? `Réponse bloquée ou vide (${blockReason})`
+          : 'Réponse vide du modèle',
+      });
     }
 
     let html = String(text).trim();
